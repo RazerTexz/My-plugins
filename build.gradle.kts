@@ -40,7 +40,7 @@ subprojects {
 
     // Fill out with your info
     aliucord {
-        author("RazerTexz", 123456789L)
+        author("RazerTexz", 633565155501801472L)
         updateUrl.set("https://raw.githubusercontent.com/RazerTexz/My-plugins/builds/updater.json")
         buildUrl.set("https://raw.githubusercontent.com/RazerTexz/My-plugins/builds/%s.zip")
     }
