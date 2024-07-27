@@ -5,7 +5,8 @@ rootProject.name = "AliucordPlugins"
 
 // Plugins are included like this
 include(
-    "Testing"
+    "Command"
+    //"Testing"
 )
 
 // This is required because plugins are in the ExamplePlugins/kotlin subdirectory.
