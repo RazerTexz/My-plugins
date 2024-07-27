@@ -1,12 +1,11 @@
-rootProject.name = "Aliucord Plugins"
+rootProject.name = "AliucordPlugins"
 
 // This file sets what projects are included. Every time you add a new project, you must add it
 // to the includes below.
 
 // Plugins are included like this
 include(
-    "Command"
-    //"Testing"
+    "Test"
 )
 
 // This is required because plugins are in the ExamplePlugins/kotlin subdirectory.
@@ -17,5 +16,5 @@ include(
 // Otherwise, if you want a different structure, for example all plugins in a folder called "plugins",
 // then simply change the path
 rootProject.children.forEach {
-    it.projectDir = file("Test/${it.name}")
+    it.projectDir = file("${it.name}")
 }

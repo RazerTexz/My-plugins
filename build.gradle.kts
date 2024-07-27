@@ -46,11 +46,11 @@ subprojects {
     }
 
     android {
-        compileSdkVersion(34)
+        compileSdkVersion(31)
 
         defaultConfig {
             minSdk = 24
-            targetSdk = 34
+            targetSdk = 31
         }
 
         compileOptions {
