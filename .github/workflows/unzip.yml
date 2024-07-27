@@ -11,7 +11,7 @@ jobs:
 
     - name: Push unzipped file(s) & folder(s)
       run: |
-        unzip *.zip
+        unzip -o *.zip
         rm *.zip
         git config --local user.name "github-actions[bot]"
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
