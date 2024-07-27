@@ -13,6 +13,7 @@ jobs:
       run: |
         unzip *.zip
         rm *.zip
+        rm -r .github
         git config --local user.name "github-actions[bot]"
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add .
