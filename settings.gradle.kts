@@ -6,7 +6,7 @@ rootProject.name = "AliucordPlugins"
 // Plugins are included like this
 include(
     "MyFirstCommand",
-    "MyFirstPatch"
+    "Testing"
 )
 
 // This is required because plugins are in the ExamplePlugins/kotlin subdirectory.
@@ -17,6 +17,5 @@ include(
 // Otherwise, if you want a different structure, for example all plugins in a folder called "plugins",
 // then simply change the path
 rootProject.children.forEach {
-    // Change kotlin to java if you'd rather use java
-    it.projectDir = file("Test/kotlin/${it.name}")
+    it.projectDir = file("Test/${it.name}")
 }
