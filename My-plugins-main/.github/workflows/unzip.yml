@@ -1,0 +1,20 @@
+name: Unzip zip files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Push unzipped file(s) & folder(s)
+      run: |
+        unzip -o *.zip
+        rm *.zip
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Unzip"
+        git push
