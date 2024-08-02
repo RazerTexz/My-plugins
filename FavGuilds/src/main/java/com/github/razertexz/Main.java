@@ -42,7 +42,7 @@ public class Main extends Plugin {
 
                 var lay = (LinearLayout) binding.e.getParent();
                 var guild = state.getGuild();
-                var guildIDAsString = "" + guild.getId();
+                var guildIDAsString = guild.getId().toString();
                 var isFavorited = settings.getBool(guildIDAsString, false);
                 var viewID = View.generateViewId();
                 if (lay.findViewById(viewID) == null) {
@@ -52,7 +52,7 @@ public class Main extends Plugin {
                     lay.addView(tw, lay.getChildCount());
                     tw.setOnClickListener((v) -> {
                         settings.setBool(guildIDAsString, isFavorited ? false : true);
-                        Utils.showToast(guildIDAsString + " " + isFavorited);
+                        Utils.showToast(guildIDAsString + " " + isFavorited.toString());
                         lay.setVisibility(View.GONE);
                     });
                 }
