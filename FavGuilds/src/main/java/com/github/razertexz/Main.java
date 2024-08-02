@@ -59,7 +59,7 @@ public class Main extends Plugin {
                 entry.getMessage().getEmbeds().add(embed);
             })
         );*/
-        patchWidgetGuildContextMenu()
+        patchWidgetGuildContextMenu();
     }
 
     private void patchWidgetGuildContextMenu() throws Throwable {
