@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aliucord.Utils;
 import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.Plugin;
@@ -53,7 +52,6 @@ public class Main extends Plugin {
                     lay.addView(tw, lay.getChildCount());
                     tw.setOnClickListener((v) -> {
                         settings.setBool(guildIDAsString, isFavorited ? false : true);
-                        Utils.showToast(guildIDAsString + " " + String.valueOf(isFavorited));
                         lay.setVisibility(View.GONE);
                     });
                 }

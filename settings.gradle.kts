@@ -5,7 +5,8 @@ rootProject.name = "AliucordPlugins"
 
 // Plugins are included like this
 include(
-    "FavGuilds"
+    "FavGuilds",
+    "AutoBlockCalls"
 )
 
 // This is required because plugins are in the ExamplePlugins/kotlin subdirectory.
