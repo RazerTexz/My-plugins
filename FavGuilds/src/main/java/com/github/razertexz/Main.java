@@ -63,8 +63,6 @@ public class Main extends Plugin {
     }
 
     private void patchWidgetGuildContextMenu() throws Throwable {
-        var context = Utils.getAppContext();
-
         var getBinding = WidgetGuildContextMenu.class.getDeclaredMethod("getBinding");
         getBinding.setAccessible(true);
         patcher.patch(WidgetGuildContextMenu.class.getDeclaredMethod("configureUI", GuildContextMenuViewModel.ViewState.class),
@@ -74,7 +72,6 @@ public class Main extends Plugin {
                 try {
                     binding = (WidgetGuildContextMenuBinding) getBinding.invoke(cf.thisObject);
                 } catch (Throwable e) {
-                    logger.error("Failed to get binding", e);
                 }
                 var lay = (LinearLayout) binding.e.getParent();
                 var guild = state.getGuild();
