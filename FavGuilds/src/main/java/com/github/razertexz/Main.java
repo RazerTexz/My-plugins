@@ -1,18 +1,25 @@
 package com.github.razertexz;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.aliucord.Utils.*;
 import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
-import com.discord.models.guild.UserGuildMember;
-import com.discord.stores.StoreUserTyping;
+
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
 import com.discord.widgets.chat.list.entries.MessageEntry;
-import com.aliucord.Logger;
+import com.discord.widgets.guilds.contextmenu.GuildContextMenuViewModel;
+import com.discord.widgets.guilds.contextmenu.WidgetGuildContextMenu;
+
+import java.util.*;
 
 // Aliucord Plugin annotation. Must be present on the main class of your plugin
 @AliucordPlugin(requiresRestart = false /* Whether your plugin requires a restart after being installed/updated */)
@@ -52,13 +59,41 @@ public class Main extends Plugin {
                 entry.getMessage().getEmbeds().add(embed);
             })
         );*/
+        patchWidgetGuildContextMenu()
+    }
 
-        // Patch that renames Yolo to No
-        patcher.patch(UserGuildMember.class.getDeclaredMethod("getNickname"),
-            new Hook(param -> { // see https://api.xposed.info/reference/de/robv/android/xposed/XC_MethodHook.MethodHookParam.html
-                var name = (String) param.getResult();
-                if (name != null && name.equalsIgnoreCase("Yolo")) {
-                    param.setResult("No");
+    private void patchWidgetGuildContextMenu() throws Throwable {
+        var context = Utils.getAppContext();
+
+        var getBinding = WidgetGuildContextMenu.class.getDeclaredMethod("getBinding");
+        getBinding.setAccessible(true);
+        patcher.patch(WidgetGuildContextMenu.class.getDeclaredMethod("configureUI", GuildContextMenuViewModel.ViewState.class),
+            new Hook((cf) -> {
+                var state = (GuildContextMenuViewModel.ViewState.Valid) cf.args[0];
+                WidgetGuildContextMenuBinding binding = null;
+                try {
+                    binding = (WidgetGuildContextMenuBinding) getBinding.invoke(cf.thisObject);
+                } catch (Throwable e) {
+                    logger.error("Failed to get binding", e);
+                }
+                var lay = (LinearLayout) binding.e.getParent();
+                var guild = state.getGuild();
+                //var guildId = guild.getId();
+                var isFavorited = false // Temp
+                var viewID = View.generateViewId();
+                if (lay.findViewById(viewID) == null) {
+                    TextView tw = new TextView(lay.getContext(), null, 0, com.lytefast.flexinput.R.i.ContextMenuTextOption);
+                    tw.setId(viewID);
+                    tw.setText(isFavorited ? "Unfavorite" : "Favorite");
+                    lay.addView(tw, lay.getChildCount());
+                    tw.setOnClickListener((v) -> {
+                        if (isFavorited) {
+                            Utils.showToast(guild.getName())
+                        } else {
+                            Utils.showToast(guild.getName())
+                        }
+                        lay.setVisibility(View.GONE);
+                    });
                 }
             })
         );
