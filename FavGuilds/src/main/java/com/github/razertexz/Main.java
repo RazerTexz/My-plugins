@@ -12,6 +12,7 @@ import com.discord.stores.StoreUserTyping;
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
 import com.discord.widgets.chat.list.entries.MessageEntry;
+import com.aliucord.Logger;
 
 // Aliucord Plugin annotation. Must be present on the main class of your plugin
 @AliucordPlugin(requiresRestart = false /* Whether your plugin requires a restart after being installed/updated */)
@@ -54,8 +55,9 @@ public class Main extends Plugin {
 
         // Patch that renames Yolo to No
         patcher.patch(UserGuildMember.class.getDeclaredMethod("getNickname"),
-            new PreHook(param -> { // see https://api.xposed.info/reference/de/robv/android/xposed/XC_MethodHook.MethodHookParam.html
-                if ( ( (UserGuildMember) param.thisObject).getNickname().startsWith("Yolo") ) {
+            new Hook(param -> { // see https://api.xposed.info/reference/de/robv/android/xposed/XC_MethodHook.MethodHookParam.html
+                var name = (String) param.getResult();
+                if (name != null && name.equalsIgnoreCase("Yolo")) {
                     param.setResult("No");
                 }
             })
