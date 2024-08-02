@@ -7,7 +7,7 @@ import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.wrappers.embeds.MessageEmbedWrapper;
-import com.discord.models.user.CoreUser;
+import com.discord.models.guild.UserGuildMember;
 import com.discord.stores.StoreUserTyping;
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
@@ -22,8 +22,8 @@ public class Main extends Plugin {
     public void start(Context context) throws Throwable {
         // Patch that adds an embed with message statistics to each message
         // Patched method is WidgetChatListAdapterItemMessage.onConfigure(int type, ChatListEntry entry)
-        patcher.patch(/* see https://docs.oracle.com/javase/tutorial/reflect/class/classNew.html */WidgetChatListAdapterItemMessage.class.getDeclaredMethod("onConfigure", int.class, ChatListEntry.class),
-            new Hook(param -> { // see https://api.xposed.info/reference/de/robv/android/xposed/XC_MethodHook.MethodHookParam.html
+        //patcher.patch(/* see https://docs.oracle.com/javase/tutorial/reflect/class/classNew.html */WidgetChatListAdapterItemMessage.class.getDeclaredMethod("onConfigure", int.class, ChatListEntry.class),
+            /*new Hook(param -> { // see https://api.xposed.info/reference/de/robv/android/xposed/XC_MethodHook.MethodHookParam.html
                 // Obtain the second argument passed to the method, so the ChatListEntry
                 // Because this is a Message item, it will always be a MessageEntry, so cast it to that
                 var entry = (MessageEntry) param.args[1];
@@ -50,20 +50,16 @@ public class Main extends Plugin {
 
                 entry.getMessage().getEmbeds().add(embed);
             })
-        );
+        );*/
 
-        // Patch that renames Juby to JoobJoob
-        patcher.patch(CoreUser.class.getDeclaredMethod("getUsername"),
+        // Patch that renames Yolo to No
+        patcher.patch(UserGuildMember.class.getDeclaredMethod("getNickname"),
             new PreHook(param -> { // see https://api.xposed.info/reference/de/robv/android/xposed/XC_MethodHook.MethodHookParam.html
-                if (((CoreUser) param.thisObject).getId() == 324622488644616195L) {
-                    // setResult() in before patches skips original method invocation
-                    param.setResult("JoobJoob");
+                if ( ( (UserGuildMember) param.thisObject).getNickname().startsWith("Yolo") ) {
+                    param.setResult("No");
                 }
             })
         );
-
-        // Patch that hides your typing status by replacing the method and simply doing nothing
-        patcher.patch(StoreUserTyping.class.getDeclaredMethod("setUserTyping", long.class), InsteadHook.DO_NOTHING);
     }
 
     @Override
