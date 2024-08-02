@@ -53,7 +53,7 @@ public class Main extends Plugin {
                     lay.addView(tw, lay.getChildCount());
                     tw.setOnClickListener((v) -> {
                         settings.setBool(guildIDAsString, isFavorited ? false : true);
-                        Utils.showToast(guildIDAsString + " " + isFavorited.toString());
+                        Utils.showToast(guildIDAsString + " " + String.valueOf(isFavorited));
                         lay.setVisibility(View.GONE);
                     });
                 }
