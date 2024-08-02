@@ -76,7 +76,7 @@ public class Main extends Plugin {
                 var lay = (LinearLayout) binding.e.getParent();
                 var guild = state.getGuild();
                 //var guildId = guild.getId();
-                var isFavorited = false // Temp
+                var isFavorited = false; // Temp
                 var viewID = View.generateViewId();
                 if (lay.findViewById(viewID) == null) {
                     TextView tw = new TextView(lay.getContext(), null, 0, com.lytefast.flexinput.R.i.ContextMenuTextOption);
@@ -85,9 +85,9 @@ public class Main extends Plugin {
                     lay.addView(tw, lay.getChildCount());
                     tw.setOnClickListener((v) -> {
                         if (isFavorited) {
-                            Utils.showToast(guild.getName())
+                            Utils.showToast(guild.getName());
                         } else {
-                            Utils.showToast(guild.getName())
+                            Utils.showToast(guild.getName());
                         }
                         lay.setVisibility(View.GONE);
                     });
