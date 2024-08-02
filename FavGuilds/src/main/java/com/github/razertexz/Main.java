@@ -10,6 +10,7 @@ import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
+import com.aliucord.api.SettingsAPI;
 
 import com.discord.widgets.guilds.contextmenu.GuildContextMenuViewModel;
 import com.discord.widgets.guilds.contextmenu.WidgetGuildContextMenu;
