@@ -20,7 +20,8 @@ import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
-    private final SettingsAPI settings = this.settings;
+    private final SettingsAPI settings = new SettingsAPI("FavGuilds");
+
     @Override
     public void start(Context context) throws Throwable {
         patchWidgetGuildContextMenu();
@@ -42,7 +43,7 @@ public class Main extends Plugin {
 
                 var lay = (LinearLayout) binding.e.getParent();
                 var guild = state.getGuild();
-                var guildIDAsString = guild.getId().toString();
+                var guildIDAsString = "" + guild.getId();
                 var isFavorited = settings.getBool(guildIDAsString, false);
                 var viewID = View.generateViewId();
                 if (lay.findViewById(viewID) == null) {
