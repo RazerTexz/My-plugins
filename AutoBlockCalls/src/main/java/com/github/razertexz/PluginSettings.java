@@ -2,7 +2,7 @@ package com.github.razertexz;
 
 import android.view.View;
 
-import com.aliucord.Utils.showToast;
+import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.fragments.SettingsPage;
 import com.aliucord.views.Button;
@@ -26,9 +26,9 @@ public class PluginSettings extends SettingsPage {
             .setText("Unblock all")
             .setOnClickListener(v -> {
                 if (settings.resetSettings()) {
-                    showToast("Successfully unblock all");
+                    Utils.showToast("Successfully unblock all");
                 } else {
-                    showToast("Failed");
+                    Utils.showToast("Failed");
                 }
             })
         );

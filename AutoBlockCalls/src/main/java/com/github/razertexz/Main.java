@@ -58,7 +58,7 @@ public class Main extends Plugin {
             new Hook((cf) -> {
                 var modal = (WidgetChannelsListItemChannelActions.Model) cf.args[0];
                 var channel = modal.getChannel();
-                var isDM = ChannelWrapper(channel).isDM();
+                var isDM = ChannelWrapper.isDM(channel);
 
                 if (isDM) {
                     var channelID = "" + ChannelWrapper(channel).id;
