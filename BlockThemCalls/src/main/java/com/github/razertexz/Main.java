@@ -24,7 +24,7 @@ import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
-    private final SettingsAPI settings = new SettingsAPI("AutoBlockCalls");
+    private final SettingsAPI settings = new SettingsAPI("BlockThemCalls");
 
     public Main() {
         settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
