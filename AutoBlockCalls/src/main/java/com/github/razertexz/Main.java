@@ -44,10 +44,12 @@ public class Main extends Plugin {
                 if (settings.getBool(channelId, false)) {
                     param.setResult(null);
                 }
+
+                // Might be useful idk
                 //var thisClass = (StoreCallsIncoming) param.thisObject;
                 //thisClass.handleCallDelete(state);
                 //thisClass.removeIncomingCall(state.getChannelId());
-                //Utils.showToast("Voice Call from " + channelId);
+                //Utils.showToast("Voice call from " + channelId);
             })
         );
     }
@@ -59,11 +61,12 @@ public class Main extends Plugin {
 
         patcher.patch(WidgetChannelsListItemChannelActions.class.getDeclaredMethod("configureUI", WidgetChannelsListItemChannelActions.Model.class),
             new Hook((cf) -> {
-                var modal = (WidgetChannelsListItemChannelActions.Model) cf.args[0];
-                var channel = modal.getChannel();
+                var model = (WidgetChannelsListItemChannelActions.Model) cf.args[0];
+                var channel = model.getChannel();
                 var isDM = ChannelWrapper.isDM(channel);
 
                 if (isDM) {
+                    var channelName = ChannelWrapper.getName(channel);
                     var channelID = "" + ChannelWrapper.getId(channel);
                     var isBlocked = settings.getBool(channelID, false);
 
@@ -75,7 +78,7 @@ public class Main extends Plugin {
                     if (lay.findViewById(viewID) == null) {
                         TextView tw = new TextView(lay.getContext(), null, 0, com.lytefast.flexinput.R.i.UiKit_Settings_Item_Icon);
                         tw.setId(viewID);
-                        tw.setText(isBlocked ? "Unblock calls" : "Block calls");
+                        tw.setText((isBlocked ? "Unblock" : "Block") + "Calls From " + channelName);
                         icon.setTint(ColorCompat.getThemedColor(tw, com.lytefast.flexinput.R.b.colorInteractiveNormal));
                         tw.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
                         lay.addView(tw, lay.getChildCount());
