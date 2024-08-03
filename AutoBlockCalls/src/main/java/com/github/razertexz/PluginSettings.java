@@ -24,13 +24,13 @@ public class PluginSettings extends SettingsPage {
         
         Button unblockButton = new Button(context);
         unblockButton.setText("Unblock all");
-        unblockButton.setOnClickListener(v ->
+        unblockButton.setOnClickListener(v -> { 
             if (settings.resetSettings()) {
                 Utils.showToast("Successfully unblock all");
             } else {
                 Utils.showToast("Failed");
             }
-        );
+        });
 
         addView(unblockButton);
     }
