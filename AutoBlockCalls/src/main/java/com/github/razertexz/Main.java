@@ -16,6 +16,8 @@ import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
 
+import top.canyie.pine.callback.InsteadHook;
+
 import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
@@ -24,7 +26,7 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
+        /*patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
             new PreHook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
@@ -32,13 +34,14 @@ public class Main extends Plugin {
                 var name = (String) dmRecipient.getDisplayName();
                 
                 if (name != null && name.equalsIgnoreCase("XyuzalKiller")) {
-                    param.setResult(null);
                     var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
                     thisClass.onEmptyCallModel();
                     Utils.showToast("WidgetVoiceCallIncoming " + name);
                 }
             })
-        );
+        );*/
+        
+        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class), InsteadHook.DO_NOTHING);
     }
 
     @Override
