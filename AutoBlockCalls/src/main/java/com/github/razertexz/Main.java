@@ -13,7 +13,6 @@ import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
 import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
-import com.discord.widgets.voice.call.WidgetVoiceCallIncoming$SystemCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
 
@@ -25,30 +24,30 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        /*patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new PreHook((param) -> {
+        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
+            new Hook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
                 var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
                 var name = dmRecipient.getDisplayName();
                 
-                Utils.showToast("Blocked call from " + name);
+                Utils.showToast("WidgetVoiceCallIncoming " + name);
                 
                 var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
                 thisClass.onEmptyCallModel();
             })
-        );*/
+        );
         
-        patcher.patch(WidgetVoiceCallIncoming$SystemCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new PreHook((param) -> {
+        patcher.patch(WidgetVoiceCallIncoming.SystemCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
+            new Hook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
                 var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
                 var name = dmRecipient.getDisplayName();
                 
-                Utils.showToast("Blocked call from " + name);
+                Utils.showToast("WidgetVoiceCallIncoming.SystemCallIncoming " + name);
                 
-                var thisClass = (WidgetVoiceCallIncoming$SystemCallIncoming) param.thisObject;
+                var thisClass = (WidgetVoiceCallIncoming.SystemCallIncoming) param.thisObject;
                 thisClass.onEmptyCallModel();
             })
         );
