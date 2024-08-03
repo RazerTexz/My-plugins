@@ -9,7 +9,7 @@ import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
-import com.discord.utilities.fcm.NotificationClient;
+//import com.discord.utilities.fcm.NotificationClient;
 import com.discord.stores.StoreCallsIncoming;
 import com.discord.models.domain.ModelCall;
 
@@ -25,9 +25,10 @@ public class Main extends Plugin {
             new PreHook((param) -> {
                 var state = (ModelCall) param.args[0];
                 var channelId = "" + state.getChannelId();
+                param.setResult(null);
                 var thisClass = (StoreCallsIncoming) param.thisObject;
                 //thisClass.handleCallDelete(state);
-                NotificationClient.clear$default(NotificationClient.INSTANCE, state.getChannelId(), context, false, 4, null);
+                //NotificationClient.clear$default(NotificationClient.INSTANCE, state.getChannelId(), context, false, 4, null);
                 thisClass.removeIncomingCall(state.getChannelId());
                 Utils.showToast("Voice Call from " + channelId);
             })
