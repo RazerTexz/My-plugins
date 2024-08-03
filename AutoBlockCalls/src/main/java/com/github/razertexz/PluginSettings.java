@@ -26,9 +26,9 @@ public class PluginSettings extends SettingsPage {
             .setText("Unblock all")
             .setOnClickListener(v -> {
                 if (settings.resetSettings()) {
-                    showToast("Successfully unblock all")
+                    showToast("Successfully unblock all");
                 } else {
-                    showToast("Failed")
+                    showToast("Failed");
                 }
             })
         );

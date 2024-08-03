@@ -40,7 +40,7 @@ public class Main extends Plugin {
             new PreHook((param) -> {
                 var state = (ModelCall) param.args[0];
                 var channelId = "" + state.getChannelId();
-                if (settings.getBool(channelId, false) {
+                if (settings.getBool(channelId, false)) {
                     param.setResult(null);
                 }
                 //var thisClass = (StoreCallsIncoming) param.thisObject;
