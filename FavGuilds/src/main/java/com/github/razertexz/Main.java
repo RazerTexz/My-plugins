@@ -5,12 +5,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aliucord.Utils;
 import com.aliucord.CollectionUtils;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
+import com.discord.widgets.guilds.list.GuildListViewHolder;
+import com.discord.widgets.guilds.list.GuildListItem;
 import com.discord.widgets.guilds.contextmenu.GuildContextMenuViewModel;
 import com.discord.widgets.guilds.contextmenu.WidgetGuildContextMenu;
 import com.discord.databinding.WidgetGuildContextMenuBinding;
@@ -23,6 +26,12 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
+        patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
+            new Hook((param) {
+                var folderItem = (GuildListItem.FolderItem) param.args[0];
+                Utils.showToast(folderItem.getName());
+            })
+        );
         patchWidgetGuildContextMenu();
     }
 
