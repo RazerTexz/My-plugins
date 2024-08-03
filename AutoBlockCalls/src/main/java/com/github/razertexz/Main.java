@@ -25,7 +25,7 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        /*patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onConnect", WidgetVoiceCallIncoming.Model.class, Boolean.class),
+        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onConnect", WidgetVoiceCallIncoming.Model.class, Boolean.class),
             new PreHook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
@@ -35,10 +35,11 @@ public class Main extends Plugin {
                 if (name != null && name.equalsIgnoreCase("XyuzalKiller")) {
                     var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
                     thisClass.onEmptyCallModel();
+                    thisClass.onStop();
                     Utils.showToast("WidgetVoiceCallIncoming " + name);
                 }
             })
-        );*/
+        );
         
         patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onViewBound", View.class), InsteadHook.DO_NOTHING);
         patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onViewBoundOrOnResume"), InsteadHook.DO_NOTHING);
