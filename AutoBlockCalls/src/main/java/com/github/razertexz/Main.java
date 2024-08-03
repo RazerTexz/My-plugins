@@ -66,7 +66,6 @@ public class Main extends Plugin {
                 var isDM = ChannelWrapper.isDM(channel);
 
                 if (isDM) {
-                    var channelName = ChannelWrapper.getName(channel);
                     var channelID = "" + ChannelWrapper.getId(channel);
                     var isBlocked = settings.getBool(channelID, false);
 
@@ -78,7 +77,7 @@ public class Main extends Plugin {
                     if (lay.findViewById(viewID) == null) {
                         TextView tw = new TextView(lay.getContext(), null, 0, com.lytefast.flexinput.R.i.UiKit_Settings_Item_Icon);
                         tw.setId(viewID);
-                        tw.setText((isBlocked ? "Unblock" : "Block") + "Calls From " + channelName);
+                        tw.setText((isBlocked ? "Unblock" : "Block") + " Calls");
                         icon.setTint(ColorCompat.getThemedColor(tw, com.lytefast.flexinput.R.b.colorInteractiveNormal));
                         tw.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
                         lay.addView(tw, lay.getChildCount());
