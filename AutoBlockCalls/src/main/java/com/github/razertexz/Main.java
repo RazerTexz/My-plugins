@@ -22,7 +22,7 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         patcher.patch(StoreCallsIncoming.class.getDeclaredMethod("handleCallCreateOrUpdate", ModelCall.class),
-            new Hook((param) -> {
+            new PreHook((param) -> {
                 var state = (ModelCall) param.args[0];
                 var channelId = "" + state.getChannelId();
                 var thisClass = (StoreCallsIncoming) param.thisObject;
