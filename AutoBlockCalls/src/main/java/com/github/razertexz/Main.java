@@ -16,6 +16,8 @@ import com.aliucord.api.SettingsAPI;
 import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
+import com.discord.stores.StoreCallsIncoming;
+import com.discord.models.domain.ModelCall;
 
 import java.util.*;
 
@@ -25,7 +27,7 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
+        /*patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
             new Hook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
@@ -33,16 +35,20 @@ public class Main extends Plugin {
                 var name = (String) dmRecipient.getDisplayName();
                 
                 if (name != null && name.equalsIgnoreCase("XyuzalKiller")) {
-                    var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
-                    thisClass.onEmptyCallModel();
-                    thisClass.onStop();
+                    //var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
+                    //thisClass.onEmptyCallModel();
                     Utils.showToast("WidgetVoiceCallIncoming " + name);
                 }
             })
-        );
+        );*/
         
-        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onViewBound", View.class), InsteadHook.DO_NOTHING);
-        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onViewBoundOrOnResume"), InsteadHook.DO_NOTHING);
+        patcher.patch(StoreCallsIncoming.class.getDeclaredMethod("handleCallCreateOrUpdate", ModelCall.class),
+            new Hook((param) -> {
+                var state = (ModelCall) param.args[0];
+                var channelId = "" + state.getChannelId();
+                Utils.showToast("Voice Call from " + channelId);
+            })
+        );
     }
 
     @Override
