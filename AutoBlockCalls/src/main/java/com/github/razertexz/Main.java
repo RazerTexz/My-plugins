@@ -14,6 +14,7 @@ import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
 import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
+import com.discord.widgets.voice.call.WidgetVoiceCallIncoming$SystemCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
 
