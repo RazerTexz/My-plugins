@@ -6,6 +6,14 @@ on:
       - main
     paths:
       - '*-auto.zip'
+
+  workflow_run:
+    workflows: [Build]
+      types:
+        - completed
+      branches:
+        - main
+
   workflow_dispatch:
 
 jobs:
