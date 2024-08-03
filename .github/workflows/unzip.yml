@@ -9,10 +9,10 @@ on:
 
   workflow_run:
     workflows: [Build]
-      types:
-        - completed
-      branches:
-        - main
+    types:
+      - completed
+    branches:
+      - main
 
   workflow_dispatch:
 
