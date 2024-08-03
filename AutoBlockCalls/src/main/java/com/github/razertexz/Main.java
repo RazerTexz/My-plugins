@@ -14,7 +14,6 @@ import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
 import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
-import com.discord.widgets.voice.call.WidgetVoiceCallIncoming$SystemCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
 
@@ -41,7 +40,7 @@ public class Main extends Plugin {
             })
         );*/
         
-        patcher.patch(WidgetVoiceCallIncoming$SystemCallIncoming.class.getDeclaredMethod("onViewCreated", View.class, Bundle.class), InsteadHook.DO_NOTHING);
+        patcher.patch(WidgetVoiceCallIncoming.SystemCallIncoming.class.getDeclaredMethod("onViewCreated", View.class, Bundle.class), InsteadHook.DO_NOTHING);
     }
 
     @Override
