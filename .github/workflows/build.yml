@@ -12,6 +12,14 @@ on:
     paths-ignore:
       - '*.md'
       - '*.zip'
+
+  workflow_run:
+    workflows: [Extract zip files]
+    types:
+      - completed
+    branches:
+      - main
+
   workflow_dispatch:
 
 jobs:

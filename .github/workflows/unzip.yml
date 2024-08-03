@@ -1,4 +1,4 @@
-name: Unzip zip files
+name: Extract zip files
 
 on:
   push:
@@ -6,13 +6,6 @@ on:
       - main
     paths:
       - '*-auto.zip'
-
-  workflow_run:
-    workflows: [Build]
-    types:
-      - completed
-    branches:
-      - main
 
   workflow_dispatch:
 
