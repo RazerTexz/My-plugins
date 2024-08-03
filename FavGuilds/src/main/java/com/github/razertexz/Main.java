@@ -27,7 +27,7 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
-            new Hook((param) {
+            new Hook((param) -> {
                 var folderItem = (GuildListItem.FolderItem) param.args[0];
                 Utils.showToast(folderItem.getName());
             })
