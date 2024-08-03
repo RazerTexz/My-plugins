@@ -26,7 +26,7 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new PreHook((param) -> {
+            new Hook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
                 var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
