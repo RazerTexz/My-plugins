@@ -1,6 +1,7 @@
 package com.github.razertexz;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class Main extends Plugin {
             })
         );*/
         
-        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onConnect", WidgetVoiceCallIncoming.Model.class, Boolean.class), InsteadHook.DO_NOTHING);
+        patcher.patch(WidgetVoiceCallIncoming$SystemCallIncoming.class.getDeclaredMethod("onViewCreated", View.class, Bundle.class), InsteadHook.DO_NOTHING);
     }
 
     @Override
