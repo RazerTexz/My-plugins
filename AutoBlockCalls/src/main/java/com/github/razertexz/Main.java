@@ -40,8 +40,8 @@ public class Main extends Plugin {
         patcher.patch(StoreCallsIncoming.class.getDeclaredMethod("handleCallCreateOrUpdate", ModelCall.class),
             new PreHook((param) -> {
                 var state = (ModelCall) param.args[0];
-                var channelId = "" + state.getChannelId();
-                if (settings.getBool(channelId, false)) {
+                var channelID = "" + state.getChannelId();
+                if (settings.getBool(channelID, false)) {
                     param.setResult(null);
                 }
 
@@ -60,8 +60,8 @@ public class Main extends Plugin {
         var blockedIcon = context.getDrawable(com.lytefast.flexinput.R.e.ic_call_disconnect_24dp).mutate();
 
         patcher.patch(WidgetChannelsListItemChannelActions.class.getDeclaredMethod("configureUI", WidgetChannelsListItemChannelActions.Model.class),
-            new Hook((cf) -> {
-                var model = (WidgetChannelsListItemChannelActions.Model) cf.args[0];
+            new Hook((param) -> {
+                var model = (WidgetChannelsListItemChannelActions.Model) param.args[0];
                 var channel = model.getChannel();
                 var isDM = ChannelWrapper.isDM(channel);
 
@@ -69,21 +69,21 @@ public class Main extends Plugin {
                     var channelID = "" + ChannelWrapper.getId(channel);
                     var isBlocked = settings.getBool(channelID, false);
 
+                    var obj = (WidgetChannelsListItemChannelActions) param.thisObject;
                     var viewID = View.generateViewId();
                     var icon = isBlocked ? blockedIcon : unblockedIcon;
-                    var actions = (WidgetChannelsListItemChannelActions) cf.thisObject;
-                    var scrollView = (NestedScrollView) actions.getView();
-                    var lay = (LinearLayout) scrollView.getChildAt(0);
-                    if (lay.findViewById(viewID) == null) {
-                        TextView tw = new TextView(lay.getContext(), null, 0, com.lytefast.flexinput.R.i.UiKit_Settings_Item_Icon);
+                    var scrollView = (NestedScrollView) obj.getView();
+                    var linearLay = (LinearLayout) scrollView.getChildAt(0);
+                    if (linearLay.findViewById(viewID) == null) {
+                        TextView tw = new TextView(linearLay.getContext(), null, 0, com.lytefast.flexinput.R.i.UiKit_Settings_Item_Icon);
                         tw.setId(viewID);
-                        tw.setText((isBlocked ? "Unblock" : "Block") + " Calls");
+                        tw.setText((isBlocked ? "Unblock" : "Block") + " Call(s)");
                         icon.setTint(ColorCompat.getThemedColor(tw, com.lytefast.flexinput.R.b.colorInteractiveNormal));
                         tw.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
                         lay.addView(tw, lay.getChildCount());
                         tw.setOnClickListener((v) -> {
                             settings.setBool(channelID, isBlocked ? false : true);
-                            ((WidgetChannelsListItemChannelActions) cf.thisObject).dismiss();
+                            obj.dismiss();
                         });
                     }
                 }
