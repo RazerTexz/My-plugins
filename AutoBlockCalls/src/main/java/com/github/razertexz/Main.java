@@ -16,8 +16,6 @@ import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
 
-import top.canyie.pine.callback.InsteadHook;
-
 import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
