@@ -1,4 +1,5 @@
 name: Extract zip files
+run-name: Extract zip files | ${{ github.sha }}
 
 on:
   push:
