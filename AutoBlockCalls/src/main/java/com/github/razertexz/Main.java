@@ -61,7 +61,7 @@ public class Main extends Plugin {
                 var isDM = ChannelWrapper.isDM(channel);
 
                 if (isDM) {
-                    var channelID = "" + ChannelWrapper(channel).id;
+                    var channelID = "" + ChannelWrapper.getId(channel);
                     var isBlocked = settings.getBool(channelID, false);
 
                     var viewID = View.generateViewId();

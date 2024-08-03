@@ -22,15 +22,16 @@ public class PluginSettings extends SettingsPage {
         setActionBarTitle("Auto Block Calls");
         setPadding(0);
         
-        addView(Button(context)
-            .setText("Unblock all")
-            .setOnClickListener(v -> {
-                if (settings.resetSettings()) {
-                    Utils.showToast("Successfully unblock all");
-                } else {
-                    Utils.showToast("Failed");
-                }
-            })
+        Button unblockButton = new Button(context);
+        unblockButton.setText("Unblock all");
+        unblockButton.setOnClickListener(v ->
+            if (settings.resetSettings()) {
+                Utils.showToast("Successfully unblock all");
+            } else {
+                Utils.showToast("Failed");
+            }
         );
+
+        addView(unblockButton);
     }
 }
