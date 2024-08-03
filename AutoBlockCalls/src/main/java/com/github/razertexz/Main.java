@@ -46,6 +46,8 @@ public class Main extends Plugin {
             new Hook((param) -> {
                 var state = (ModelCall) param.args[0];
                 var channelId = "" + state.getChannelId();
+                var thisClass = (StoreCallsIncoming) param.thisObject;
+                thisClass.handleCallDelete(state);
                 Utils.showToast("Voice Call from " + channelId);
             })
         );
