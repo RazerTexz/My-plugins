@@ -25,7 +25,7 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new Hook((param) -> {
+            new PreHook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
                 var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
@@ -34,7 +34,9 @@ public class Main extends Plugin {
                 Utils.showToast("Blocked call from " + name);
                 
                 var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
+                //var systemCallIncoming = (WidgetVoiceCallIncoming.SystemCallIncoming) param.args[0];
                 thisClass.onEmptyCallModel();
+                //systemCallIncoming.onEmptyCallModel();
             })
         );
     }
