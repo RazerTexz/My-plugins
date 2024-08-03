@@ -1,6 +1,10 @@
 name: Extract zip files
 run-name: Extract zip files ${{ github.run_number }} | ${{ github.run_id }}
 
+concurrency: 
+  group: "unzip"
+  cancel-in-progress: true
+
 on:
   push:
     branches:
