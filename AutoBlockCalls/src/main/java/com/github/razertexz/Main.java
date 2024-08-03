@@ -32,7 +32,7 @@ public class Main extends Plugin {
                 var name = dmRecipient.getDisplayName();
                 
                 Utils.showToast("Blocked call from " + name);
-                param.setResult(null)
+                param.setResult(null);
             })
         );
     }
