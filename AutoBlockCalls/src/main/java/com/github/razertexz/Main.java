@@ -15,6 +15,7 @@ import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.wrappers.ChannelWrapper;
 
+import com.discord.utilities.color.ColorCompat;
 import com.discord.stores.StoreCallsIncoming;
 import com.discord.models.domain.ModelCall;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
@@ -53,6 +54,8 @@ public class Main extends Plugin {
 
     private void patchWidgetChannelsListItemChannelActions() throws Throwable {
         var context = Utils.getAppContext();
+        var unblockedIcon = context.getDrawable(com.lytefast.flexinput.R.e.ic_call_24dp).mutate();
+        var blockedIcon = context.getDrawable(com.lytefast.flexinput.R.e.ic_call_disconnect_24dp).mutate();
 
         patcher.patch(WidgetChannelsListItemChannelActions.class.getDeclaredMethod("configureUI", WidgetChannelsListItemChannelActions.Model.class),
             new Hook((cf) -> {
@@ -65,6 +68,7 @@ public class Main extends Plugin {
                     var isBlocked = settings.getBool(channelID, false);
 
                     var viewID = View.generateViewId();
+                    var icon = isBlocked ? blockedIcon : unblockedIcon;
                     var actions = (WidgetChannelsListItemChannelActions) cf.thisObject;
                     var scrollView = (NestedScrollView) actions.getView();
                     var lay = (LinearLayout) scrollView.getChildAt(0);
@@ -72,6 +76,8 @@ public class Main extends Plugin {
                         TextView tw = new TextView(lay.getContext(), null, 0, com.lytefast.flexinput.R.i.UiKit_Settings_Item_Icon);
                         tw.setId(viewID);
                         tw.setText(isBlocked ? "Unblock calls" : "Block calls");
+                        icon.setTint(ColorCompat.getThemedColor(tw, com.lytefast.flexinput.R.b.colorInteractiveNormal));
+                        tw.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
                         lay.addView(tw, lay.getChildCount());
                         tw.setOnClickListener((v) -> {
                             settings.setBool(channelID, isBlocked ? false : true);
