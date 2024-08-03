@@ -13,6 +13,7 @@ import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
 import com.discord.widgets.voice.call.WidgetVoiceCallIncoming;
+import com.discord.widgets.voice.call.WidgetVoiceCallIncoming$SystemCallIncoming;
 import com.discord.widgets.voice.model.CallModel;
 import com.discord.stores.StoreVoiceParticipants;
 
@@ -37,9 +38,9 @@ public class Main extends Plugin {
                 thisClass.onEmptyCallModel();
             })
         );*/
-
-        patcher.patch(WidgetVoiceCallIncoming.SystemCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new Hook((param) -> {
+        
+        patcher.patch(WidgetVoiceCallIncoming$SystemCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
+            new PreHook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
                 var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
@@ -47,7 +48,7 @@ public class Main extends Plugin {
                 
                 Utils.showToast("Blocked call from " + name);
                 
-                var thisClass = (WidgetVoiceCallIncoming.SystemCallIncoming) param.thisObject;
+                var thisClass = (WidgetVoiceCallIncoming$SystemCallIncoming) param.thisObject;
                 thisClass.onEmptyCallModel();
             })
         );
