@@ -26,7 +26,7 @@ public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("AutoBlockCalls");
 
     public Main() {
-        settingsTab = new SettingsTab(Main.class).withArgs(settings);
+        settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Main extends Plugin {
                 var isDM = ChannelWrapper(channel).isDM();
 
                 if (isDM) {
-                    var channelId = "" + ChannelWrapper(channel).id;
+                    var channelID = "" + ChannelWrapper(channel).id;
                     var isBlocked = settings.getBool(channelID, false);
 
                     var viewID = View.generateViewId();
