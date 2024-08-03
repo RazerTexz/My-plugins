@@ -1,10 +1,6 @@
 package com.github.razertexz;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.aliucord.Utils;
 import com.aliucord.CollectionUtils;
@@ -32,7 +28,7 @@ public class Main extends Plugin {
                 var thisClass = (StoreCallsIncoming) param.thisObject;
                 //thisClass.handleCallDelete(state);
                 NotificationClient.clear$default(NotificationClient.INSTANCE, state.getChannelId(), context, false, 4, null);
-                thisClass.removeIncomingCall(state.getChannelId())
+                thisClass.removeIncomingCall(state.getChannelId());
                 Utils.showToast("Voice Call from " + channelId);
             })
         );
