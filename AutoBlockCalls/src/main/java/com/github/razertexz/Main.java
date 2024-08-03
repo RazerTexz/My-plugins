@@ -30,8 +30,9 @@ public class Main extends Plugin {
                 var state = (ModelCall) param.args[0];
                 var channelId = "" + state.getChannelId();
                 var thisClass = (StoreCallsIncoming) param.thisObject;
-                thisClass.handleCallDelete(state);
+                //thisClass.handleCallDelete(state);
                 NotificationClient.clear$default(NotificationClient.INSTANCE, state.getChannelId(), context, false, 4, null);
+                thisClass.removeIncomingCall(state.getChannelId())
                 Utils.showToast("Voice Call from " + channelId);
             })
         );
