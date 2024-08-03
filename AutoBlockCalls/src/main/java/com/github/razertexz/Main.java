@@ -80,7 +80,7 @@ public class Main extends Plugin {
                         tw.setText((isBlocked ? "Unblock" : "Block") + " Call(s)");
                         icon.setTint(ColorCompat.getThemedColor(tw, com.lytefast.flexinput.R.b.colorInteractiveNormal));
                         tw.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null);
-                        lay.addView(tw, lay.getChildCount());
+                        linearLay.addView(tw, linearLay.getChildCount());
                         tw.setOnClickListener((v) -> {
                             settings.setBool(channelID, isBlocked ? false : true);
                             obj.dismiss();
