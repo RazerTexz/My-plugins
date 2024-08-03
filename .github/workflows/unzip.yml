@@ -1,6 +1,11 @@
 name: Unzip zip files
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*-auto.zip'
   workflow_dispatch:
 
 jobs:
