@@ -1,5 +1,5 @@
 name: Build
-run-name: Build | ${{ github.sha }}
+run-name: Build ${{ github.run_number }} | ${{ github.run_id }}
 
 # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#concurrency
 concurrency: 
