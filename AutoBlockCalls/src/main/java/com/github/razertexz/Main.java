@@ -40,7 +40,8 @@ public class Main extends Plugin {
             })
         );*/
         
-        patcher.patch(WidgetVoiceCallIncoming.SystemCallIncoming.class.getDeclaredMethod("onViewCreated", View.class, Bundle.class), InsteadHook.DO_NOTHING);
+        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onViewBound", View.class), InsteadHook.DO_NOTHING);
+        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onViewBoundOrOnResume"), InsteadHook.DO_NOTHING);
     }
 
     @Override
