@@ -24,7 +24,7 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        /*patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
+        /*patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onConnect", WidgetVoiceCallIncoming.Model.class, Boolean.class),
             new PreHook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
@@ -39,7 +39,7 @@ public class Main extends Plugin {
             })
         );*/
         
-        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class), InsteadHook.DO_NOTHING);
+        patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("onConnect", WidgetVoiceCallIncoming.Model.class, Boolean.class), InsteadHook.DO_NOTHING);
     }
 
     @Override
