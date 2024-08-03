@@ -16,7 +16,6 @@ import com.aliucord.api.SettingsAPI;
 import com.discord.utilities.fcm.NotificationClient;
 import com.discord.stores.StoreCallsIncoming;
 import com.discord.models.domain.ModelCall;
-import com.discord.app.AppFragment;
 
 import java.util.*;
 
