@@ -25,30 +25,18 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         patcher.patch(WidgetVoiceCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new Hook((param) -> {
+            new PreHook((param) -> {
                 var state = (WidgetVoiceCallIncoming.Model) param.args[0];
                 var callModel = (CallModel) state.component1();
                 var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
-                var name = dmRecipient.getDisplayName();
+                var name = (String) dmRecipient.getDisplayName();
                 
-                Utils.showToast("WidgetVoiceCallIncoming " + name);
-                
-                var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
-                thisClass.onEmptyCallModel();
-            })
-        );
-        
-        patcher.patch(WidgetVoiceCallIncoming.SystemCallIncoming.class.getDeclaredMethod("configureUI", WidgetVoiceCallIncoming.Model.class),
-            new Hook((param) -> {
-                var state = (WidgetVoiceCallIncoming.Model) param.args[0];
-                var callModel = (CallModel) state.component1();
-                var dmRecipient = (StoreVoiceParticipants.VoiceUser) callModel.getDmRecipient();
-                var name = dmRecipient.getDisplayName();
-                
-                Utils.showToast("WidgetVoiceCallIncoming.SystemCallIncoming " + name);
-                
-                var thisClass = (WidgetVoiceCallIncoming.SystemCallIncoming) param.thisObject;
-                thisClass.onEmptyCallModel();
+                if (name != null && name.equalsIgnoreCase("XyuzalKiller")) {
+                    param.setResult(null);
+                    var thisClass = (WidgetVoiceCallIncoming) param.thisObject;
+                    thisClass.onEmptyCallModel();
+                    Utils.showToast("WidgetVoiceCallIncoming " + name);
+                }
             })
         );
     }
