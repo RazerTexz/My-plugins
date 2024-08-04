@@ -39,11 +39,13 @@ public class Main extends Plugin {
             })
         );*/
 
-        patcher.patch(WidgetGuildsListViewModel.StoreStare.class.getDeclaredMethod("getSortedGuilds"),
+        patcher.patch(WidgetGuildsListViewModel.StoreState.class.getDeclaredMethod("getSortedGuilds"),
             new PreHook(param -> {
                 var field = WidgetGuildsListViewModel.StoreState.class.getDeclaredField("fieldName");
                 field.setAccessible(true);
-                var value = field.get(param.thisObject);
+                List<StoreGuildsSorted.Entry> value = field.get(param.thisObject);
+                var guildName = ((StoreGuildsSorted.Entry.SingletonGuild) value.get(0)).getGuild().getName();
+                Utils.showToast(guildName);
 
                 /*for (StoreGuildsSorted.Entry entry : value) {
                     if (entry instanceof StoreGuildsSorted.Entry.SingletonGuild) {
