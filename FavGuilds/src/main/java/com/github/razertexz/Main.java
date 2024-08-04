@@ -18,12 +18,9 @@ import com.discord.widgets.guilds.contextmenu.GuildContextMenuViewModel;
 import com.discord.widgets.guilds.contextmenu.WidgetGuildContextMenu;
 import com.discord.databinding.WidgetGuildContextMenuBinding;
 import com.discord.models.guild.Guild;
+import com.discord.widgets.guilds.list.WidgetGuildListAdapter;
 
 import java.util.*;
-
-import com.discord.widgets.guilds.list.FolderItemDecoration;
-import android.graphics.Canvas;
-import androidx.recyclerview.widget.RecyclerView;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
@@ -34,21 +31,19 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         folder = new GuildListItem.FolderItem(633565155501801472L, 0, "Favorites", false, list, false, false, false, 0, false, false);
-        /*patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
-            new Hook((param) -> {
-                var recyclerView = (RecyclerView) param.args[1];
-                var childAt = (View) recyclerView.getChildAt(0);
-                var childViewHolder = (RecyclerView.ViewHolder) recyclerView.getChildViewHolder(childAt);
-                if (childViewHolder instanceof GuildListViewHolder.FolderViewHolder) {
-                    var folderViewHolder = (GuildListViewHolder.FolderViewHolder) childViewHolder;
-                    folderViewHolder.configure(new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false));
-                }
-            })
-        );*/
-        patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
+        /*patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new PreHook((param) -> {
                 var thisClass = (GuildListViewHolder.FolderViewHolder) param.thisObject;
                 thisClass.configure(folder);
+            })
+        );*/
+        patcher.patch(WidgetGuildListAdapter.class.getDeclaredMethod("onBindViewHolder", GuildListViewHolder.class, Int.class),
+            new Hook((param) -> {
+                var thisClass = (WidgetGuildListAdapter) param.thisObject;
+                Utils.showToast("" + thisClass.getItemCount());
+
+                var viewHolder = (GuildListViewHolder) param.args[0];
+                viewHolder.configure(folder);
             })
         );
         patchWidgetGuildContextMenu();
