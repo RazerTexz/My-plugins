@@ -20,6 +20,7 @@ import com.discord.databinding.WidgetGuildContextMenuBinding;
 import com.discord.models.guild.Guild;
 
 import java.util.*;
+import java.lang.reflect.Member;
 
 import com.discord.widgets.guilds.list.FolderItemDecoration;
 import android.graphics.Canvas;
