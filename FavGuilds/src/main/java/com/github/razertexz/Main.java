@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
+    private boolean favFolderCreated = false;
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
     List<Guild> list = new ArrayList<Guild>();
 
@@ -43,11 +44,15 @@ public class Main extends Plugin {
                 }
             })
         );*/
-        /*patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
+        patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new PreHook((param) -> {
+                if (!favFolderCreated) { 
+                    favFolderCreated = true;
+                    var obj = param.thisObject;
+                    obj.configure(new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false));
+                }
             })
-        );*/
-        patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class), InsteadHook.DO_NOTHING);
+        );
         patchWidgetGuildContextMenu();
     }
 
