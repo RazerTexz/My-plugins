@@ -37,15 +37,7 @@ public class Main extends Plugin {
                 thisClass.configure(folder);
             })
         );*/
-        patcher.patch(WidgetGuildListAdapter.class.getDeclaredMethod("onBindViewHolder", GuildListViewHolder.class, Int.class),
-            new Hook((param) -> {
-                var thisClass = (WidgetGuildListAdapter) param.thisObject;
-                Utils.showToast("" + thisClass.getItemCount());
-
-                var viewHolder = (GuildListViewHolder) param.args[0];
-                viewHolder.configure(folder);
-            })
-        );
+        patcher.patch(WidgetGuildListAdapter.class.getDeclaredMethod("onBindViewHolder", GuildListViewHolder.class, int.class), InsteadHook.DO_NOTHING);
         patchWidgetGuildContextMenu();
     }
 
