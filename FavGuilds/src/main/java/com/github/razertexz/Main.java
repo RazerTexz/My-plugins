@@ -28,22 +28,17 @@ import androidx.recyclerview.widget.RecyclerView;
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
+    List<Guild> list = new ArrayList<Guild>();
 
     @Override
     public void start(Context context) throws Throwable {
-        patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
+        /*patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
             new Hook((param) -> {
-                Utils.showToast("Called");
-                //var folderItem = (GuildListItem.FolderItem) param.args[0];
-                //Utils.showToast(folderItem.getName());
-                //GuildListViewHolder.FolderViewHolder.configure(favFolder);
             })
-        );
+        );*/
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
-            new Hook((param) -> {
-                var folderItem = (GuildListItem.FolderItem) param.args[0];
-                Utils.showToast("" + folderItem.getFolderId());
-                //GuildListViewHolder.FolderViewHolder.configure(favFolder);
+            new PreHook((param) -> {
+                param.args[0] = new GuildListItem.FolderItem(999, 2, "Favorites", false, list, false, false, false, 0, false, false);
             })
         );
         patchWidgetGuildContextMenu();
@@ -65,7 +60,6 @@ public class Main extends Plugin {
 
                 var lay = (LinearLayout) binding.e.getParent();
                 var guild = state.getGuild();
-                List<Guild> list = new ArrayList<Guild>();
                 list.add(guild);
                 var guildIDAsString = "" + guild.getId();
                 var isFavorited = settings.getBool(guildIDAsString, false);
@@ -76,8 +70,6 @@ public class Main extends Plugin {
                     tw.setText(isFavorited ? "Unfavorite" : "Favorite");
                     lay.addView(tw, lay.getChildCount());
                     tw.setOnClickListener((v) -> {
-                        var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, list, false, false, false, 0, false, false);
-                        GuildListViewHolder.FolderViewHolder.configure(favFolder);
                         settings.setBool(guildIDAsString, isFavorited ? false : true);
                         lay.setVisibility(View.GONE);
                     });
