@@ -20,6 +20,10 @@ import com.discord.databinding.WidgetGuildContextMenuBinding;
 
 import java.util.*;
 
+import com.discord.widgets.guilds.list.FolderItemDecoration;
+import android.graphics.Canvas;
+import androidx.recyclerview.widget.RecyclerView;
+
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
@@ -29,13 +33,19 @@ public class Main extends Plugin {
         var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
         Utils.showToast(favFolder.getName());
 
-        var viewHolder = new GuildListViewHolder.FolderViewHolder();
-        viewHolder.configure(favFolder);
-
+        patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
+            new Hook((param) -> {
+                Utils.showToast("Called");
+                //var folderItem = (GuildListItem.FolderItem) param.args[0];
+                //Utils.showToast(folderItem.getName());
+                //GuildListViewHolder.FolderViewHolder.configure(favFolder);
+            })
+        );
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new Hook((param) -> {
                 var folderItem = (GuildListItem.FolderItem) param.args[0];
-                Utils.showToast(folderItem.getName());                
+                Utils.showToast("" + folderItem.getFolderId());
+                //GuildListViewHolder.FolderViewHolder.configure(favFolder);
             })
         );
         patchWidgetGuildContextMenu();
