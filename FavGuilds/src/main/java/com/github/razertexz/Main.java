@@ -27,9 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
-    private boolean favFolderCreated = false;
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
     List<Guild> list = new ArrayList<Guild>();
+    var folder = new GuildListItem.FolderItem(633565155501801472L, 0, "Favorites", false, list, false, false, false, 0, false, false);
 
     @Override
     public void start(Context context) throws Throwable {
@@ -46,12 +46,8 @@ public class Main extends Plugin {
         );*/
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new PreHook((param) -> {
-                if (!favFolderCreated) { 
-                    favFolderCreated = true;
-                    var thisClass = (GuildListViewHolder.FolderViewHolder) param.thisObject;
-                    var folder = new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false);
-                    thisClass.configure(folder);
-                }
+                var thisClass = (GuildListViewHolder.FolderViewHolder) param.thisObject;
+                thisClass.configure(folder);
             })
         );
         patchWidgetGuildContextMenu();
