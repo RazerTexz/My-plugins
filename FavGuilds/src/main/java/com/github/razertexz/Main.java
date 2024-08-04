@@ -27,9 +27,11 @@ public class Main extends Plugin {
     @Override
     public void start(Context context) throws Throwable {
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
-            new Hook((param) -> {
-                var folderItem = (GuildListItem.FolderItem) param.args[0];
-                Utils.showToast(folderItem.getName());
+            new PreHook((param) -> {
+                //var folderItem = (GuildListItem.FolderItem) param.args[0];
+                //Utils.showToast(folderItem.getName());
+                param.args[0] = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
+                
             })
         );
         patchWidgetGuildContextMenu();
