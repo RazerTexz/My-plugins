@@ -32,15 +32,18 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        /*patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
+        patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
             new Hook((param) -> {
-            })
-        );*/
-        patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
-            new PreHook((param) -> {
-                param.args[0] = new GuildListItem.FolderItem(999, 2, "Favorites", false, list, false, false, false, 0, false, false);
+                var recyclerView = (RecyclerView) param.args[1];
+                var childAt = (View) recyclerView.getChildAt(0);
+                var folderViewHolder = (FolderViewHolder) recyclerView.getChildViewHolder(childAt);
+                folderViewHolder.configure(new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false));
             })
         );
+        /*patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
+            new PreHook((param) -> {
+            })
+        );*/
         patchWidgetGuildContextMenu();
     }
 
