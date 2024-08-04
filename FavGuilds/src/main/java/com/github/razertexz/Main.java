@@ -28,11 +28,11 @@ import androidx.recyclerview.widget.RecyclerView;
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
-    List<Guild> list = new ArrayList<Guild>();
-    var folder = new GuildListItem.FolderItem(633565155501801472L, 0, "Favorites", false, list, false, false, false, 0, false, false);
 
     @Override
     public void start(Context context) throws Throwable {
+        List<Guild> list = new ArrayList<Guild>();
+        var folder = new GuildListItem.FolderItem(633565155501801472L, 0, "Favorites", false, list, false, false, false, 0, false, false);
         /*patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
             new Hook((param) -> {
                 var recyclerView = (RecyclerView) param.args[1];
