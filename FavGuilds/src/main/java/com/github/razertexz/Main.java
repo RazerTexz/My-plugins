@@ -29,19 +29,13 @@ import java.util.*;
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
     private List<StoreGuildsSorted.Entry> list = new ArrayList<StoreGuildsSorted.Entry>();
-    private GuildListItem.FolderItem folder;
 
     @Override
     public void start(Context context) throws Throwable {
-        folder = new GuildListItem.FolderItem(633565155501801472L, 0, "Favorites", false, list, false, false, false, 0, false, false);
         /*patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new PreHook((param) -> {
                 var thisClass = (GuildListViewHolder.FolderViewHolder) param.thisObject;
                 thisClass.configure(folder);
-            })
-        );*/
-        /*patcher.patch(WidgetGuildListAdapter.class.getDeclaredMethod("onBindViewHolder", GuildListViewHolder.class, int.class),
-            new Hook((param) -> {
             })
         );*/
         
