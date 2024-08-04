@@ -17,6 +17,7 @@ import com.discord.widgets.guilds.list.GuildListItem;
 import com.discord.widgets.guilds.contextmenu.GuildContextMenuViewModel;
 import com.discord.widgets.guilds.contextmenu.WidgetGuildContextMenu;
 import com.discord.databinding.WidgetGuildContextMenuBinding;
+import com.discord.models.guild.Guild;
 
 import java.util.*;
 
@@ -30,9 +31,6 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        //var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
-        //Utils.showToast(favFolder.getName());
-
         patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
             new Hook((param) -> {
                 Utils.showToast("Called");
@@ -67,6 +65,8 @@ public class Main extends Plugin {
 
                 var lay = (LinearLayout) binding.e.getParent();
                 var guild = state.getGuild();
+                List<Guild> list = new ArrayList<Guild>();
+                list.add(guild);
                 var guildIDAsString = "" + guild.getId();
                 var isFavorited = settings.getBool(guildIDAsString, false);
                 var viewID = View.generateViewId();
@@ -76,6 +76,8 @@ public class Main extends Plugin {
                     tw.setText(isFavorited ? "Unfavorite" : "Favorite");
                     lay.addView(tw, lay.getChildCount());
                     tw.setOnClickListener((v) -> {
+                        var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, list, false, false, false, 0, false, false);
+                        GuildListViewHolder.FolderViewHolder.configure(favFolder);
                         settings.setBool(guildIDAsString, isFavorited ? false : true);
                         lay.setVisibility(View.GONE);
                     });
