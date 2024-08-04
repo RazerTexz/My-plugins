@@ -49,7 +49,8 @@ public class Main extends Plugin {
                 if (!favFolderCreated) { 
                     favFolderCreated = true;
                     var thisClass = param.thisObject;
-                    thisClass.configure(new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false));
+                    var folder = new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false);
+                    thisClass.configure(folder);
                 }
             })
         );
