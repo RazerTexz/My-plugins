@@ -26,12 +26,13 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
+        var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
+        Utils.showToast(favFolder.getName());
+        GuildListViewHolder.FolderViewHolder.configure(favFolder);
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
-            new PreHook((param) -> {
-                //var folderItem = (GuildListItem.FolderItem) param.args[0];
-                //Utils.showToast(folderItem.getName());
-                param.args[0] = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
-                
+            new Hook((param) -> {
+                var folderItem = (GuildListItem.FolderItem) param.args[0];
+                Utils.showToast(folderItem.getName());                
             })
         );
         patchWidgetGuildContextMenu();
