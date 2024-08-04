@@ -36,9 +36,9 @@ public class Main extends Plugin {
             new Hook((param) -> {
                 var recyclerView = (RecyclerView) param.args[1];
                 var childAt = (View) recyclerView.getChildAt(0);
-                var childViewHolder = (RecyclerView.ViewHolder) recyclerView.getChildViewHolder(childAt)
+                var childViewHolder = (RecyclerView.ViewHolder) recyclerView.getChildViewHolder(childAt);
                 if (childViewHolder instanceof GuildListViewHolder.FolderViewHolder) {
-                    var folderViewHolder = (GuildListViewHolder.FolderViewHolder) recyclerView.getChildViewHolder(childAt);
+                    var folderViewHolder = (GuildListViewHolder.FolderViewHolder) childViewHolder;
                     folderViewHolder.configure(new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false));
                 }
             })
