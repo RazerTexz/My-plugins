@@ -28,7 +28,10 @@ public class Main extends Plugin {
     public void start(Context context) throws Throwable {
         var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
         Utils.showToast(favFolder.getName());
-        GuildListViewHolder.FolderViewHolder.configure(favFolder);
+
+        var viewHolder = new GuildListViewHolder.FolderViewHolder();
+        viewHolder.configure(favFolder);
+
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new Hook((param) -> {
                 var folderItem = (GuildListItem.FolderItem) param.args[0];
