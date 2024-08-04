@@ -30,8 +30,8 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
-        Utils.showToast(favFolder.getName());
+        //var favFolder = new GuildListItem.FolderItem(999, 2, "Favorites", false, null, false, false, false, 0, false, false);
+        //Utils.showToast(favFolder.getName());
 
         patcher.patch(FolderItemDecoration.class.getDeclaredMethod("onDraw", Canvas.class, RecyclerView.class, RecyclerView.State.class),
             new Hook((param) -> {
