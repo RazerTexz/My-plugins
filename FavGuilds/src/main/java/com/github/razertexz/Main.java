@@ -20,7 +20,6 @@ import com.discord.databinding.WidgetGuildContextMenuBinding;
 import com.discord.models.guild.Guild;
 
 import java.util.*;
-import java.lang.reflect.Method;
 
 import com.discord.widgets.guilds.list.FolderItemDecoration;
 import android.graphics.Canvas;
@@ -49,9 +48,9 @@ public class Main extends Plugin {
             new PreHook((param) -> {
                 if (!favFolderCreated) { 
                     favFolderCreated = true;
-                    var theMethod = (Method) param.method;
+                    var theMethod = param.method;
                     var folder = new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false);
-                    theMethod(folder);
+                    theMethod.invoke(param.thisObject, folder);
                 }
             })
         );
