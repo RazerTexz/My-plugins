@@ -38,8 +38,25 @@ public class Main extends Plugin {
                 thisClass.configure(folder);
             })
         );*/
-        
-        patcher.patch(WidgetGuildsListViewModel.class.getDeclaredMethod("access$handleStoreState", WidgetGuildsListViewModel.StoreState.class),
+
+        patcher.patch(WidgetGuildsListViewModel.StoreStare.class.getDeclaredMethod("getSortedGuilds"),
+            new PreHook(param -> {
+                var field = WidgetGuildsListViewModel.StoreState.class.getDeclaredField("fieldName");
+                field.setAccessible(true);
+                var value = field.get(param.thisObject);
+
+                /*for (StoreGuildsSorted.Entry entry : value) {
+                    if (entry instanceof StoreGuildsSorted.Entry.SingletonGuild) {
+                        var guild = ((StoreGuildsSorted.Entry.SingletonGuild) entry).getGuild().getName();
+                        list.add(guild);
+                    }
+                }*/
+
+                param.setResult(list);
+            })
+        );
+
+        /*patcher.patch(WidgetGuildsListViewModel.class.getDeclaredMethod("access$handleStoreState", WidgetGuildsListViewModel.StoreState.class),
             new Hook((param) -> {
                 var state = (WidgetGuildsListViewModel.StoreState) param.args[0];
                 for (StoreGuildsSorted.Entry entry : state.getSortedGuilds()) {
@@ -50,7 +67,7 @@ public class Main extends Plugin {
                     }
                 }
             })
-        );
+        );*/
 
         patchWidgetGuildContextMenu();
     }
