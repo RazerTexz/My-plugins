@@ -46,11 +46,12 @@ public class Main extends Plugin {
         );*/
         patcher.patch(GuildListViewHolder.FolderViewHolder.class.getDeclaredMethod("configure", GuildListItem.FolderItem.class),
             new PreHook((param) -> {
+                var theMethod = param.method;
+                var folder = new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false);
+
                 if (!favFolderCreated) { 
                     favFolderCreated = true;
-                    var theMethod = param.method;
-                    var folder = new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false);
-                    theMethod.invoke(param.thisObject, folder);
+                    theMethod(folder);
                 }
             })
         );
