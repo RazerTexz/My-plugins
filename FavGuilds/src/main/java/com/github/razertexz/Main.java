@@ -48,9 +48,9 @@ public class Main extends Plugin {
             new PreHook((param) -> {
                 if (!favFolderCreated) { 
                     favFolderCreated = true;
-                    var thisClass = param.thisObject;
+                    var thisMethod = param.method;
                     var folder = new GuildListItem.FolderItem(29183838, 0, "Favorites", false, list, false, false, false, 0, false, false);
-                    thisClass.configure(folder);
+                    thisMethod(folder);
                 }
             })
         );
