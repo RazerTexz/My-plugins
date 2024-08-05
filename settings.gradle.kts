@@ -5,7 +5,6 @@ rootProject.name = "AliucordPlugins"
 
 // Plugins are included like this
 include(
-    "FavGuilds",
     "BlockThemCalls"
 )
 
