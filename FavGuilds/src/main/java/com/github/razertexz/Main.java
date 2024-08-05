@@ -41,11 +41,9 @@ public class Main extends Plugin {
             })
         );*/
 
-        var field = WidgetGuildsListViewModel.StoreState.class.getDeclaredField("sortedGuilds");
-        field.setAccessible(true);
         patcher.patch(WidgetGuildsListViewModel.StoreState.class.getDeclaredMethod("getSortedGuilds"),
             new PreHook((param) -> {
-                var value = (List<StoreGuildsSorted.Entry>) field.get(param.thisObject); // XposedBridge.invokeOriginalMethod(param.method, this, null);
+                var value = (List<StoreGuildsSorted.Entry>) param.getResult(); //XposedBridge.invokeOriginalMethod(param.method, this, null);
                 var guildName = ((StoreGuildsSorted.Entry.SingletonGuild) value.get(0)).getGuild().getName();
                 Utils.showToast(guildName);
 
