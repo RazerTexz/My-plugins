@@ -41,9 +41,9 @@ public class Main extends Plugin {
 
         patcher.patch(WidgetGuildsListViewModel.StoreState.class.getDeclaredMethod("getSortedGuilds"),
             new PreHook(param -> {
-                var field = WidgetGuildsListViewModel.StoreState.class.getDeclaredField("fieldName");
-                field.setAccessible(true);
-                List<StoreGuildsSorted.Entry> value = field.get(param.thisObject);
+                /*var field = WidgetGuildsListViewModel.StoreState.class.getDeclaredField("fieldName");
+                field.setAccessible(true);*/
+                List<StoreGuildsSorted.Entry> value = param.invokeOriginalMethod(param.method, this, null); // field.get(param.thisObject);
                 var guildName = ((StoreGuildsSorted.Entry.SingletonGuild) value.get(0)).getGuild().getName();
                 Utils.showToast(guildName);
 
