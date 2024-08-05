@@ -25,6 +25,8 @@ import com.discord.stores.StoreGuildsSorted;
 
 import java.util.*;
 
+import de.robv.android.xposed.XposedBridge;
+
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("FavGuilds");
