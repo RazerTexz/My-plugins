@@ -40,7 +40,7 @@ public class Main extends Plugin {
         );*/
 
         patcher.patch(WidgetGuildsListViewModel.StoreState.class.getDeclaredMethod("getSortedGuilds"),
-            new PreHook(param -> {
+            new PreHook((param) -> {
                 /*var field = WidgetGuildsListViewModel.StoreState.class.getDeclaredField("fieldName");
                 field.setAccessible(true);*/
                 List<StoreGuildsSorted.Entry> value = param.invokeOriginalMethod(param.method, this, null); // field.get(param.thisObject);
