@@ -14,8 +14,8 @@ import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
-import com.discord.R;
-import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter;
+import com.discord.widgets.chat.list.model.WidgetChatListModel;
+import com.discord.databinding.WidgetChatListBinding;
 
 import java.util.*;
 
@@ -33,18 +33,16 @@ public class Main extends Plugin {
     }
 
     private void patches() throws Throwable {
-        patcher.patch(WidgetChatListAdapter.class.getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
+        patcher.patch(WidgetChatListBinding.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
             new Hook((param) -> {
-                var viewHolder = (RecyclerView.ViewHolder) param.args[0];
-                var itemView = (View) viewHolder.itemView;
-                if (itemView instanceof ViewGroup) {
-                    var viewGroup = (ViewGroup) itemView;
-                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                        var child = (View) viewGroup.getChildAt(i);
-                        if (child instanceof ViewGroup) {
-                            var textView = (TextView) child.findViewById(2131559038);
-                            Utils.showToast(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
-                        }
+                var thisObject = (WidgetChatListBinding) param.thisObject;
+                var view = (RecyclerView) thisObject.getRoot();
+                var layoutManager = view.layoutManager;
+                for (int i = 0; i < layoutManager.getChildCount(); i++) {
+                    var child = (View) layoutManager.getChildAt(i);
+                    if (child instanceof ViewGroup) {
+                        var textView = (TextView) child.findViewById(2131559038);
+                        Utils.showToast(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
                     }
                 }
             })
