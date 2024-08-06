@@ -39,7 +39,7 @@ public class Main extends Plugin {
         getBinding.setAccessible(true);
         patcher.patch(WidgetChatList.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
             new Hook((param) -> {
-                var binding = getBinding.invoke(param.thisObject);
+                var binding = (WidgetChatListBinding) getBinding.invoke(param.thisObject);
                 var view = (RecyclerView) binding.getRoot();
                 var layoutManager = (LinearLayoutManager) view.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
