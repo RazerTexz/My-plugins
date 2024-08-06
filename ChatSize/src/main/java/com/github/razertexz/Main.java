@@ -42,7 +42,7 @@ public class Main extends Plugin {
                     for (int i = 0; i < viewGroup.getChildCount(); i++) {
                         var child = (View) viewGroup.getChildAt(i);
                         if (child instanceof ViewGroup) {
-                            var textView = (TextView) child.findViewById(R.id.widget_chat_list_adapter_item_text);
+                            var textView = (TextView) child.findViewById(2131559038);
                             Utils.showToast(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
                         }
                     }
