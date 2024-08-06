@@ -1,6 +1,7 @@
 package com.github.razertexz;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.view.View;
@@ -37,7 +38,7 @@ public class Main extends Plugin {
             new Hook((param) -> {
                 var thisObject = (WidgetChatListBinding) param.thisObject;
                 var view = (RecyclerView) thisObject.getRoot();
-                var layoutManager = view.layoutManager;
+                var layoutManager = (LinearLayoutManager) view.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
                     var child = (View) layoutManager.getChildAt(i);
                     if (child instanceof ViewGroup) {
