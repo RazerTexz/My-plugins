@@ -51,10 +51,12 @@ public class Main extends Plugin {
                 var layoutManager = (LinearLayoutManager) view.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
                     var child = (View) layoutManager.getChildAt(i);
-                    if (child instanceof ViewGroup) {
+                    var name = (String) (child.getId() == View.NO_ID) ? "" : child.getResources().getResourceName(child.getId());
+                    logger.info(name);
+                    /*if (child instanceof ViewGroup) {
                         var textView = (TextView) child.findViewById(2131559038);
                         Utils.showToast(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
-                    }
+                    }*/
                 }
             })
         );
