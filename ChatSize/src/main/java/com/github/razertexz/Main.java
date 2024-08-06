@@ -14,6 +14,7 @@ import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
+import com.discord.R;
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter;
 
 import java.util.*;
@@ -41,8 +42,8 @@ public class Main extends Plugin {
                     for (int i = 0; i < viewGroup.getChildCount(); i++) {
                         var child = (View) viewGroup.getChildAt(i);
                         if (child instanceof ViewGroup) {
-                            var textView = (TextView) child.findViewById(R.id.widget_chat_list_item);
-                            Utils.showToast(textView.getTextSizeUnit().toString() + " - " + textView.getTextSize().toString());
+                            var textView = (TextView) child.findViewById(R.id.widget_chat_list_adapter_item_text);
+                            Utils.showToast(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
                         }
                     }
                 }
