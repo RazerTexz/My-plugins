@@ -51,7 +51,7 @@ public class Main extends Plugin {
                 var layoutManager = (LinearLayoutManager) view.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
                     var child = (View) layoutManager.getChildAt(i);
-                    var name = (String) (child.getId() == View.NO_ID) ? "" : child.getResources().getResourceName(child.getId());
+                    String name = (child.getId() == View.NO_ID) ? "" : child.getResources().getResourceName(child.getId());
                     logger.info(name);
                     /*if (child instanceof ViewGroup) {
                         var textView = (TextView) child.findViewById(2131559038);
