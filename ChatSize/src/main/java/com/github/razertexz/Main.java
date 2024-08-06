@@ -15,6 +15,7 @@ import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 
+import com.discord.widgets.chat.list.WidgetChatList;
 import com.discord.widgets.chat.list.model.WidgetChatListModel;
 import com.discord.databinding.WidgetChatListBinding;
 
@@ -34,7 +35,7 @@ public class Main extends Plugin {
     }
 
     private void patches() throws Throwable {
-        patcher.patch(WidgetChatListBinding.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
+        patcher.patch(WidgetChatList.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
             new Hook((param) -> {
                 var thisObject = (WidgetChatListBinding) param.thisObject;
                 var view = (RecyclerView) thisObject.getRoot();
