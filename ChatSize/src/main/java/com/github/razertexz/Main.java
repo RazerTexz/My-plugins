@@ -24,7 +24,6 @@ import java.util.*;
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("ChatSize");
-    var getBinding = WidgetChatList.class.getDeclaredMethod("getBinding");
 
     public Main() {
         settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
@@ -32,11 +31,12 @@ public class Main extends Plugin {
 
     @Override
     public void start(Context context) throws Throwable {
-        getBinding.setAccessible(true);
         patches();
     }
 
     private void patches() throws Throwable {
+        var getBinding = WidgetChatList.class.getDeclaredMethod("getBinding");
+        getBinding.setAccessible(true);
         patcher.patch(WidgetChatList.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
             new Hook((param) -> {
                 var binding = getBinding.invoke(param.thisObject);
