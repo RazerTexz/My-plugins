@@ -14,6 +14,7 @@ import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
+import com.aliucord.Logger;
 
 import com.discord.widgets.chat.list.WidgetChatList;
 import com.discord.widgets.chat.list.model.WidgetChatListModel;
@@ -23,6 +24,7 @@ import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
+    private final Logger logger = new Logger("Logger");
     private final SettingsAPI settings = new SettingsAPI("ChatSize");
 
     public Main() {
@@ -39,8 +41,13 @@ public class Main extends Plugin {
         getBinding.setAccessible(true);
         patcher.patch(WidgetChatList.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
             new Hook((param) -> {
-                var binding = (WidgetChatListBinding) getBinding.invoke((WidgetChatList) param.thisObject);
-                var view = (RecyclerView) binding.getRoot();
+                WidgetChatListBinding binding = null;
+                try {
+                    binding = (WidgetChatListBinding) getBinding.invoke(param.thisObject);
+                } catch (Throwable e) {
+                    logger.error("Failed to get binding", e);
+                }
+                var view = (RecyclerView) binding.a;
                 var layoutManager = (LinearLayoutManager) view.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
                     var child = (View) layoutManager.getChildAt(i);
