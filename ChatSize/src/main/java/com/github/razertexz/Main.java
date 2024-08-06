@@ -54,8 +54,12 @@ public class Main extends Plugin {
                     String name = (child.getId() == View.NO_ID) ? "" : child.getResources().getResourceName(child.getId());
                     logger.info(name);
                     if (child instanceof ViewGroup) {
-                        var textView = (TextView) child.findViewById(0x7f0a0357);
-                        logger.info(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
+                        for (int i = 0; i < child.getChildCount(); i++) {
+                            var textView = (View) child.getChildAt(i);
+                            String textViewName = (textView.getId() == View.NO_ID) ? "" : textView.getResources().getResourceName(textView.getId());
+                            logger.info(textViewName);
+                            //logger.info(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
+                        }
                     }
                 }
             })
