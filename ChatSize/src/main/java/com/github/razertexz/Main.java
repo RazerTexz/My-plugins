@@ -53,10 +53,10 @@ public class Main extends Plugin {
                     var child = (View) layoutManager.getChildAt(i);
                     String name = (child.getId() == View.NO_ID) ? "" : child.getResources().getResourceName(child.getId());
                     logger.info(name);
-                    /*if (child instanceof ViewGroup) {
-                        var textView = (TextView) child.findViewById(2131559038);
-                        Utils.showToast(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
-                    }*/
+                    if (child instanceof ViewGroup) {
+                        var textView = (TextView) child.findViewById(0x7f0a0357);
+                        logger.info(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
+                    }
                 }
             })
         );
