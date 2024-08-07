@@ -47,15 +47,17 @@ public class Main extends Plugin {
                 } catch (Throwable e) {
                     logger.error("Failed to get binding", e);
                 }
+
                 var view = (RecyclerView) binding.a;
                 var layoutManager = (LinearLayoutManager) view.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
-                    var child = (View) layoutManager.getChildAt(i);
-                    String name = (child.getId() == View.NO_ID) ? "" : child.getResources().getResourceName(child.getId());
+                    var view = (View) layoutManager.getChildAt(i);
+                    String name = (view.getId() == View.NO_ID) ? "" : view.getResources().getResourceName(view.getId());
                     logger.info(name);
-                    if (child instanceof ViewGroup) {
-                        for (int i = 0; i < child.getChildCount(); i++) {
-                            var textView = (View) child.getChildAt(i);
+                    if (view instanceof ViewGroup) {
+                        var viewGroup = (ViewGroup) view;
+                        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                            var textView = (View) viewGroup.getChildAt(i);
                             String textViewName = (textView.getId() == View.NO_ID) ? "" : textView.getResources().getResourceName(textView.getId());
                             logger.info(textViewName);
                             //logger.info(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
