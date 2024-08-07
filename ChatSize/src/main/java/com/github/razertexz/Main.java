@@ -42,19 +42,22 @@ public class Main extends Plugin {
         patcher.patch(WidgetChatListAdapter.class.getSuperclass().getSuperclass().getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
             new Hook((param) -> {
                 var viewHolder = (RecyclerView.ViewHolder) param.args[0];
-                var itemView = (ViewGroup) viewHolder.itemView;
-                for (int i = 0; i < itemView.getChildCount(); i++) {
-                    var view = (View) itemView.getChildAt(i);
-                    if (view instanceof ViewGroup) {
-                        var viewGroup = (ViewGroup) view;
-                        var textView = (TextView) viewGroup.findViewById(0x7f0a0357);
-                        if (textView != null && textView.getTextSize() != 20f) {
-                            logger.info("Size Unit: " + textView.getTextSizeUnit());
-                            logger.info("Size: " + textView.getTextSize());
-                            //textView.setTextSize(textView.getTextSizeUnit(), 20f);
+
+                var itemView = viewHolder.itemView;
+                if (itemView instanceof ViewGroup) {
+                    var rootView = (ViewGroup) itemView;
+                    for (int i = 0; i < rootView.getChildCount(); i++) {
+                        var view = (View) rootView.getChildAt(i);
+                        if (view instanceof ViewGroup) {
+                            var viewGroup = (ViewGroup) view;
+                            var textView = (TextView) viewGroup.findViewById(0x7f0a0357);
+                            if (textView != null && textView.getTextSize() != 20f) {
+                                logger.info("Size Unit: " + textView.getTextSizeUnit());
+                                logger.info("Size: " + textView.getTextSize());
+                                //textView.setTextSize(textView.getTextSizeUnit(), 20f);
+                            }
                         }
                     }
-                }
             })
         );
 
