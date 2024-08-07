@@ -46,12 +46,18 @@ public class Main extends Plugin {
                 var itemView = viewHolder.itemView;
                 if (itemView instanceof ViewGroup) {
                     var rootView = (ViewGroup) itemView;
-                    String rootViewName = (rootView.getId() == View.NO_ID) ? "" : rootView.getResources().getResourceName(rootView.getId());
-                    logger.info(rootViewName);
-                    for (int i = 0; i < rootView.getChildCount(); i++) {
+                    //String rootViewName = (rootView.getId() == View.NO_ID) ? "" : rootView.getResources().getResourceName(rootView.getId());
+                    //logger.info(rootViewName);
+                    var textView = (TextView) rootView.findViewById(0x7f0a0357);
+                    if (textView != null && textView.getTextSize() != 20f) {
+                        logger.info("Size Unit: " + textView.getTextSizeUnit());
+                        logger.info("Size: " + textView.getTextSize());
+                        //textView.setTextSize(textView.getTextSizeUnit(), 20f);
+                    }
+                    /*for (int i = 0; i < rootView.getChildCount(); i++) {
                         var view = (View) rootView.getChildAt(i);
                         String viewName = (view.getId() == View.NO_ID) ? "" : view.getResources().getResourceName(view.getId());
-                        logger.info(viewName);
+                        logger.info(viewName);*/
                         /*if (view instanceof ViewGroup) {
                             var viewGroup = (ViewGroup) view;
                             var textView = (TextView) viewGroup.findViewById(0x7f0a0357);
