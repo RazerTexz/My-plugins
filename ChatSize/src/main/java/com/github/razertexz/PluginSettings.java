@@ -1,11 +1,12 @@
 package com.github.razertexz;
 
 import android.view.View;
+import android.text.TextWatcher;
 
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.fragments.SettingsPage;
-import com.aliucord.views.Button;
+import com.aliucord.views.TextInput;
 
 public class PluginSettings extends SettingsPage {
     private final SettingsAPI settings;
@@ -22,16 +23,21 @@ public class PluginSettings extends SettingsPage {
         setActionBarTitle("Chat Size Settings");
         setPadding(0);
         
-        /*Button unblockButton = new Button(context);
-        unblockButton.setText("Unblock all user(s)");
-        unblockButton.setOnClickListener(v -> { 
-            if (settings.resetSettings()) {
-                Utils.showToast("Successfully unblocked all user(s)");
-            } else {
-                Utils.showToast("Failed to unblock");
+        TextInput fontScaleInput = new TextInput(
+            context,
+            "Font scale",
+            String.valueOf(settings.getFloat("fontScale", 34f),
+            new TextWatcher() {
+                public void afterTextChanged(Editable editable) {
+                    var scale = editable.toString();
+                    if (!scale.equals("")) {
+                        settings.setFloat("fontScale", Float.parseFloat(scale));
+                        Utils.promptRestart();
+                    }
+                }
             }
-        });
+        );
 
-        addView(unblockButton);*/
+        addView(fontScaleInput);
     }
 }
