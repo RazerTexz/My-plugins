@@ -20,6 +20,8 @@ import com.discord.widgets.chat.list.WidgetChatList;
 import com.discord.widgets.chat.list.model.WidgetChatListModel;
 import com.discord.databinding.WidgetChatListBinding;
 
+import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter;
+
 import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
@@ -37,6 +39,12 @@ public class Main extends Plugin {
     }
 
     private void patches() throws Throwable {
+        patcher.patch(WidgetChatListAdapter.class.getSuperclass().getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
+            new Hook((param) -> {
+                Utils.showToast("onBindViewHolder");
+            })
+        );
+
         var getBinding = WidgetChatList.class.getDeclaredMethod("getBinding");
         getBinding.setAccessible(true);
         patcher.patch(WidgetChatList.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
