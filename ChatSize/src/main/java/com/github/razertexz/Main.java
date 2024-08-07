@@ -57,15 +57,9 @@ public class Main extends Plugin {
                         var textView = (TextView) viewGroup.findViewById(0x7f0a0357);
                         if (textView != null) {
                             logger.info("Found TextView with id 0x7f0a0357");
-                        } else {
-                            logger.info("Didn't found TextView with id 0x7f0a0357");
+                            logger.info("Size Unit: " + textView.getTextSizeUnit());
+                            logger.info("Size: " + textView.getTextSize());
                         }
-                        /*for (int i2 = 0; i2 < viewGroup.getChildCount(); i2++) {
-                            var textView = (View) viewGroup.getChildAt(i2);
-                            String textViewName = (textView.getId() == View.NO_ID) ? "" : textView.getResources().getResourceName(textView.getId());
-                            logger.info(textViewName);
-                            //logger.info(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
-                        }*/
                     }
                 }
             })
