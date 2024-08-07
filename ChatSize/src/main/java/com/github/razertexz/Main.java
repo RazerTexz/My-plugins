@@ -59,7 +59,7 @@ public class Main extends Plugin {
                             logger.info("Found TextView with id 0x7f0a0357");
                             logger.info("Size Unit: " + textView.getTextSizeUnit());
                             logger.info("Size: " + textView.getTextSize());
-                            textView.setTextSize(textView.getTextSizeUnit(), 74.0);
+                            textView.setTextSize(textView.getTextSizeUnit(), 74f);
                         }
                     }
                 }
