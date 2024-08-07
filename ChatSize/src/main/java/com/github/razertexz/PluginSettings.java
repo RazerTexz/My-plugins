@@ -2,6 +2,7 @@ package com.github.razertexz;
 
 import android.view.View;
 import android.text.TextWatcher;
+import android.text.Editable;
 
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
