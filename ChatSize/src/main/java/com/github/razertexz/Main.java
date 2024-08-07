@@ -48,16 +48,16 @@ public class Main extends Plugin {
                     logger.error("Failed to get binding", e);
                 }
 
-                var view = (RecyclerView) binding.a;
-                var layoutManager = (LinearLayoutManager) view.getLayoutManager();
+                var recyclerView = (RecyclerView) binding.a;
+                var layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 for (int i = 0; i < layoutManager.getChildCount(); i++) {
                     var view = (View) layoutManager.getChildAt(i);
                     String name = (view.getId() == View.NO_ID) ? "" : view.getResources().getResourceName(view.getId());
                     logger.info(name);
                     if (view instanceof ViewGroup) {
                         var viewGroup = (ViewGroup) view;
-                        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                            var textView = (View) viewGroup.getChildAt(i);
+                        for (int i2 = 0; i2 < viewGroup.getChildCount(); i2++) {
+                            var textView = (View) viewGroup.getChildAt(i2);
                             String textViewName = (textView.getId() == View.NO_ID) ? "" : textView.getResources().getResourceName(textView.getId());
                             logger.info(textViewName);
                             //logger.info(("" + textView.getTextSizeUnit()) + " - " + ("" + textView.getTextSize()));
