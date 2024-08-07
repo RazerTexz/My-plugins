@@ -23,7 +23,7 @@ import java.util.*;
 public class Main extends Plugin {
     //private final Logger logger = new Logger("Logger");
     private final SettingsAPI settings = new SettingsAPI("ChatSize");
-    private final float fontScale = settings.getFloat("fontScale", 34f);
+    private final float fontScale = settings.getFloat("fontScale", 0.0f);
 
     public Main() {
         settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
@@ -37,14 +37,16 @@ public class Main extends Plugin {
     private void patches() throws Throwable {
         patcher.patch(WidgetChatListAdapter.class.getSuperclass().getSuperclass().getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
             new Hook((param) -> {
-                var viewHolder = (RecyclerView.ViewHolder) param.args[0];
+                if (fontScale != 0.0f) {
+                    var viewHolder = (RecyclerView.ViewHolder) param.args[0];
 
-                var itemView = viewHolder.itemView;
-                if (itemView instanceof ViewGroup) {
-                    var rootView = (ViewGroup) itemView;
-                    var textView = (TextView) rootView.findViewById(0x7f0a0357);
-                    if (textView != null && textView.getTextSize() != fontScale) {
-                        textView.setTextSize(textView.getTextSizeUnit(), fontScale);
+                    var itemView = viewHolder.itemView;
+                    if (itemView instanceof ViewGroup) {
+                        var rootView = (ViewGroup) itemView;
+                        var textView = (TextView) rootView.findViewById(0x7f0a0357);
+                        if (textView != null && textView.getTextSize() != fontScale) {
+                            textView.setTextSize(textView.getTextSizeUnit(), fontScale);
+                        }
                     }
                 }
             })
