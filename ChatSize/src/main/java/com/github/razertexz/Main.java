@@ -66,8 +66,8 @@ public class Main extends Plugin {
                                 logger.info("Size: " + textView.getTextSize());
                                 //textView.setTextSize(textView.getTextSizeUnit(), 20f);
                             }
-                        }*/
-                    }
+                        }
+                    }*/
                 }
             })
         );
