@@ -39,7 +39,7 @@ public class Main extends Plugin {
     }
 
     private void patches() throws Throwable {
-        patcher.patch(WidgetChatListAdapter.class.getSuperclass().getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
+        patcher.patch(WidgetChatListAdapter.class.getSuperclass().getSuperclass().getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
             new Hook((param) -> {
                 Utils.showToast("onBindViewHolder");
             })
