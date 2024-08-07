@@ -28,13 +28,16 @@ public class PluginSettings extends SettingsPage {
             "Font scale (Default: 34)",
             String.valueOf(settings.getFloat("fontScale", 34f)),
             new TextWatcher() {
-                public void afterTextChanged(Editable editable) {
-                    var scale = editable.toString();
+                public void afterTextChanged(Editable s) {
+                    var scale = s.toString();
                     if (!scale.equals("")) {
                         settings.setFloat("fontScale", Float.parseFloat(scale));
                         Utils.promptRestart();
                     }
                 }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
             }
         );
 
