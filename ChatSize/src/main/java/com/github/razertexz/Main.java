@@ -55,11 +55,10 @@ public class Main extends Plugin {
                     if (view instanceof ViewGroup) {
                         var viewGroup = (ViewGroup) view;
                         var textView = (TextView) viewGroup.findViewById(0x7f0a0357);
-                        if (textView != null) {
-                            logger.info("Found TextView with id 0x7f0a0357");
-                            logger.info("Size Unit: " + textView.getTextSizeUnit());
-                            logger.info("Size: " + textView.getTextSize());
-                            textView.setTextSize(textView.getTextSizeUnit(), 74f);
+                        if (textView != null && textView.getTextSize() != 20f) {
+                            //logger.info("Size Unit: " + textView.getTextSizeUnit());
+                            //logger.info("Size: " + textView.getTextSize());
+                            textView.setTextSize(textView.getTextSizeUnit(), 20f);
                         }
                     }
                 }
