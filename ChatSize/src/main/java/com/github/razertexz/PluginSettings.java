@@ -26,7 +26,7 @@ public class PluginSettings extends SettingsPage {
         TextInput fontScaleInput = new TextInput(
             context,
             "Font scale",
-            String.valueOf(settings.getFloat("fontScale", 34f),
+            String.valueOf(settings.getFloat("fontScale", 34f)),
             new TextWatcher() {
                 public void afterTextChanged(Editable editable) {
                     var scale = editable.toString();
