@@ -41,11 +41,24 @@ public class Main extends Plugin {
     private void patches() throws Throwable {
         patcher.patch(WidgetChatListAdapter.class.getSuperclass().getSuperclass().getDeclaredMethod("onBindViewHolder", RecyclerView.ViewHolder.class, int.class),
             new Hook((param) -> {
-                Utils.showToast("onBindViewHolder");
+                var viewHolder = (RecyclerView.ViewHolder) param.args[0];
+                var itemView = (ViewGroup) viewHolder.itemView;
+                for (int i = 0; i < itemView.getChildCount(); i++) {
+                    var view = (View) itemView.getChildAt(i);
+                    if (view instanceof ViewGroup) {
+                        var viewGroup = (ViewGroup) view;
+                        var textView = (TextView) viewGroup.findViewById(0x7f0a0357);
+                        if (textView != null && textView.getTextSize() != 20f) {
+                            logger.info("Size Unit: " + textView.getTextSizeUnit());
+                            logger.info("Size: " + textView.getTextSize());
+                            //textView.setTextSize(textView.getTextSizeUnit(), 20f);
+                        }
+                    }
+                }
             })
         );
 
-        var getBinding = WidgetChatList.class.getDeclaredMethod("getBinding");
+        /*var getBinding = WidgetChatList.class.getDeclaredMethod("getBinding");
         getBinding.setAccessible(true);
         patcher.patch(WidgetChatList.class.getDeclaredMethod("configureUI", WidgetChatListModel.class),
             new Hook((param) -> {
@@ -71,7 +84,7 @@ public class Main extends Plugin {
                     }
                 }
             })
-        );
+        );*/
     }
 
     @Override
