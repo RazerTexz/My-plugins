@@ -1,5 +1,6 @@
 package com.github.razertexz;
 
+import android.content.Context;
 import android.view.View;
 import android.text.TextWatcher;
 import android.text.Editable;
