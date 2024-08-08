@@ -45,9 +45,6 @@ public class Main extends Plugin {
                         var rootView = (ViewGroup) itemView;
                         var textView = (TextView) rootView.findViewById(0x7f0a0357);
                         if (textView != null && textView.getTextSize() != fontScale) {
-                            if (settings.exists("fontScale") {
-                                settings.setFloat("fontScale", textView.getTextSize());
-                            }
                             textView.setTextSize(textView.getTextSizeUnit(), fontScale);
                         }
                     }

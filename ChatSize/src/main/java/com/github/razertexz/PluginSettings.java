@@ -23,7 +23,7 @@ public class PluginSettings extends SettingsPage {
 
         setActionBarTitle("Chat Size Settings");
         setPadding(0);
-        
+
         TextInput fontScaleInput = new TextInput(
             context,
             "Font scale (0 to disable)",
