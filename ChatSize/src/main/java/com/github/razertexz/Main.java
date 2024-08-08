@@ -13,7 +13,7 @@ import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
-//import com.aliucord.Logger;
+import com.aliucord.Logger;
 
 import com.discord.widgets.chat.input.WidgetChatInputEditText;
 import com.discord.widgets.chat.input.ChatInputViewModel;
@@ -26,7 +26,7 @@ import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
-    //private final Logger logger = new Logger("Logger");
+    private final Logger logger = new Logger("Logger");
     private final SettingsAPI settings = new SettingsAPI("ChatSize");
     private final float fontScale = settings.getFloat("fontScale", 0.0f);
     private final float chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f);
@@ -65,9 +65,13 @@ public class Main extends Plugin {
                 if (chatBoxFontScale != 0.0f) {
                     var thisObject = (WidgetChatInput) param.thisObject;
                     var widgetChatInputEditText = (WidgetChatInputEditText) WidgetChatInput.access$getChatInputEditTextHolder$p(thisObject);
-                    var flexEditText = (FlexEditText) editText.get(widgetChatInputEditText);
-                    if (flexEditText.getTextSize() != chatBoxFontScale) {
-                        flexEditText.setTextSize(flexEditText.getTextSizeUnit(), chatBoxFontScale);
+                    try { 
+                        var flexEditText = (FlexEditText) editText.get(widgetChatInputEditText);
+                        if (flexEditText.getTextSize() != chatBoxFontScale) {
+                            flexEditText.setTextSize(flexEditText.getTextSizeUnit(), chatBoxFontScale);
+                        }
+                    } catch (Throwable e) {
+                        logger.error("Error", e);
                     }
                 }
             })
@@ -78,4 +82,4 @@ public class Main extends Plugin {
     public void stop(Context context) {
         patcher.unpatchAll();
     }
-}
+}   
