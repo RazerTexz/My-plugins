@@ -31,9 +31,9 @@ public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("BetterFontScale");
     private final float fontScale = settings.getFloat("fontScale", 0.0f);
     private final float chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f);
-    private final float userNameFontScale = settings.getFloat("userNameFontScale", 30.0f);
-    private final float tagFontScale = settings.getFloat("tagFontScale", 4.0f);
-    private final float gameFontScale = settings.getFloat("gameFontScale", 15.0f);
+    private final float userNameFontScale = settings.getFloat("userNameFontScale", 0.0f);
+    private final float tagFontScale = settings.getFloat("tagFontScale", 0.0f);
+    private final float gameFontScale = settings.getFloat("gameFontScale", 0.0f);
 
     public Main() {
         settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
@@ -90,17 +90,17 @@ public class Main extends Plugin {
                     var rootView = (ViewGroup) itemView;
 
                     var userName = (TextView) rootView.findViewById(0x7f0a10cc);
-                    if (userName != null && userName.getTextSize() != fontScale) {
+                    if (userNameFontScale != 0.0f && userName != null && userName.getTextSize() != userNameFontScale) {
                         userName.setTextSize(userName.getTextSizeUnit(), userNameFontScale);
                     }
 
                     var tag = (TextView) rootView.findViewById(0x7f0a10cb);
-                    if (tag != null && tag.getTextSize() != fontScale) {
+                    if (tagFontScale != 0.0f && tag != null && tag.getTextSize() != tagFontScale) {
                         tag.setTextSize(tag.getTextSizeUnit(), tagFontScale);
                     }
 
                     var game = (TextView) rootView.findViewById(0x7f0a0243);
-                    if (game != null && game.getTextSize() != fontScale) {
+                    if (gameFontScale != 0.0f && game != null && game.getTextSize() != gameFontScale) {
                         game.setTextSize(game.getTextSizeUnit(), gameFontScale);
                     }
                 }

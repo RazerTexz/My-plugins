@@ -24,15 +24,23 @@ public class PluginSettings extends SettingsPage {
         setActionBarTitle("Better Font Scale Settings");
         setPadding(0);
 
-        TextInput fontScaleInput = new TextInput(
+        createTextInput(context, "Font Scale (0 to disable)", "fontScale");
+        createTextInput(context, "Chatbox Font Scale (0 to disable)", "chatBoxFontScale");
+        createTextInput(context, "Username Font Scale (0 to disable)", "userNameFontScale");
+        createTextInput(context, "Tag Font Scale (0 to disable)", "tagFontScale");
+        createTextInput(context, "Game/Status Font Scale (0 to disable)", "gameFontScale");
+    }
+
+    private void createTextInput(Context context, CharSequence name, String settingName) {
+        TextInput input = new TextInput(
             context,
-            "Font Scale (0 to disable)",
-            String.valueOf(settings.getFloat("fontScale", 0.0f)),
+            name,
+            String.valueOf(settings.getFloat(settingName, 0.0f)),
             new TextWatcher() {
                 public void afterTextChanged(Editable s) {
                     var scale = s.toString();
                     if (!scale.equals("")) {
-                        settings.setFloat("fontScale", Float.parseFloat(scale));
+                        settings.setFloat(settingName, Float.parseFloat(scale));
                         Utils.promptRestart();
                     }
                 }
@@ -42,25 +50,6 @@ public class PluginSettings extends SettingsPage {
             }
         );
 
-        TextInput chatBoxFontScaleInput = new TextInput(
-            context,
-            "Chatbox Font Scale (0 to disable)",
-            String.valueOf(settings.getFloat("chatBoxFontScale", 0.0f)),
-            new TextWatcher() {
-                public void afterTextChanged(Editable s) {
-                    var scale = s.toString();
-                    if (!scale.equals("")) {
-                        settings.setFloat("chatBoxFontScale", Float.parseFloat(scale));
-                        Utils.promptRestart();
-                    }
-                }
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            }
-        );
-
-        addView(fontScaleInput);
-        addView(chatBoxFontScaleInput);
+        addView(input);
     }
 }
