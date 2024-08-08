@@ -1,10 +1,11 @@
-version = "1.0.0" // Plugin version. Increment this to trigger the updater
+version = "1.0.1" // Plugin version. Increment this to trigger the updater
 description = "Allows you to change the chat/chatbox font size" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
     changelog.set("""
-        N/A
+        v1.0.1:
+          - Added custom chatbox font scale
     """.trimIndent())
     // Image or Gif that will be shown at the top of your changelog page
     // changelogMedia.set("https://cool.png")
