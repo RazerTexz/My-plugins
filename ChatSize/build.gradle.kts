@@ -1,5 +1,5 @@
 version = "1.0.0" // Plugin version. Increment this to trigger the updater
-description = "Allows you to change the chat font size" // Plugin description that will be shown to user
+description = "Allows you to change the chat/chatbox font size" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin

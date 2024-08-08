@@ -26,7 +26,7 @@ public class PluginSettings extends SettingsPage {
 
         TextInput fontScaleInput = new TextInput(
             context,
-            "Font scale (0 to disable)",
+            "Font Scale (0 to disable)",
             String.valueOf(settings.getFloat("fontScale", 0.0f)),
             new TextWatcher() {
                 public void afterTextChanged(Editable s) {
@@ -42,6 +42,25 @@ public class PluginSettings extends SettingsPage {
             }
         );
 
+        TextInput chatBoxFontScaleInput = new TextInput(
+            context,
+            "Chatbox Font Scale (0 to disable)",
+            String.valueOf(settings.getFloat("chatBoxFontScale", 0.0f)),
+            new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    var scale = s.toString();
+                    if (!scale.equals("")) {
+                        settings.setFloat("chatBoxFontScale", Float.parseFloat(scale));
+                        Utils.promptRestart();
+                    }
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            }
+        );
+
         addView(fontScaleInput);
+        addView(chatBoxFontScaleInput);
     }
 }

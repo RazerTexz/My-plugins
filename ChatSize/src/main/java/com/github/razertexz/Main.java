@@ -15,7 +15,12 @@ import com.aliucord.patcher.*;
 import com.aliucord.api.SettingsAPI;
 //import com.aliucord.Logger;
 
+import com.discord.widgets.chat.input.WidgetChatInputEditText;
+import com.discord.widgets.chat.input.ChatInputViewModel;
+import com.discord.widgets.chat.input.WidgetChatInput;
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter;
+
+import com.lytefast.flexinput.widget.FlexEditText;
 
 import java.util.*;
 
@@ -24,6 +29,7 @@ public class Main extends Plugin {
     //private final Logger logger = new Logger("Logger");
     private final SettingsAPI settings = new SettingsAPI("ChatSize");
     private final float fontScale = settings.getFloat("fontScale", 0.0f);
+    private final float chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f);
 
     public Main() {
         settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
@@ -47,6 +53,21 @@ public class Main extends Plugin {
                         if (textView != null && textView.getTextSize() != fontScale) {
                             textView.setTextSize(textView.getTextSizeUnit(), fontScale);
                         }
+                    }
+                }
+            })
+        );
+
+        var editText = WidgetChatInputEditText.class.getDeclaredField("editText");
+        editText.setAccessible(true);
+        patcher.patch(WidgetChatInput.class.getDeclaredMethod("configureUI", ChatInputViewModel.ViewState.class),
+            new Hook((param) -> {
+                if (chatBoxFontScale != 0.0f) {
+                    var thisObject = (WidgetChatInput) param.thisObject;
+                    var widgetChatInputEditText = (WidgetChatInputEditText) WidgetChatInput.access$getChatInputEditTextHolder$p(thisObject);
+                    var flexEditText = (FlexEditText) editText.get(widgetChatInputEditText);
+                    if (flexEditText.getTextSize() != chatBoxFontScale) {
+                        flexEditText.setTextSize(flexEditText.getTextSizeUnit(), chatBoxFontScale);
                     }
                 }
             })
