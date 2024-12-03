@@ -1,0 +1,31 @@
+name: Extract Zip File(s)
+run-name: Extract Zip File(s) ${{ github.run_number }} | ${{ github.run_id }}
+
+concurrency: 
+  group: "unzip"
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*-auto.zip'
+  workflow_dispatch:
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Push Extracted Files(s) & Folder(s)
+      run: |
+        unzip -o *.zip
+        rm *.zip
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "[Extract Zip File(s)]"
+        git push
