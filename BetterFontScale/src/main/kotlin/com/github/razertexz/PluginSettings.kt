@@ -31,9 +31,12 @@ class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
 
     private fun createTextInput(context: Context, name: CharSequence, settingName: String) {
         addView(TextInput(context, name, settings.getFloat(settingName, 0.0f).toString(), object : TextWatcher {
-            override fun afterTextChanged(s: Editable) = s.toString().toFloatOrNull()?.let {
-                settings.setFloat(settingName, it)
-                Utils.promptRestart()
+            override fun afterTextChanged(s: Editable) {
+                val newValue = s.toString().toFloatOrNull()
+                if (newValue != null) {
+                    settings.setFloat(settingName, newValue)
+                    Utils.promptRestart()
+    }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
