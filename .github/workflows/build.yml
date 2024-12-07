@@ -49,7 +49,7 @@ jobs:
           cp **/build/*.zip $GITHUB_WORKSPACE/builds
           cp build/updater.json $GITHUB_WORKSPACE/builds
 
-	  - name: Undo Commit If Build Fails
+      - name: Undo Commit If Build Fails
         if: ${{ github.event_name == 'push' && failure() }}
         run: |
           git config --local user.name 'github-actions[bot]'
