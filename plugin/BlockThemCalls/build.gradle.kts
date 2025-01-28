@@ -1,13 +1,12 @@
 version = "1.0.0" // Plugin version. Increment this to trigger the updater
-description = "My first Kotlin plugin!" // Plugin description that will be shown to user
+description = "Allows you to block calls from other users" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
-    changelog.set(
-        """
-        Some changelog
-        """.trimIndent()
-    )
+    changelog.set("""
+        # 1.0.0
+        * Initial version
+    """.trimIndent())
     // Image or Gif that will be shown at the top of your changelog page
     // changelogMedia.set("https://cool.png")
 
@@ -17,5 +16,5 @@ aliucord {
 
     // Excludes this plugin from the updater, meaning it won't show up for users.
     // Set this if the plugin is unfinished
-    excludeFromUpdaterJson.set(true)
+    excludeFromUpdaterJson.set(false)
 }
