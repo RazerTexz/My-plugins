@@ -9,3 +9,6 @@ Better font scale (check plugin settings).
 
 ### [SearchScrollFix](https://github.com/RazerTexz/My-plugins/raw/builds/SearchScrollFix.zip)
 Maintains scroll position when searching.
+
+### [SaveMessageAsFile](https://github.com/RazerTexz/My-plugins/raw/builds/SaveMessageAsFile.zip)
+Adds a new context menu for saving messages to a file.
