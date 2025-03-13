@@ -11,6 +11,7 @@ import com.aliucord.Utils;
 import com.aliucord.Constants;
 import com.aliucord.annotations.AliucordPlugin;
 import com.aliucord.entities.Plugin;
+import com.aliucord.api.SettingsAPI;
 import com.aliucord.patcher.*;
 import com.aliucord.fragments.InputDialog;
 
@@ -25,9 +26,20 @@ import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
+    @JvmField
+    val settings = SettingsAPI("SaveMessageAsFile")
+
+    init {
+        settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
+    }
+
     override fun start(context: Context) {
         val icon: Drawable? = context.getDrawable(R.e.ic_upload_24dp)?.mutate()
         val viewID: Int = View.generateViewId()
+        val fileNameInputDialog: InputDialog = InputDialog()
+            .setInputType(1)
+            .setTitle("Enter file name:")
+            .setDescription("Please input the file name")
 
         patcher.after<WidgetChatListActions>("configureUI", WidgetChatListActions.Model::class.java) {
             val thisObject: WidgetChatListActions = it.thisObject as WidgetChatListActions
@@ -44,11 +56,10 @@ class Main : Plugin() {
                 textView.setText("Save Message as File")
                 textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
                 textView.setOnClickListener {
-                    val fileNameInputDialog: InputDialog = InputDialog().setInputType(1).setTitle("Enter file name:").setDescription("Please input the file name")
                     fileNameInputDialog.setOnOkListener {
                         val input: String = fileNameInputDialog.getInput()
                         try {
-                            val file: File = File(Constants.BASE_PATH, if (input.isNotEmpty()) input else "untitled")
+                            val file: File = File(Constants.BASE_PATH, if (input.isNotEmpty()) input else settings.getString("defaultFileName", "untitled"))
                             file.writeText(messageContent)
 
                             Utils.showToast("Successfully saved message to $file")

@@ -1,9 +1,12 @@
-version = "1.0.0" // Plugin version. Increment this to trigger the updater
+version = "1.1.0" // Plugin version. Increment this to trigger the updater
 description = "Adds a new context menu for saving messages to a file" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
     changelog.set("""
+        # 1.1.0
+        * Added settings tab
+
         # 1.0.0
         * Initial version
     """.trimIndent())
