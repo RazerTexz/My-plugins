@@ -24,6 +24,9 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: write
+
 jobs:
   squash_commits:
     runs-on: ubuntu-latest
