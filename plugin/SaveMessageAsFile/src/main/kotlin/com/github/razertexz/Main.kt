@@ -54,7 +54,7 @@ class Main : Plugin() {
                 fileNameInputDialog.setOnOkListener {
                     val input: String = fileNameInputDialog.getInput()
                     try {
-                        val file: File = File(Constants.BASE_PATH, if (input.isNotEmpty()) input else settings.getString("defaultFileName", "untitled"))
+                        val file: File = File(Constants.BASE_PATH, if (input.isNotBlank()) input else settings.getString("defaultFileName", "untitled"))
                         file.writeText(messageContent)
 
                         Utils.showToast("Successfully saved message to $file")
