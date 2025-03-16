@@ -14,8 +14,6 @@ import com.aliucord.patcher.*;
 
 import com.discord.widgets.search.results.WidgetSearchResults;
 
-import java.util.*;
-
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
     private val searchResultsListId: Int = Utils.getResId("search_results_list", "id")

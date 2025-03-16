@@ -20,8 +20,6 @@ import com.discord.stores.StoreCallsIncoming;
 import com.discord.models.domain.ModelCall;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
 
-import java.util.*;
-
 @AliucordPlugin(requiresRestart = false)
 public class Main extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("BlockThemCalls");

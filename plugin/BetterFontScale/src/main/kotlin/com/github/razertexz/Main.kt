@@ -27,19 +27,17 @@ import com.discord.databinding.UserProfileHeaderViewBinding;
 
 import com.lytefast.flexinput.widget.FlexEditText;
 
-import java.util.*;
-
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    private val logger = Logger("Logger")
-    private val settings = SettingsAPI("BetterFontScale")
-    private val fontScale = settings.getFloat("fontScale", 0.0f)
-    private val chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f)
-    private val aboutMeFontScale = settings.getFloat("aboutMeFontScale", 0.0f)
-    private val userNameFontScale = settings.getFloat("userNameFontScale", 0.0f)
-    private val tagFontScale = settings.getFloat("tagFontScale", 0.0f)
-    private val gameFontScale = settings.getFloat("gameFontScale", 0.0f)
-    private val profileStatusFontScale = settings.getFloat("profileStatusFontScale", 0.0f)
+    private val logger: Logger = Logger("Logger")
+    private val settings: SettingsAPI = SettingsAPI("BetterFontScale")
+    private val fontScale: Float = settings.getFloat("fontScale", 0.0f)
+    private val chatBoxFontScale: Float = settings.getFloat("chatBoxFontScale", 0.0f)
+    private val aboutMeFontScale: Float = settings.getFloat("aboutMeFontScale", 0.0f)
+    private val userNameFontScale: Float = settings.getFloat("userNameFontScale", 0.0f)
+    private val tagFontScale: Float = settings.getFloat("tagFontScale", 0.0f)
+    private val gameFontScale: Float = settings.getFloat("gameFontScale", 0.0f)
+    private val profileStatusFontScale: Float = settings.getFloat("profileStatusFontScale", 0.0f)
 
     init {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)

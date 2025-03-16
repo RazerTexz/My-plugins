@@ -15,7 +15,7 @@ import com.aliucord.views.TextInput;
 class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        val context = requireContext()
+        val context: Context = requireContext()
 
         setActionBarTitle("Better Font Scale Settings")
         setPadding(0)
@@ -32,7 +32,7 @@ class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     private fun createTextInput(context: Context, name: CharSequence, settingName: String) {
         addView(TextInput(context, name, settings.getFloat(settingName, 0.0f).toString(), object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                val newValue = s.toString().toFloatOrNull()
+                val newValue: Float? = s.toString().toFloatOrNull()
                 if (newValue != null) {
                     settings.setFloat(settingName, newValue)
                     Utils.promptRestart()

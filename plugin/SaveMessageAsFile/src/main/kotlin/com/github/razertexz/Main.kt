@@ -22,12 +22,11 @@ import com.discord.widgets.chat.list.actions.WidgetChatListActions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
     @JvmField
-    val settings = SettingsAPI("SaveMessageAsFile")
+    val settings: SettingsAPI = SettingsAPI("SaveMessageAsFile")
 
     init {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
