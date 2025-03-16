@@ -10,6 +10,8 @@ import com.aliucord.api.SettingsAPI;
 import com.aliucord.fragments.SettingsPage;
 import com.aliucord.views.TextInput;
 
+import com.discord.views.CheckedSetting;
+
 class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
         super.onViewBound(view)
@@ -25,5 +27,12 @@ class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         }))
+
+        addView(Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Skip File Name Dialog", null).apply {
+            isChecked = settings.getBool("skipFileNameDialog", false)
+            setOnCheckedListener {
+                settings.setBool("skipFileNameDialog", it)
+            }
+        })
     }
 }

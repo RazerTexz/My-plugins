@@ -51,24 +51,36 @@ class Main : Plugin() {
 
                 icon?.setTint(ColorCompat.getThemedColor(textView, R.b.colorInteractiveNormal))
 
+                fileNameInputDialog.setOnOkListener {
+                    val input: String = fileNameInputDialog.getInput()
+                    try {
+                        val file: File = File(Constants.BASE_PATH, if (input.isNotEmpty()) input else settings.getString("defaultFileName", "untitled"))
+                        file.writeText(messageContent)
+
+                        Utils.showToast("Successfully saved message to $file")
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                    fileNameInputDialog.dismiss()
+                }
+
                 textView.setId(viewID)
                 textView.setText("Save Message as File")
                 textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
                 textView.setOnClickListener {
-                    fileNameInputDialog.setOnOkListener {
-                        val input: String = fileNameInputDialog.getInput()
+                    if (settings.getBool("skipFileNameDialog", false)) {
                         try {
-                            val file: File = File(Constants.BASE_PATH, if (input.isNotEmpty()) input else settings.getString("defaultFileName", "untitled"))
+                            val file: File = File(Constants.BASE_PATH, settings.getString("defaultFileName", "untitled"))
                             file.writeText(messageContent)
 
                             Utils.showToast("Successfully saved message to $file")
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
-
-                        fileNameInputDialog.dismiss()
+                    } else {
+                        fileNameInputDialog.show(Utils.appActivity.getSupportFragmentManager(), "fileName")
                     }
-                    fileNameInputDialog.show(Utils.appActivity.getSupportFragmentManager(), "fileName")
 
                     thisObject.dismiss()
                 }
