@@ -32,6 +32,17 @@ class Main : Plugin() {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
     }
 
+    private fun writeToFile(fileName: String, content: String) {
+        try {
+            val file: File = File(Constants.BASE_PATH, fileName.takeIf { it.isNotBlank() } ?: settings.getString("defaultFileName", "untitled"))
+            file.writeText(content)
+
+            Utils.showToast("Successfully saved message to $file")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
     override fun start(context: Context) {
         val icon: Drawable? = context.getDrawable(R.e.ic_upload_24dp)?.mutate()
         val viewID: Int = View.generateViewId()
@@ -52,16 +63,7 @@ class Main : Plugin() {
                 icon?.setTint(ColorCompat.getThemedColor(textView, R.b.colorInteractiveNormal))
 
                 fileNameInputDialog.setOnOkListener {
-                    val input: String = fileNameInputDialog.getInput()
-                    try {
-                        val file: File = File(Constants.BASE_PATH, if (input.isNotBlank()) input else settings.getString("defaultFileName", "untitled"))
-                        file.writeText(messageContent)
-
-                        Utils.showToast("Successfully saved message to $file")
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-
+                    writeToFile(fileNameInputDialog.getInput(), messageContent)
                     fileNameInputDialog.dismiss()
                 }
 
@@ -70,14 +72,7 @@ class Main : Plugin() {
                 textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
                 textView.setOnClickListener {
                     if (settings.getBool("skipFileNameDialog", false)) {
-                        try {
-                            val file: File = File(Constants.BASE_PATH, settings.getString("defaultFileName", "untitled"))
-                            file.writeText(messageContent)
-
-                            Utils.showToast("Successfully saved message to $file")
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
+                        writeToFile("", messageContent)
                     } else {
                         fileNameInputDialog.show(Utils.appActivity.getSupportFragmentManager(), "fileName")
                     }
