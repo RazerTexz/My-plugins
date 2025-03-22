@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.View;
 import android.content.Context;
-import android.view.ViewTreeObserver;
 
 import com.aliucord.Utils;
 import com.aliucord.annotations.AliucordPlugin;
@@ -16,27 +15,21 @@ import com.discord.widgets.search.results.WidgetSearchResults;
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    private val searchResultsListId: Int = Utils.getResId("search_results_list", "id")
+    lateinit var linearLayoutManager: LinearLayoutManager
+    var lastPosition: Int = 0
+    val searchResultsListId: Int = Utils.getResId("search_results_list", "id")
 
     override fun start(context: Context) {
-        lateinit var linearLayoutManager: LinearLayoutManager
-        var lastPosition: Int = 0
-
         patcher.after<WidgetSearchResults>("onViewBound", View::class.java) {
             val recyclerView: RecyclerView = requireView().findViewById<RecyclerView>(searchResultsListId)
+
             linearLayoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+            linearLayoutManager.scrollToPositionWithOffset(lastPosition, 0)
 
-            if (lastPosition != 0) {
-                recyclerView.getViewTreeObserver().addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        recyclerView.post {
-                            linearLayoutManager.scrollToPositionWithOffset(lastPosition, 0)
-                        }
-
-                        recyclerView.getViewTreeObserver().removeOnPreDrawListener(this)
-                        return true
-                    }
-                })
+            recyclerView.postOnAnimation {
+                if (linearLayoutManager.findFirstVisibleItemPosition() != lastPosition) {
+                    linearLayoutManager.scrollToPositionWithOffset(lastPosition, 0)
+                }
             }
         }
 
