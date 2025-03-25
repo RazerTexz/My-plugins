@@ -24,7 +24,7 @@ class Main : Plugin() {
             linearLayoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
 
             recyclerView.getAdapter()!!.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                override fun onChanged() {
                     linearLayoutManager.scrollToPositionWithOffset(lastPosition, 0)
                     recyclerView.getAdapter()!!.unregisterAdapterDataObserver(this)
                 }
