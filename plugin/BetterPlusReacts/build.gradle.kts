@@ -1,9 +1,12 @@
-version = "1.0.0" // Plugin version. Increment this to trigger the updater
+version = "1.0.1" // Plugin version. Increment this to trigger the updater
 description = "Port of vc-betterplusreacts" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
     changelog.set("""
+        # 1.0.1
+        * Support for '+++⭐' format
+
         # 1.0.0
         * Initial version
     """.trimIndent())

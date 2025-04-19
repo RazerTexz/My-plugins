@@ -16,45 +16,44 @@ import kotlin.jvm.functions.Function1
 import com.discord.stores.StoreMessagesHolder
 import com.discord.stores.StoreChannelsSelected
 import com.discord.stores.StoreStream
-import com.discord.widgets.chat.input.models.ApplicationCommandData
-import com.discord.widgets.chat.input.`WidgetChatInput$configureSendListeners$2`
+import com.discord.widgets.chat.MessageContent
+import com.discord.widgets.chat.MessageManager
+import com.discord.widgets.chat.input.ChatInputViewModel
 import com.discord.utilities.rest.RestAPI
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    val pattern = Pattern.compile("^\\s*(\\++):(.+):$")
+    val pattern = Pattern.compile("^\\s*(\\++)(.+)$")
 
     override fun start(context: Context) {
         val storeMessagesHolder = ReflectUtils.getField(StoreStream.getMessages(), "holder") as StoreMessagesHolder
         val storeChannelsSelected = StoreStream.getChannelsSelected()
-        val unicodeEmojisNamesMap = StoreStream.getEmojis().unicodeEmojisNamesMap
+        val unicodeEmojis = StoreStream.getEmojis().unicodeEmojiSurrogateMap.keys
         val api = RestAPI.api
 
-        patcher.before<`WidgetChatInput$configureSendListeners$2`>("invoke", List::class.java, ApplicationCommandData::class.java, Function1::class.java) {
-            val _this = it.thisObject as `WidgetChatInput$configureSendListeners$2`
-            val inputText = _this.`$chatInput`.getText()
+        patcher.before<ChatInputViewModel>("sendMessage", Context::class.java, MessageManager::class.java, MessageContent::class.java, List::class.java, Boolean::class.java, Function1::class.java) {
+            val textContent = (it.args[2] as MessageContent).textContent
 
-            val matcher = pattern.matcher(inputText)
+            val matcher = pattern.matcher(textContent)
             if (!matcher.find()) return@before
 
-            val unicodeEmoji = unicodeEmojisNamesMap[matcher.group(2)] 
-            if (unicodeEmoji == null) return@before
+            val emoji = matcher.group(2)
+            if (!unicodeEmojis.contains(emoji)) return@before
 
             val selectedChannelId = storeChannelsSelected.getId()
             val messages = storeMessagesHolder
                 .getMessagesForChannel(selectedChannelId)!!
-                .descendingMap()
                 .values
 
             val plusAmount = matcher.group(1)!!.length
             if (plusAmount > messages.size) return@before
 
-            val messageId = messages.elementAt(plusAmount - 1).id
+            val messageId = messages.elementAt(messages.size - plusAmount).id
             Utils.threadPool.execute {
-                api.addReaction(selectedChannelId, messageId, unicodeEmoji.getReactionKey()).subscribe {}
+                api.addReaction(selectedChannelId, messageId, emoji).subscribe {}
             }
 
-            (it.args[2] as Function1<in Boolean, out Unit>).invoke(true)
+            (it.args[5] as Function1<in Boolean, out Unit>).invoke(true)
             it.setResult(null)
         }
     }
