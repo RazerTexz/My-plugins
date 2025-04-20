@@ -23,13 +23,15 @@ import com.discord.utilities.rest.RestAPI
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    val pattern = Pattern.compile("^\\s*(\\++)(.+)$")
+    val pattern = Pattern.compile("^\\s*(\\++)(<a?:\\w+:(\\d{19})>|.+)$")
 
     override fun start(context: Context) {
         val storeMessagesHolder = ReflectUtils.getField(StoreStream.getMessages(), "holder") as StoreMessagesHolder
         val storeChannelsSelected = StoreStream.getChannelsSelected()
-        val unicodeEmojis = StoreStream.getEmojis().unicodeEmojiSurrogateMap.keys
+        val storeEmoji = StoreStream.getEmojis()
         val api = RestAPI.api
+
+        val unicodeEmojis = storeEmoji.unicodeEmojiSurrogateMap.keys
 
         patcher.before<ChatInputViewModel>("sendMessage", Context::class.java, MessageManager::class.java, MessageContent::class.java, List::class.java, Boolean::class.java, Function1::class.java) {
             val textContent = (it.args[2] as MessageContent).textContent
@@ -37,8 +39,11 @@ class Main : Plugin() {
             val matcher = pattern.matcher(textContent)
             if (!matcher.find()) return@before
 
-            val emoji = matcher.group(2)
-            if (!unicodeEmojis.contains(emoji)) return@before
+            var emoji = matcher.group(2)
+            if (!unicodeEmojis.contains(emoji))  {
+                val customEmojiId = matcher.group(3)?.toLong() ?: return@before
+                emoji = storeEmoji.getCustomEmojiInternal(customEmojiId)?.getReactionKey() ?: return@before
+            }
 
             val selectedChannelId = storeChannelsSelected.getId()
             val messages = storeMessagesHolder
