@@ -23,7 +23,7 @@ import com.discord.utilities.rest.RestAPI
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    val pattern = Pattern.compile("^\\s*(\\++)(<a?:\\w+:(\\d{19})>|.+)$")
+    val pattern = Pattern.compile("^\\s*(\\++)(<a?:\\w+:(\\d{19})>|.)$")
 
     override fun start(context: Context) {
         val storeMessagesHolder = ReflectUtils.getField(StoreStream.getMessages(), "holder") as StoreMessagesHolder
