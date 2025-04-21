@@ -1,28 +1,30 @@
-version = "1.0.6" // Plugin version. Increment this to trigger the updater
-description = "Better font scale" // Plugin description that will be shown to user
+version = "1.0.7" // Plugin version. Increment this to trigger the updater
+description = "Better Font Scale" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
     changelog.set("""
+        # 1.0.7
+        * Improved patches
+        * Removed Tag font scale setting
+
         # 1.0.6
-        * Added setting for profile status font scale
+        * Added a setting for Profile Status font scale
 
         # 1.0.5
-        * Added setting for about me font scale
+        * Added a setting for About Me font scale
 
         # 1.0.4
-        * Remade code from java to kotlin (pain)
+        * Rewrote code from Java to Kotlin (pain)
 
         # 1.0.3
-        * Fixed app crashing when inputting non-number value in plugin settings.
+        * Fixed crashes caused by entering non-numeric values in plugin settings
 
         # 1.0.2
-        * Added setting for username font scale
-        * Added setting for tag font scale
-        * Added setting for game / status font scale
+        * Added settings for Username font scale, Tag font scale, and Game Status font scale
 
         # 1.0.1
-        * Added setting for chatbox font scale
+        * Added a setting for Chatbox font scale
 
         # 1.0.0
         * Initial version
