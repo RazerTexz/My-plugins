@@ -1,11 +1,14 @@
-version = "1.1.1" // Plugin version. Increment this to trigger the updater
+version = "1.1.2" // Plugin version. Increment this to trigger the updater
 description = "Adds a new context menu for saving messages to a file" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
     changelog.set("""
+        # 1.1.2
+        * Fix crash
+
         # 1.1.1
-        * Added 'Skip File Name Dialog' option in settings tab
+        * Added 'Skip File Name Dialog' in settings tab
 
         # 1.1.0
         * Added settings tab

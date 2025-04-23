@@ -1,16 +1,16 @@
-package com.github.razertexz;
+package com.github.razertexz
 
-import android.content.Context;
-import android.view.View;
-import android.text.TextWatcher;
-import android.text.Editable;
+import android.content.Context
+import android.view.View
+import android.text.TextWatcher
+import android.text.Editable
 
-import com.aliucord.Utils;
-import com.aliucord.api.SettingsAPI;
-import com.aliucord.fragments.SettingsPage;
-import com.aliucord.views.TextInput;
+import com.aliucord.Utils
+import com.aliucord.api.SettingsAPI
+import com.aliucord.fragments.SettingsPage
+import com.aliucord.views.TextInput
 
-import com.discord.views.CheckedSetting;
+import com.discord.views.CheckedSetting
 
 class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
