@@ -1,38 +1,38 @@
-package com.github.razertexz;
+package com.github.razertexz
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 
-import android.view.View;
-import android.content.Context;
+import android.content.Context
 
-import com.aliucord.annotations.AliucordPlugin;
-import com.aliucord.entities.Plugin;
-import com.aliucord.patcher.*;
+import com.aliucord.annotations.AliucordPlugin
+import com.aliucord.entities.Plugin
+import com.aliucord.patcher.*
 
-import com.discord.widgets.search.results.WidgetSearchResults;
+import com.discord.widgets.search.results.WidgetSearchResults
+import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    lateinit var linearLayoutManager: LinearLayoutManager
-    var lastPosition: Int = 0
-
     override fun start(context: Context) {
-        patcher.after<WidgetSearchResults>("onViewBound", View::class.java) {
-            val recyclerView: RecyclerView = it.args[0] as RecyclerView
+        lateinit var layoutManager: LinearLayoutManager
+        var lastPosition = 0
 
-            linearLayoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+        patcher.after<WidgetSearchResults>("addThreadSpineItemDecoration", WidgetChatListAdapter::class.java) {
+            val adapter = it.args[0] as WidgetChatListAdapter
 
-            recyclerView.getAdapter()!!.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            layoutManager = adapter.layoutManager
+
+            adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                 override fun onChanged() {
-                    linearLayoutManager.scrollToPositionWithOffset(lastPosition, 0)
-                    recyclerView.getAdapter()!!.unregisterAdapterDataObserver(this)
+                    layoutManager.scrollToPositionWithOffset(lastPosition, 0)
+                    adapter.unregisterAdapterDataObserver(this)
                 }
             })
         }
 
         patcher.before<WidgetSearchResults>("onPause") {
-            lastPosition = linearLayoutManager.findFirstVisibleItemPosition()
+            lastPosition = layoutManager.findFirstVisibleItemPosition()
         }
     }
 
