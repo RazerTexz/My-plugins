@@ -15,7 +15,6 @@ import com.discord.databinding.UserProfileHeaderViewBinding
 import com.discord.databinding.WidgetUserSheetBinding
 import com.discord.utilities.view.text.SimpleDraweeSpanTextView
 import com.discord.utilities.view.text.LinkifiedTextView
-import com.facebook.drawee.span.SimpleDraweeSpanTextView as FacebookSimpleDraweeSpanTextView
 import com.discord.views.UsernameView
 
 import com.lytefast.flexinput.widget.FlexEditText
@@ -47,7 +46,7 @@ class Main : Plugin() {
 
     /*private fun android.view.View.infoToastId(identifier: String) {
         if (this.getId() != 0xFFFFFFFF) {
-            logger.infoToast("$identifier: ${ view.getResources().getResourceName(view.getId()) }")
+            logger.infoToast("$identifier: ${ this.getResources().getResourceName(this.getId()) }")
         }
     }*/
 
@@ -59,8 +58,7 @@ class Main : Plugin() {
             SimpleDraweeSpanTextView::class.java,
             MessageEntry::class.java
         ) {
-            val simpleDraweeSpanTextView = it.args[0] as SimpleDraweeSpanTextView
-            simpleDraweeSpanTextView.setTextSize(simpleDraweeSpanTextView.getTextSizeUnit(), messagesFontScale)
+            (it.args[0] as SimpleDraweeSpanTextView).apply { setTextSize(getTextSizeUnit(), messagesFontScale) }
         }
     }
 
@@ -70,8 +68,7 @@ class Main : Plugin() {
         patcher.patch(
             WidgetChatInputEditText::class.java.getDeclaredConstructors()[0],
             Hook {
-                val flexEditText = it.args[0] as FlexEditText
-                flexEditText.setTextSize(flexEditText.getTextSizeUnit(), chatBoxFontScale)
+                (it.args[0] as FlexEditText).apply { setTextSize(getTextSizeUnit(), chatBoxFontScale) }
             }
         )
     }
@@ -82,8 +79,7 @@ class Main : Plugin() {
         patcher.patch(
             WidgetUserSheetBinding::class.java.getDeclaredConstructors()[0],
             Hook {
-                val linkifiedTextView = it.args[6] as LinkifiedTextView
-                linkifiedTextView.setTextSize(linkifiedTextView.getTextSizeUnit(), aboutMeFontScale)
+                (it.args[6] as LinkifiedTextView).apply { setTextSize(getTextSizeUnit(), aboutMeFontScale) }
             }
         )
     }
@@ -95,14 +91,12 @@ class Main : Plugin() {
             WidgetChannelMembersListItemUserBinding::class.java.getDeclaredConstructors()[0],
             Hook {
                 if (gameStatusFontScale != 0.0f) {
-                    val simpleDraweeSpanTextView = it.args[3] as SimpleDraweeSpanTextView
-                    simpleDraweeSpanTextView.setTextSize(simpleDraweeSpanTextView.getTextSizeUnit(), gameStatusFontScale)
+                    (it.args[3] as SimpleDraweeSpanTextView).apply { setTextSize(getTextSizeUnit(), gameStatusFontScale) }
                 }
 
                 if (userNameFontScale != 0.0f) {
                     val userNameView = it.args[5] as UsernameView
-                    val facebookSimpleDraweeSpanTextView = userNameView.j.c as FacebookSimpleDraweeSpanTextView
-                    facebookSimpleDraweeSpanTextView.setTextSize(facebookSimpleDraweeSpanTextView.getTextSizeUnit(), userNameFontScale)
+                    userNameView.j.c.apply { setTextSize(getTextSizeUnit(), userNameFontScale) }
                 }
             }
         )
@@ -114,8 +108,7 @@ class Main : Plugin() {
         patcher.patch(
             UserProfileHeaderViewBinding::class.java.getDeclaredConstructors()[0],
             Hook {
-                val simpleDraweeSpanTextView = it.args[9] as SimpleDraweeSpanTextView
-                simpleDraweeSpanTextView.setTextSize(simpleDraweeSpanTextView.getTextSizeUnit(), profileStatusFontScale)
+                (it.args[9] as SimpleDraweeSpanTextView).apply { setTextSize(getTextSizeUnit(), profileStatusFontScale) }
             }
         )
     }
