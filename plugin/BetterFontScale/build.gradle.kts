@@ -1,5 +1,5 @@
 version = "1.0.7" // Plugin version. Increment this to trigger the updater
-description = "Better Font Scale" // Plugin description that will be shown to user
+description = "More control over font sizes" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin

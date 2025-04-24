@@ -1,11 +1,9 @@
 version = "1.0.2" // Plugin version. Increment this to trigger the updater
-description = "Maintains scroll position when searching." // Plugin description that will be shown to user
+description = "Saves your scroll position when searching" // Plugin description that will be shown to user
 
 aliucord {
     // Changelog of your plugin
     changelog.set("""
-        # 1.0.2
-
         # 1.0.1
         * Hopefully no timing issues
 

@@ -5,16 +5,16 @@ Adds a way to "block" calls from other users.
 Works with group chat(s) too.
 
 ### [BetterFontScale](https://github.com/RazerTexz/My-plugins/raw/builds/BetterFontScale.zip)
-Better font scale (check plugin settings).
+More control over font sizes (see plugin settings).
 
-### [SearchScrollFix](https://github.com/RazerTexz/My-plugins/raw/builds/SearchScrollFix.zip)
-Maintains scroll position when searching.
+### [SearchScrollSaver](https://github.com/RazerTexz/My-plugins/raw/builds/SearchScrollSaver.zip)
+Saves your scroll position when searching.
 
-### [SaveMessageAsFile](https://github.com/RazerTexz/My-plugins/raw/builds/SaveMessageAsFile.zip)
+### [SaveMessageToFile](https://github.com/RazerTexz/My-plugins/raw/builds/SaveMessageToFile.zip)
 Adds a new context menu for saving messages to a file.
 
 ### [BetterPlusReacts](https://github.com/RazerTexz/My-plugins/raw/builds/BetterPlusReacts.zip)
 Port of [vc-betterplusreacts](https://github.com/Masterjoona/vc-betterplusreacts).
 
 ### [FullUsernames](https://github.com/RazerTexz/My-plugins/raw/builds/FullUsernames.zip)
-Prevent username truncation.
+Prevents username truncation.
