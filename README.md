@@ -15,3 +15,6 @@ Adds a new context menu for saving messages to a file.
 
 ### [BetterPlusReacts](https://github.com/RazerTexz/My-plugins/raw/builds/BetterPlusReacts.zip)
 Port of [vc-betterplusreacts](https://github.com/Masterjoona/vc-betterplusreacts).
+
+### [FullUsernames](https://github.com/RazerTexz/My-plugins/raw/builds/FullUsernames.zip)
+Prevent username truncation.
