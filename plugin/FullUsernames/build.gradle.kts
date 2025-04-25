@@ -1,4 +1,4 @@
-version = "1.0.0" // Plugin version. Increment this to trigger the updater
+version = "1.0.1" // Plugin version. Increment this to trigger the updater
 description = "Prevents username truncation" // Plugin description that will be shown to user
 
 aliucord {

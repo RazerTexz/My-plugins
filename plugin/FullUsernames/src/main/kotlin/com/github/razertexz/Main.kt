@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.*
-import com.aliucord.utils.ReflectUtils
+import com.aliucord.utils.lazyField
 
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage
 import com.discord.widgets.chat.list.entries.ChatListEntry
@@ -15,6 +15,8 @@ import com.discord.views.UsernameView
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
+    private val f_itemName by lazyField<WidgetChatListAdapterItemMessage>("itemName")
+
     override fun start(context: Context) {
         patcher.patch(
             WidgetChannelMembersListItemUserBinding::class.java.getDeclaredConstructors()[0],
@@ -32,7 +34,7 @@ class Main : Plugin() {
             Int::class.java,
             ChatListEntry::class.java
         ) {
-            (ReflectUtils.getField(this, "itemName") as TextView).apply {
+            (f_itemName[this] as TextView).apply {
                 isSingleLine = false
                 setHorizontallyScrolling(false)
             }
