@@ -1,4 +1,4 @@
-version = "1.0.2" // Plugin version. Increment this to trigger the updater
+version = "1.0.3" // Plugin version. Increment this to trigger the updater
 description = "Port of vc-betterplusreacts" // Plugin description that will be shown to user
 
 aliucord {

@@ -21,13 +21,6 @@ import com.lytefast.flexinput.widget.FlexEditText
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    private val messagesFontScale = settings.getFloat("messagesFontScale", 0.0f)
-    private val chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f)
-    private val userNameFontScale = settings.getFloat("userNameFontScale", 0.0f)
-    private val aboutMeFontScale = settings.getFloat("aboutMeFontScale", 0.0f)
-    private val gameStatusFontScale = settings.getFloat("gameStatusFontScale", 0.0f)
-    private val profileStatusFontScale = settings.getFloat("profileStatusFontScale", 0.0f)
-
     init {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
     }
@@ -51,6 +44,7 @@ class Main : Plugin() {
     }*/
 
     private fun patchMessages() {
+        val messagesFontScale = settings.getFloat("messagesFontScale", 0.0f)
         if (messagesFontScale == 0.0f) return
 
         patcher.after<WidgetChatListAdapterItemMessage>(
@@ -63,6 +57,7 @@ class Main : Plugin() {
     }
 
     private fun patchChatbox() {
+        val chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f)
         if (chatBoxFontScale == 0.0f) return
 
         patcher.patch(
@@ -74,6 +69,7 @@ class Main : Plugin() {
     }
 
     private fun patchAboutMe() {
+        val aboutMeFontScale = settings.getFloat("aboutMeFontScale", 0.0f)
         if (aboutMeFontScale == 0.0f) return
 
         patcher.patch(
@@ -85,6 +81,8 @@ class Main : Plugin() {
     }
 
     private fun patchUsernameAndGameStatus() {
+        val gameStatusFontScale = settings.getFloat("gameStatusFontScale", 0.0f)
+        val userNameFontScale = settings.getFloat("userNameFontScale", 0.0f)
         if (gameStatusFontScale == 0.0f && userNameFontScale == 0.0f) return
 
         patcher.patch(
@@ -103,6 +101,7 @@ class Main : Plugin() {
     }
 
     private fun patchProfileStatus() {
+        val profileStatusFontScale = settings.getFloat("profileStatusFontScale", 0.0f)
         if (profileStatusFontScale == 0.0f) return
 
         patcher.patch(

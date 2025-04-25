@@ -1,4 +1,4 @@
-version = "1.0.7" // Plugin version. Increment this to trigger the updater
+version = "1.0.8" // Plugin version. Increment this to trigger the updater
 description = "More control over font sizes" // Plugin description that will be shown to user
 
 aliucord {
