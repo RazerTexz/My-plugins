@@ -40,37 +40,39 @@ class Main : Plugin() {
 
     override fun start(context: Context) {
         val icon = context.getDrawable(R.e.ic_upload_24dp)!!.mutate()
-        val viewID = View.generateViewId()
+        val viewId = View.generateViewId()
         val fileNameInputDialog = InputDialog()
             .setInputType(1)
             .setTitle("Enter file name:")
             .setDescription("Please input the file name")
 
         patcher.after<WidgetChatListActions>("configureUI", WidgetChatListActions.Model::class.java) {
-            val nestedScrollView = this.getView() as NestedScrollView
+            val chatListActions = this
+            val nestedScrollView = chatListActions.requireView() as NestedScrollView
             val linearLayout = nestedScrollView.getChildAt(0) as LinearLayout
 
-            if (linearLayout.findViewById<TextView>(viewID) == null) {
-                val textView = TextView(linearLayout.getContext(), null, 0, R.i.UiKit_Settings_Item_Icon)
-                val messageContent = "${ (it.args[0] as WidgetChatListActions.Model).getMessageContent() }"
+            if (linearLayout.findViewById<TextView>(viewId) == null) {
+                val messageContent = (it.args[0] as WidgetChatListActions.Model).getMessageContent().toString()
+                val textView = TextView(linearLayout.getContext(), null, 0, R.i.UiKit_Settings_Item_Icon).apply {
+                    id = viewId
+                    text = "Save Message to File"
 
-                icon.setTint(ColorCompat.getThemedColor(textView, R.b.colorInteractiveNormal))
+                    icon.setTint(ColorCompat.getThemedColor(this, R.b.colorInteractiveNormal))
+                    setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
 
-                textView.setId(viewID)
-                textView.setText("Save Message as File")
-                textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
-                textView.setOnClickListener {
-                    if (settings.getBool("skipFileNameDialog", false)) {
-                        writeToFile("", messageContent)
-                    } else {
-                        fileNameInputDialog.setOnOkListener {
-                            writeToFile(fileNameInputDialog.getInput(), messageContent)
-                            fileNameInputDialog.dismiss()
+                    setOnClickListener {
+                        if (settings.getBool("skipFileNameDialog", false)) {
+                            writeToFile("", messageContent)
+                        } else {
+                            fileNameInputDialog.setOnOkListener {
+                                writeToFile(fileNameInputDialog.getInput(), messageContent)
+                                fileNameInputDialog.dismiss()
+                            }
+                            fileNameInputDialog.show(chatListActions.parentFragmentManager, "fileName")
                         }
-                        fileNameInputDialog.show(this.parentFragmentManager, "fileName")
-                    }
 
-                    this.dismiss()
+                        chatListActions.dismiss()
+                    }
                 }
 
                 linearLayout.addView(textView, linearLayout.getChildCount())
