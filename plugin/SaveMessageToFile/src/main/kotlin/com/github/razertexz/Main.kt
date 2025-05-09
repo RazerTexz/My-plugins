@@ -52,7 +52,7 @@ class Main : Plugin() {
             val linearLayout = nestedScrollView.getChildAt(0) as LinearLayout
 
             if (linearLayout.findViewById<TextView>(viewId) == null) {
-                val messageContent = (it.args[0] as WidgetChatListActions.Model).getMessageContent().toString()
+                val content = (it.args[0] as WidgetChatListActions.Model).message.content
                 val textView = TextView(linearLayout.getContext(), null, 0, R.i.UiKit_Settings_Item_Icon).apply {
                     id = viewId
                     text = "Save Message to File"
@@ -62,10 +62,10 @@ class Main : Plugin() {
 
                     setOnClickListener {
                         if (settings.getBool("skipFileNameDialog", false)) {
-                            writeToFile("", messageContent)
+                            writeToFile("", content)
                         } else {
                             fileNameInputDialog.setOnOkListener {
-                                writeToFile(fileNameInputDialog.getInput(), messageContent)
+                                writeToFile(fileNameInputDialog.getInput(), content)
                                 fileNameInputDialog.dismiss()
                             }
                             fileNameInputDialog.show(chatListActions.parentFragmentManager, "fileName")
