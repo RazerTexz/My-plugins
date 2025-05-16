@@ -1,8 +1,7 @@
-version = "1.0.8" // Plugin version. Increment this to trigger the updater
-description = "More control over font sizes" // Plugin description that will be shown to user
+version = "1.0.8"
+description = "More control over font sizes"
 
 aliucord {
-    // Changelog of your plugin
     changelog.set("""
         # 1.0.7
         * Improved patches
@@ -29,14 +28,6 @@ aliucord {
         # 1.0.0
         * Initial version
     """.trimIndent())
-    // Image or Gif that will be shown at the top of your changelog page
-    // changelogMedia.set("https://cool.png")
 
-    // Add additional authors to this plugin
-    // author("Name", 0)
-    // author("Name", 0)
-
-    // Excludes this plugin from the updater, meaning it won't show up for users.
-    // Set this if the plugin is unfinished
     excludeFromUpdaterJson.set(false)
 }
