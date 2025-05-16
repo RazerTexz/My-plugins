@@ -18,3 +18,6 @@ Port of [vc-betterplusreacts](https://github.com/Masterjoona/vc-betterplusreacts
 
 ### [FullUsernames](https://github.com/RazerTexz/My-plugins/raw/builds/FullUsernames.zip)
 Prevents username truncation.
+
+### [SwipeToReply](https://github.com/RazerTexz/My-plugins/raw/builds/SwipeToReply.zip)
+Swipe to quickly reply!
