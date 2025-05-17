@@ -1,7 +1,6 @@
 package com.github.razertexz
 
 import android.content.Context
-import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import android.widget.RelativeLayout
@@ -18,9 +17,11 @@ import com.discord.widgets.guilds.list.GuildListItem
 import com.discord.stores.StoreStream
 import com.discord.utilities.rest.RestAPI
 import com.discord.utilities.rx.ObservableExtensionsKt
+import com.discord.utilities.color.ColorCompat
 
 import rx.Observable.H as merge
 import rx.Observable.B as fromIterable
+import com.lytefast.flexinput.R
 
 private const val GUILDS_ITEM_PROFILE_AVATAR_WRAP_ID = 0x7F0A0889
 
@@ -33,22 +34,24 @@ class Main : Plugin() {
         val api = RestAPI.api
 
         val viewId = View.generateViewId()
-        val marginPx = DimenUtils.dpToPx(32.0f)
+        val topMarginPx = DimenUtils.dpToPx(32.0f)
+        val bottomMarginPx = DimenUtils.dpToPx(4.0f)
 
         patcher.after<GuildListViewHolder.FriendsViewHolder>("configure", GuildListItem.FriendsItem::class.java) {
             val layout = this.itemView as RelativeLayout
 
             if (layout.findViewById<TextView>(viewId) == null) {
-                val textView = TextView(layout.context).apply {
+                val textView = TextView(layout.context, null, 0, R.i.UiKit_TextView_Semibold).apply {
                     id = viewId
                     text = "Read All"
                     textSize = 14.0f
-                    setTextColor(Color.WHITE)
+                    setTextColor(ColorCompat.getThemedColor(this.context, R.b.colorChannelDefault))
 
                     layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
                         addRule(RelativeLayout.CENTER_HORIZONTAL)
                         addRule(RelativeLayout.BELOW, GUILDS_ITEM_PROFILE_AVATAR_WRAP_ID)
-                        topMargin = marginPx
+                        topMargin = topMarginPx
+                        bottomMargin = bottomMarginPx
                     }
                 }
                 textView.setOnClickListener {
@@ -61,7 +64,7 @@ class Main : Plugin() {
                             return@subscribe
                         }
 
-                        textView.text = "Reading..."
+                        textView.text = "Wait..."
 
                         val observablesList = this.map { guildId ->
                             ObservableExtensionsKt.restSubscribeOn(api.ackGuild(guildId), false)
