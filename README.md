@@ -21,3 +21,6 @@ Prevents username truncation.
 
 ### [SwipeToReply](https://github.com/RazerTexz/My-plugins/raw/builds/SwipeToReply.zip)
 Swipe to quickly reply!
+
+### [ReadAllButton](https://github.com/RazerTexz/My-plugins/raw/builds/ReadAllButton.zip)
+WARNING: I cannot guarantee you won't get banned!
