@@ -1,8 +1,11 @@
-version = "1.0.2"
+version = "1.0.3"
 description = "WARNING: I cannot guarantee you won't get banned!"
 
 aliucord {
     changelog.set("""
+        # 1.0.3
+        * Optimized functionality
+
         # 1.0.2
         * Improved button appearance
 
