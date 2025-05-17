@@ -1,6 +1,7 @@
 package com.github.razertexz
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import android.widget.RelativeLayout
@@ -11,7 +12,6 @@ import com.aliucord.patcher.*
 import com.aliucord.utils.RxUtils
 import com.aliucord.utils.RxUtils.subscribe
 import com.aliucord.utils.DimenUtils
-import com.aliucord.Utils
 
 import com.discord.widgets.guilds.list.GuildListViewHolder
 import com.discord.widgets.guilds.list.GuildListItem
@@ -33,7 +33,7 @@ class Main : Plugin() {
         val api = RestAPI.api
 
         val viewId = View.generateViewId()
-        val marginPx = DimenUtils.dpToPx(26.0f)
+        val marginPx = DimenUtils.dpToPx(32.0f)
 
         patcher.after<GuildListViewHolder.FriendsViewHolder>("configure", GuildListItem.FriendsItem::class.java) {
             val layout = this.itemView as RelativeLayout
@@ -43,39 +43,43 @@ class Main : Plugin() {
                     id = viewId
                     text = "Read All"
                     textSize = 14.0f
+                    setTextColor(Color.WHITE)
 
                     layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
                         addRule(RelativeLayout.CENTER_HORIZONTAL)
                         addRule(RelativeLayout.BELOW, GUILDS_ITEM_PROFILE_AVATAR_WRAP_ID)
                         topMargin = marginPx
                     }
+                }
+                textView.setOnClickListener {
+                    if (isReading) return@setOnClickListener
 
-                    setOnClickListener {
-                        if (isReading) return@setOnClickListener
-
-                        isReading = true
-                        Utils.showToast("Reading all guilds...")
-
-                        storeReadStates.getUnreadGuildIds().subscribe {
-                            if (this.isEmpty()) {
-                                isReading = false
-                                return@subscribe
-                            }
-
-                            val observablesList = this.map { guildId ->
-                                ObservableExtensionsKt.restSubscribeOn(api.ackGuild(guildId), false)
-                            }
-
-                            val mergedObservable = merge(fromIterable(observablesList))
-                            ObservableExtensionsKt.ui(mergedObservable).subscribe(RxUtils.createActionSubscriber(
-                                { },
-                                { },
-                                {
-                                    isReading = false
-                                    Utils.showToast("All guilds marked as read!")
-                                }
-                            ))
+                    isReading = true
+                    storeReadStates.getUnreadGuildIds().subscribe {
+                        if (this.isEmpty()) {
+                            isReading = false
+                            return@subscribe
                         }
+
+                        textView.text = "Reading..."
+
+                        val observablesList = this.map { guildId ->
+                            ObservableExtensionsKt.restSubscribeOn(api.ackGuild(guildId), false)
+                        }
+
+                        val mergedObservable = merge(fromIterable(observablesList))
+                        ObservableExtensionsKt.ui(mergedObservable).subscribe(RxUtils.createActionSubscriber(
+                            { },
+                            { error ->
+                                isReading = false
+                                error.printStackTrace()
+                                textView.text = "Read All"
+                            },
+                            {
+                                isReading = false
+                                textView.text = "Read All"
+                            }
+                        ))
                     }
                 }
 
