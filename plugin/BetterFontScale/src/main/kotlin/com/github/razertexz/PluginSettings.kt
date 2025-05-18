@@ -1,45 +1,54 @@
 package com.github.razertexz
 
+import android.content.Context
 import android.text.TextWatcher
 import android.text.InputType
 import android.text.Editable
 import android.widget.LinearLayout
-import android.content.Context
+import android.widget.TextView
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 
-import com.aliucord.Utils.promptRestart
+import com.aliucord.Utils
 import com.aliucord.utils.DimenUtils.defaultPadding
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.TextInput
 import com.aliucord.api.SettingsAPI
+import com.aliucord.Constants.Fonts
+
+import com.lytefast.flexinput.R
 
 class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        val context = requireContext()
 
         setActionBarTitle("Better Font Scale Settings")
         setPadding(0)
 
-        createTextInput(context, "Messages Font Scale (0 to disable)", "messagesFontScale")
-        createTextInput(context, "Chatbox Font Scale (0 to disable)", "chatBoxFontScale")
-        createTextInput(context, "Username Font Scale (0 to disable)", "userNameFontScale")
-        createTextInput(context, "About Me Font Scale (0 to disable)", "aboutMeFontScale")
-        createTextInput(context, "Game Status Font Scale (0 to disable)", "gameStatusFontScale")
-        createTextInput(context, "Profile Status Font Scale (0 to disable)", "profileStatusFontScale")
+        val context = requireContext()
+        addView(TextView(context, null, 0, R.i.UiKit_Settings_Item_Header).apply {
+            text = "NOTE: 0 = Use Default Value"
+            setTypeface(ResourcesCompat.getFont(context, Fonts.whitney_semibold))
+        })
+
+        addTextInput(context, "Messages Font Scale", "messagesFontScale")
+        addTextInput(context, "Chatbox Font Scale", "chatBoxFontScale")
+        addTextInput(context, "Username Font Scale", "userNameFontScale")
+        addTextInput(context, "About Me Font Scale", "aboutMeFontScale")
+        addTextInput(context, "Game Status Font Scale", "gameStatusFontScale")
+        addTextInput(context, "Profile Status Font Scale", "profileStatusFontScale")
     }
 
-    private fun createTextInput(context: Context, hint: CharSequence, settingName: String) {
+    private fun addTextInput(context: Context, hint: CharSequence, settingName: String) {
         addView(TextInput(
             context,
             hint,
             settings.getFloat(settingName, 0.0f).toString(),
             object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
-                    val input = s.toString()
-                    if (input != "") {
-                        settings.setFloat(settingName, input.toFloat())
-                        promptRestart()
+                    s.toString().toFloatOrNull()?.let {
+                        settings.setFloat(settingName, it)
+                        Utils.promptRestart()
                     }
                 }
 
@@ -49,7 +58,7 @@ class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
         ).apply {
             editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-                defaultPadding.let { setMargins(it, 8, it, 8) }
+                setMargins(defaultPadding, 8, defaultPadding, 8)
             }
         })
     }

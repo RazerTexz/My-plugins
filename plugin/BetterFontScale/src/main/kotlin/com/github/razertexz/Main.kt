@@ -19,26 +19,14 @@ import com.discord.views.UsernameView
 
 import com.lytefast.flexinput.widget.FlexEditText
 
-@AliucordPlugin(requiresRestart = false)
+@AliucordPlugin(requiresRestart = true)
 class Main : Plugin() {
     init {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
     }
 
-    override fun start(context: Context) {
-        patchMessages()
-        patchChatbox()
-        patchAboutMe()
-        patchUsernameAndGameStatus()
-        patchProfileStatus()
-    }
-
-    override fun stop(context: Context) {
-        patcher.unpatchAll()
-    }
-
     /*private fun android.view.View.infoToastId(identifier: String) {
-        if (this.getId() != 0xFFFFFFFF) {
+        if (this.getId() != android.view.View.NO_ID) {
             logger.infoToast("$identifier: ${ this.getResources().getResourceName(this.getId()) }")
         }
     }*/
@@ -52,7 +40,7 @@ class Main : Plugin() {
             SimpleDraweeSpanTextView::class.java,
             MessageEntry::class.java
         ) {
-            (it.args[0] as SimpleDraweeSpanTextView).apply { setTextSize(getTextSizeUnit(), messagesFontScale) }
+            (it.args[0] as SimpleDraweeSpanTextView).run { setTextSize(getTextSizeUnit(), messagesFontScale) }
         }
     }
 
@@ -63,7 +51,7 @@ class Main : Plugin() {
         patcher.patch(
             WidgetChatInputEditText::class.java.getDeclaredConstructors()[0],
             Hook {
-                (it.args[0] as FlexEditText).apply { setTextSize(getTextSizeUnit(), chatBoxFontScale) }
+                (it.args[0] as FlexEditText).run { setTextSize(getTextSizeUnit(), chatBoxFontScale) }
             }
         )
     }
@@ -75,7 +63,7 @@ class Main : Plugin() {
         patcher.patch(
             WidgetUserSheetBinding::class.java.getDeclaredConstructors()[0],
             Hook {
-                (it.args[6] as LinkifiedTextView).apply { setTextSize(getTextSizeUnit(), aboutMeFontScale) }
+                (it.args[6] as LinkifiedTextView).run { setTextSize(getTextSizeUnit(), aboutMeFontScale) }
             }
         )
     }
@@ -89,12 +77,12 @@ class Main : Plugin() {
             WidgetChannelMembersListItemUserBinding::class.java.getDeclaredConstructors()[0],
             Hook {
                 if (gameStatusFontScale != 0.0f) {
-                    (it.args[3] as SimpleDraweeSpanTextView).apply { setTextSize(getTextSizeUnit(), gameStatusFontScale) }
+                    (it.args[3] as SimpleDraweeSpanTextView).run { setTextSize(getTextSizeUnit(), gameStatusFontScale) }
                 }
 
                 if (userNameFontScale != 0.0f) {
                     val userNameView = it.args[5] as UsernameView
-                    userNameView.j.c.apply { setTextSize(getTextSizeUnit(), userNameFontScale) }
+                    userNameView.j.c.run { setTextSize(getTextSizeUnit(), userNameFontScale) }
                 }
             }
         )
@@ -107,8 +95,20 @@ class Main : Plugin() {
         patcher.patch(
             UserProfileHeaderViewBinding::class.java.getDeclaredConstructors()[0],
             Hook {
-                (it.args[9] as SimpleDraweeSpanTextView).apply { setTextSize(getTextSizeUnit(), profileStatusFontScale) }
+                (it.args[9] as SimpleDraweeSpanTextView).run { setTextSize(getTextSizeUnit(), profileStatusFontScale) }
             }
         )
+    }
+
+    override fun start(context: Context) {
+        patchMessages()
+        patchChatbox()
+        patchAboutMe()
+        patchUsernameAndGameStatus()
+        patchProfileStatus()
+    }
+
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
     }
 }
