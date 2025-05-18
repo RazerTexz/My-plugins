@@ -1,4 +1,4 @@
-version = "1.0.3"
+version = "1.0.4"
 description = "WARNING: I cannot guarantee you won't get banned!"
 
 aliucord {

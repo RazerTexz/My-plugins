@@ -21,6 +21,7 @@ import com.discord.utilities.color.ColorCompat
 import com.lytefast.flexinput.R
 
 private const val GUILDS_ITEM_PROFILE_AVATAR_WRAP_ID = 0x7F0A0889
+private const val READ_ALL_TEXT = "Read All"
 
 private class ReadStateAck(val channel_id: Long, val message_id: Long)
 private class Payload(val read_states: List<ReadStateAck>)
@@ -43,7 +44,7 @@ class Main : Plugin() {
             if (layout.findViewById<TextView>(viewId) == null) {
                 val textView = TextView(layout.context, null, 0, R.i.UiKit_TextView_Semibold).apply {
                     id = viewId
-                    text = "Read All"
+                    text = READ_ALL_TEXT
                     textSize = 14.0f
                     setTextColor(ColorCompat.getThemedColor(this.context, R.b.colorChannelDefault))
 
@@ -58,7 +59,9 @@ class Main : Plugin() {
                     if (isReading) return@setOnClickListener
 
                     isReading = true
-                    storeReadStates.getUnreadChannelIds().subscribe {
+
+                    // Z(int) is take(int)
+                    storeReadStates.getUnreadChannelIds().Z(1).subscribe {
                         if (this.isEmpty()) {
                             isReading = false
                             return@subscribe
@@ -72,8 +75,8 @@ class Main : Plugin() {
                                 Http.Request.newDiscordRNRequest("https://discord.com/api/v9/read-states/ack-bulk", "POST").executeWithJson(Payload(chunk))
                             }
 
-                            textView.post {
-                                textView.text = "Read All"
+                            Utils.mainThread.post {
+                                textView.text = READ_ALL_TEXT
                                 isReading = false
                             }
                         }
