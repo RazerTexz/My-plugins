@@ -58,9 +58,8 @@ class Main : Plugin() {
                 textView.setOnClickListener {
                     if (isReading) return@setOnClickListener
 
-                    isReading = true
-
                     // Z(int) is take(int)
+                    isReading = true
                     storeReadStates.getUnreadChannelIds().Z(1).subscribe {
                         if (this.isEmpty()) {
                             isReading = false
@@ -68,6 +67,7 @@ class Main : Plugin() {
                         }
 
                         textView.text = "Wait..."
+                        Utils.showToast("Marking ${ this.size } channels as read...", true)
 
                         Utils.threadPool.execute {
                             val readStates = this.map { channelId -> ReadStateAck(channelId, storeChannels.getChannel(channelId).l()) }
