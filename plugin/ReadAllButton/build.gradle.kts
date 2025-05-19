@@ -1,5 +1,5 @@
-version = "1.0.5"
-description = "WARNING: I cannot guarantee you won't get banned!"
+version = "1.0.6"
+description = "Add a button under the Home icon to read all channels"
 
 aliucord {
     changelog.set("""

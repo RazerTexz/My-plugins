@@ -23,4 +23,4 @@ Prevents username truncation.
 Swipe to quickly reply!
 
 ### [ReadAllButton](https://github.com/RazerTexz/My-plugins/raw/builds/ReadAllButton.zip)
-WARNING: I cannot guarantee you won't get banned!
+Add a button under the Home icon to read all channels.

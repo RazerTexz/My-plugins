@@ -41,7 +41,7 @@ class Main : Plugin() {
         patcher.after<GuildListViewHolder.FriendsViewHolder>("configure", GuildListItem.FriendsItem::class.java) {
             val layout = this.itemView as RelativeLayout
 
-            if (layout.findViewById<TextView>(viewId) == null) {
+            if (layout.findViewById<View>(viewId) == null) {
                 val textView = TextView(layout.context, null, 0, R.i.UiKit_TextView_Semibold).apply {
                     id = viewId
                     text = READ_ALL_TEXT
@@ -54,30 +54,31 @@ class Main : Plugin() {
                         topMargin = topMarginPx
                         bottomMargin = bottomMarginPx
                     }
-                }
-                textView.setOnClickListener {
-                    if (isReading) return@setOnClickListener
 
-                    // Z(int) is take(int)
-                    isReading = true
-                    storeReadStates.getUnreadChannelIds().Z(1).subscribe {
-                        if (this.isEmpty()) {
-                            isReading = false
-                            return@subscribe
-                        }
-
-                        textView.text = "Wait..."
-                        Utils.showToast("Marking ${ this.size } channels as read...", true)
-
-                        Utils.threadPool.execute {
-                            val readStates = this.map { channelId -> ReadStateAck(channelId, storeChannels.getChannel(channelId).l()) }
-                            readStates.chunked(100) { chunk ->
-                                Http.Request.newDiscordRNRequest("https://discord.com/api/v9/read-states/ack-bulk", "POST").executeWithJson(Payload(chunk))
-                            }
-
-                            Utils.mainThread.post {
-                                textView.text = READ_ALL_TEXT
+                    setOnClickListener {
+                        if (isReading) return@setOnClickListener
+    
+                        // Z(int) is take(int)
+                        isReading = true
+                        storeReadStates.getUnreadChannelIds().Z(1).subscribe {
+                            if (this.isEmpty()) {
                                 isReading = false
+                                return@subscribe
+                            }
+    
+                            this@apply.text = "Wait..."
+                            Utils.showToast("Marking ${ this.size } channels as read...", true)
+    
+                            Utils.threadPool.execute {
+                                val readStates = this.map { channelId -> ReadStateAck(channelId, storeChannels.getChannel(channelId).l()) }
+                                readStates.chunked(100) { chunk ->
+                                    Http.Request.newDiscordRNRequest("https://discord.com/api/v9/read-states/ack-bulk", "POST").executeWithJson(Payload(chunk))
+                                }
+    
+                                Utils.mainThread.postDelayed({
+                                    this@apply.text = READ_ALL_TEXT
+                                    isReading = false
+                                }, 5000L)
                             }
                         }
                     }
