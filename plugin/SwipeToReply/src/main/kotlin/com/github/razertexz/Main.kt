@@ -1,7 +1,6 @@
 package com.github.razertexz
 
 import android.content.Context
-import android.view.View
 import android.util.AttributeSet
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -66,7 +65,7 @@ class Main : Plugin() {
             scrollingSlopPx.set(this, newScrollingSlopPx)
         }
 
-        patcher.after<WidgetChatList>("onViewBound", View::class.java) {
+        patcher.after<WidgetChatList>("onViewBoundOrOnResume") {
             val recyclerView = (getBinding.invoke(this) as WidgetChatListBinding).b
             itemTouchHelper.attachToRecyclerView(recyclerView)
         }
