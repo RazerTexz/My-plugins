@@ -57,7 +57,7 @@ class Main : Plugin() {
 
                     setOnClickListener {
                         if (isReading) return@setOnClickListener
-    
+
                         // Z(int) is take(int)
                         isReading = true
                         storeReadStates.getUnreadChannelIds().Z(1).subscribe {
@@ -65,20 +65,20 @@ class Main : Plugin() {
                                 isReading = false
                                 return@subscribe
                             }
-    
+
                             this@apply.text = "Wait..."
-                            Utils.showToast("Marking ${ this.size } channels as read...", true)
-    
+
                             Utils.threadPool.execute {
                                 val readStates = this.map { channelId -> ReadStateAck(channelId, storeChannels.getChannel(channelId).l()) }
                                 readStates.chunked(100) { chunk ->
                                     Http.Request.newDiscordRNRequest("https://discord.com/api/v9/read-states/ack-bulk", "POST").executeWithJson(Payload(chunk))
                                 }
-    
-                                Utils.mainThread.postDelayed({
+
+                                Utils.mainThread.post {
                                     this@apply.text = READ_ALL_TEXT
                                     isReading = false
-                                }, 5000L)
+                                    Utils.promptRestart("ReadAllButton wants you to restart :)")
+                                }
                             }
                         }
                     }

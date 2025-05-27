@@ -1,8 +1,12 @@
-version = "1.0.6"
-description = "Add a button under the Home icon to read all channels"
+version = "1.0.7"
+description = "Adds a button under the Home icon to read all channels"
 
 aliucord {
     changelog.set("""
+        # 1.0.7
+        * Removed the toast
+        * Prompts a restart after reading
+
         # 1.0.5
         * Added toast with channel read count
 
@@ -13,7 +17,7 @@ aliucord {
         * Improved button appearance
 
         # 1.0.1
-        * Fix some bugs
+        * Fixed some bugs
 
         # 1.0.0
         * Initial version
