@@ -37,7 +37,7 @@ class Main : Plugin() {
             private lateinit var m_Message: Message
 
             override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                val entry = (recyclerView.adapter as WidgetChatListAdapter).getData().getList()[viewHolder.adapterPosition]
+                val entry = (recyclerView.adapter as WidgetChatListAdapter).getData().getList().getOrNull(viewHolder.adapterPosition) ?: return 0
                 m_Message = when (entry) {
                     is MessageEntry -> entry.message
                     is AttachmentEntry -> entry.message
