@@ -1,7 +1,7 @@
-name: "Build"
+name: Build
 
 concurrency:
-  group: "build"
+  group: build
   cancel-in-progress: true
 
 on:
@@ -11,7 +11,6 @@ on:
     paths-ignore:
       - "**.md"
       - ".github/**"
-      - "**LICENSE"
   workflow_dispatch:
 
 jobs:
@@ -21,26 +20,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: "src"
+          path: src
 
       - name: Checkout builds
         uses: actions/checkout@v4
         with:
-          ref: "builds"
-          path: "builds"
+          ref: builds
+          path: builds
 
       - name: Checkout Aliucord
         uses: actions/checkout@v4
         with:
-          repository: "Aliucord/Aliucord"
-          path: "repo"
+          repository: Aliucord/Aliucord
+          path: repo
 
       - name: Setup JDK 11
         uses: actions/setup-java@v4
         with:
-          java-version: "11"
-          distribution: "temurin"
-          check-latest: true
+          java-version: 11
+          distribution: temurin
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
