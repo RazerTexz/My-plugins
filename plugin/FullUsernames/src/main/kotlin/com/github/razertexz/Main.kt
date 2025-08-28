@@ -22,7 +22,7 @@ class Main : Plugin() {
             WidgetChannelMembersListItemUserBinding::class.java.getDeclaredConstructors()[0],
             Hook {
                 val userNameView = it.args[5] as UsernameView
-                userNameView.j.c.apply {
+                with(userNameView.j.c) {
                     isSingleLine = false
                     setHorizontallyScrolling(false)
                 }
@@ -34,7 +34,7 @@ class Main : Plugin() {
             Int::class.java,
             ChatListEntry::class.java
         ) {
-            (f_itemName[this] as TextView).apply {
+            (f_itemName[this] as? TextView)?.run {
                 isSingleLine = false
                 setHorizontallyScrolling(false)
             }
