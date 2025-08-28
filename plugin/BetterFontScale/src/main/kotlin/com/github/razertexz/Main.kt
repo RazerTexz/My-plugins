@@ -1,23 +1,12 @@
 package com.github.razertexz
 
-import android.widget.TextView
 import android.content.Context
+import android.widget.TextView
 
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.*
-
-import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage
-import com.discord.widgets.chat.list.entries.MessageEntry
-import com.discord.widgets.chat.input.WidgetChatInputEditText
-import com.discord.databinding.WidgetChannelMembersListItemUserBinding
-import com.discord.databinding.UserProfileHeaderViewBinding
-import com.discord.databinding.WidgetUserSheetBinding
-import com.discord.utilities.view.text.SimpleDraweeSpanTextView
-import com.discord.utilities.view.text.LinkifiedTextView
-import com.discord.views.UsernameView
-
-import com.lytefast.flexinput.widget.FlexEditText
+import com.aliucord.Utils
 
 @AliucordPlugin(requiresRestart = true)
 class Main : Plugin() {
@@ -25,90 +14,22 @@ class Main : Plugin() {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
     }
 
-    /*private fun android.view.View.infoToastId(identifier: String) {
-        if (this.getId() != android.view.View.NO_ID) {
-            logger.infoToast("$identifier: ${ this.getResources().getResourceName(this.getId()) }")
-        }
-    }*/
+    override fun start(ctx: Context) {
+        patcher.before<TextView>("setRawTextSize", Float::class.java, Boolean::class.java) {
+            val newTextSize = when (id) {
+                Utils.getResId("chat_list_adapter_item_text", "id") -> settings.getFloat("messagesFontScale", 0.0f)
+                Utils.getResId("text_input", "id") -> settings.getFloat("chatBoxFontScale", 0.0f)
+                Utils.getResId("username_text", "id") -> settings.getFloat("userNameFontScale", 0.0f)
+                Utils.getResId("about_me_text", "id") ->  settings.getFloat("aboutMeFontScale", 0.0f)
+                Utils.getResId("channel_members_list_item_game", "id") -> settings.getFloat("gameStatusFontScale", 0.0f)
+                Utils.getResId("user_profile_header_custom_status", "id") -> settings.getFloat("profileStatusFontScale", 0.0f)
+                else -> 0.0f
+            }
 
-    private fun patchMessages() {
-        val messagesFontScale = settings.getFloat("messagesFontScale", 0.0f)
-        if (messagesFontScale == 0.0f) return
-
-        patcher.after<WidgetChatListAdapterItemMessage>(
-            "processMessageText",
-            SimpleDraweeSpanTextView::class.java,
-            MessageEntry::class.java
-        ) {
-            (it.args[0] as SimpleDraweeSpanTextView).run { setTextSize(getTextSizeUnit(), messagesFontScale) }
+            if (newTextSize != 0.0f)
+                it.args[0] = newTextSize
         }
     }
 
-    private fun patchChatbox() {
-        val chatBoxFontScale = settings.getFloat("chatBoxFontScale", 0.0f)
-        if (chatBoxFontScale == 0.0f) return
-
-        patcher.patch(
-            WidgetChatInputEditText::class.java.getDeclaredConstructors()[0],
-            Hook {
-                (it.args[0] as FlexEditText).run { setTextSize(getTextSizeUnit(), chatBoxFontScale) }
-            }
-        )
-    }
-
-    private fun patchAboutMe() {
-        val aboutMeFontScale = settings.getFloat("aboutMeFontScale", 0.0f)
-        if (aboutMeFontScale == 0.0f) return
-
-        patcher.patch(
-            WidgetUserSheetBinding::class.java.getDeclaredConstructors()[0],
-            Hook {
-                (it.args[6] as LinkifiedTextView).run { setTextSize(getTextSizeUnit(), aboutMeFontScale) }
-            }
-        )
-    }
-
-    private fun patchUsernameAndGameStatus() {
-        val gameStatusFontScale = settings.getFloat("gameStatusFontScale", 0.0f)
-        val userNameFontScale = settings.getFloat("userNameFontScale", 0.0f)
-        if (gameStatusFontScale == 0.0f && userNameFontScale == 0.0f) return
-
-        patcher.patch(
-            WidgetChannelMembersListItemUserBinding::class.java.getDeclaredConstructors()[0],
-            Hook {
-                if (gameStatusFontScale != 0.0f) {
-                    (it.args[3] as SimpleDraweeSpanTextView).run { setTextSize(getTextSizeUnit(), gameStatusFontScale) }
-                }
-
-                if (userNameFontScale != 0.0f) {
-                    val userNameView = it.args[5] as UsernameView
-                    userNameView.j.c.run { setTextSize(getTextSizeUnit(), userNameFontScale) }
-                }
-            }
-        )
-    }
-
-    private fun patchProfileStatus() {
-        val profileStatusFontScale = settings.getFloat("profileStatusFontScale", 0.0f)
-        if (profileStatusFontScale == 0.0f) return
-
-        patcher.patch(
-            UserProfileHeaderViewBinding::class.java.getDeclaredConstructors()[0],
-            Hook {
-                (it.args[9] as SimpleDraweeSpanTextView).run { setTextSize(getTextSizeUnit(), profileStatusFontScale) }
-            }
-        )
-    }
-
-    override fun start(context: Context) {
-        patchMessages()
-        patchChatbox()
-        patchAboutMe()
-        patchUsernameAndGameStatus()
-        patchProfileStatus()
-    }
-
-    override fun stop(context: Context) {
-        patcher.unpatchAll()
-    }
+    override fun stop(ctx: Context) = patcher.unpatchAll()
 }

@@ -1,47 +1,47 @@
 package com.github.razertexz
 
+import androidx.core.content.res.ResourcesCompat
 import android.content.Context
+import android.view.View
 import android.text.TextWatcher
 import android.text.InputType
 import android.text.Editable
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.view.View
-import androidx.core.content.res.ResourcesCompat
 
-import com.aliucord.Utils
 import com.aliucord.utils.DimenUtils.defaultPadding
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.TextInput
 import com.aliucord.api.SettingsAPI
 import com.aliucord.Constants.Fonts
+import com.aliucord.Utils
 
 import com.lytefast.flexinput.R
 
 class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
         super.onViewBound(view)
+        val ctx = requireContext()
 
         setActionBarTitle("Better Font Scale Settings")
         setPadding(0)
 
-        val context = requireContext()
-        addView(TextView(context, null, 0, R.i.UiKit_Settings_Item_Header).apply {
+        addView(TextView(ctx, null, 0, R.i.UiKit_Settings_Item_Header).apply {
             text = "NOTE: 0 = Use Default Value"
-            setTypeface(ResourcesCompat.getFont(context, Fonts.whitney_semibold))
+            setTypeface(ResourcesCompat.getFont(ctx, Fonts.whitney_semibold))
         })
 
-        addTextInput(context, "Messages Font Scale", "messagesFontScale")
-        addTextInput(context, "Chatbox Font Scale", "chatBoxFontScale")
-        addTextInput(context, "Username Font Scale", "userNameFontScale")
-        addTextInput(context, "About Me Font Scale", "aboutMeFontScale")
-        addTextInput(context, "Game Status Font Scale", "gameStatusFontScale")
-        addTextInput(context, "Profile Status Font Scale", "profileStatusFontScale")
+        addTextInput(ctx, "Messages Font Scale", "messagesFontScale")
+        addTextInput(ctx, "Chatbox Font Scale", "chatBoxFontScale")
+        addTextInput(ctx, "Username Font Scale", "userNameFontScale")
+        addTextInput(ctx, "About Me Font Scale", "aboutMeFontScale")
+        addTextInput(ctx, "Game Status Font Scale", "gameStatusFontScale")
+        addTextInput(ctx, "Profile Status Font Scale", "profileStatusFontScale")
     }
 
-    private fun addTextInput(context: Context, hint: CharSequence, settingName: String) {
+    private fun addTextInput(ctx: Context, hint: CharSequence, settingName: String) {
         addView(TextInput(
-            context,
+            ctx,
             hint,
             settings.getFloat(settingName, 0.0f).toString(),
             object : TextWatcher {
