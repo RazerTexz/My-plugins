@@ -1,8 +1,11 @@
-version = "1.1.0"
+version = "1.1.1"
 description = "More control over font sizes"
 
 aliucord {
     changelog.set("""
+        # 1.1.1
+        * Fix font scaling
+
         # 1.0.7
         * Improved patches
         * Removed Tag font scale setting

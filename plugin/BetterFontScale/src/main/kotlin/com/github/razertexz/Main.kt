@@ -27,7 +27,7 @@ class Main : Plugin() {
             }
 
             if (newTextSize != 0.0f)
-                it.args[0] = newTextSize
+                it.args[0] = newTextSize * ctx.resources.displayMetrics.scaledDensity
         }
     }
 
