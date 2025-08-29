@@ -23,4 +23,7 @@ Prevents username truncation.
 Swipe to quickly reply!
 
 ### [ReadAllButton](https://github.com/RazerTexz/My-plugins/raw/builds/ReadAllButton.zip)
-Add a button under the Home icon to read all channels.
+Adds a button under the Home icon to read all channels.
+
+### [CopyCodeBlocks](https://github.com/RazerTexz/My-plugins/raw/builds/CopyCodeBlocks.zip)
+Adds a copy button on multi-line codeblocks!
