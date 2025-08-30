@@ -27,3 +27,6 @@ Adds a button under the Home icon to read all channels.
 
 ### [CopyCodeBlocks](https://github.com/RazerTexz/My-plugins/raw/builds/CopyCodeBlocks.zip)
 Adds a copy button on multi-line codeblocks!
+
+### [SwipeActions](https://github.com/RazerTexz/My-plugins/raw/builds/SwipeActions.zip)
+Adds swipe actions like swipe to reply or edit
