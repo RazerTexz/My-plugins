@@ -10,7 +10,6 @@ on:
       - main
     paths-ignore:
       - "**.md"
-      - ".github/**"
   workflow_dispatch:
 
 jobs:
@@ -18,18 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: src
 
-      - name: Checkout builds
-        uses: actions/checkout@v4
+      - name: Checkout Builds
+        uses: actions/checkout@v5
         with:
           ref: builds
           path: builds
 
       - name: Checkout Aliucord
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: Aliucord/Aliucord
           path: repo
@@ -46,15 +45,16 @@ jobs:
       - name: Build Plugins
         run: |
           cd "$GITHUB_WORKSPACE/src"
-          chmod +x gradlew && ./gradlew make generateUpdaterJson
+          chmod +x gradlew
+          ./gradlew make generateUpdaterJson
           cp plugin/**/build/*.zip "$GITHUB_WORKSPACE/builds"
           cp build/updater.json "$GITHUB_WORKSPACE/builds"
 
-      - name: Push builds
+      - name: Push Builds
         run: |
           cd "$GITHUB_WORKSPACE/builds"
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit -m "Build $GITHUB_SHA" || exit 0 # do not error if nothing to commit
+          git commit -m "Build $GITHUB_SHA" || exit 0
           git push
