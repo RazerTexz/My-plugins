@@ -1,4 +1,4 @@
-version = "1.0.7"
+version = "1.0.8"
 description = "Adds a button under the Home icon to read all channels"
 
 aliucord {
