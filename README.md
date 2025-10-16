@@ -30,3 +30,6 @@ Adds a copy button on multi-line codeblocks!
 
 ### [SwipeActions](https://github.com/RazerTexz/My-plugins/raw/builds/SwipeActions.zip)
 Adds swipe actions like swipe to reply or edit
+
+### [AutoSpoilerAttachments](https://github.com/RazerTexz/My-plugins/raw/builds/AutoSpoilerAttachments.zip)
+Automatically marks attachments as spoilers
