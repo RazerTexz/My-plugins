@@ -1,8 +1,8 @@
-version = "1.0.8"
-description = "Adds a button under the Home icon to read all channels"
-
 aliucord {
-    changelog.set("""
+    version = "1.0.8"
+    description = "Adds a button under the Home icon to read all channels"
+
+    changelog = """
         # 1.0.7
         * Removed the toast
         * Prompts a restart after reading
@@ -21,7 +21,7 @@ aliucord {
 
         # 1.0.0
         * Initial version
-    """.trimIndent())
+    """.trimIndent()
 
-    excludeFromUpdaterJson.set(false)
+    deploy = true
 }

@@ -1,8 +1,8 @@
-version = "1.1.4"
-description = "Adds a new context menu for saving messages to a file"
-
 aliucord {
-    changelog.set("""
+    version = "1.1.4"
+    description = "Adds a new context menu for saving messages to a file"
+
+    changelog = """
         # 1.1.2
         * Fix crash
 
@@ -14,7 +14,7 @@ aliucord {
 
         # 1.0.0
         * Initial version
-    """.trimIndent())
+    """.trimIndent()
 
-    excludeFromUpdaterJson.set(false)
+    deploy = true
 }

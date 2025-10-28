@@ -1,8 +1,8 @@
-version = "1.0.3"
-description = "Port of vc-betterplusreacts"
-
 aliucord {
-    changelog.set("""
+    version = "1.0.3"
+    description = "Port of vc-betterplusreacts"
+
+    changelog = """
         # 1.0.2
         * Support for custom emojis
 
@@ -11,7 +11,7 @@ aliucord {
 
         # 1.0.0
         * Initial version
-    """.trimIndent())
+    """.trimIndent()
 
-    excludeFromUpdaterJson.set(false)
+    deploy = true
 }

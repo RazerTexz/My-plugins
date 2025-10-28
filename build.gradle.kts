@@ -1,8 +1,5 @@
-@file:Suppress("DSL_SCOPE_VIOLATION")
-
 plugins {
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.aliucord) apply false
-    alias(libs.plugins.ktlint) apply false
+    id("com.android.library") version "8.13.0" apply false
+    id("org.jetbrains.kotlin.android") version "2.2.0" apply false
+    id("com.aliucord.plugin") version "2.1.3"
 }
