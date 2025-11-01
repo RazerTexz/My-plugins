@@ -1,5 +1,5 @@
 aliucord {
-    version = "1.0.2"
+    version = "1.0.3"
     description = "Saves your scroll position when searching"
 
     changelog = """

@@ -10,33 +10,23 @@ import com.aliucord.entities.Plugin
 import com.aliucord.patcher.*
 
 import com.discord.widgets.search.results.WidgetSearchResults
-import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter
 
 @AliucordPlugin(requiresRestart = false)
 class Main : Plugin() {
-    override fun start(context: Context) {
-        lateinit var layoutManager: LinearLayoutManager
-        var lastPosition = 0
+    override fun start(ctx: Context) {
+        var lastPos = -1
 
-        patcher.after<WidgetSearchResults>("addThreadSpineItemDecoration", WidgetChatListAdapter::class.java) {
-            val adapter = it.args[0] as WidgetChatListAdapter
-
-            layoutManager = adapter.layoutManager
-
-            adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-                override fun onChanged() {
-                    layoutManager.scrollToPositionWithOffset(lastPosition, 0)
-                    adapter.unregisterAdapterDataObserver(this)
-                }
-            })
+        patcher.after<WidgetSearchResults>("configureUI", WidgetSearchResults.Model::class.java) {
+            if (lastPos >= 0) {
+                ((view as RecyclerView).layoutManager as LinearLayoutManager).scrollToPositionWithOffset(lastPos, 0)
+                lastPos = -1
+            }
         }
 
         patcher.before<WidgetSearchResults>("onPause") {
-            lastPosition = layoutManager.findFirstVisibleItemPosition()
+            lastPos = ((view as RecyclerView).layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
         }
     }
 
-    override fun stop(context: Context) {
-        patcher.unpatchAll()
-    }
+    override fun stop(ctx: Context) = patcher.unpatchAll()
 }
