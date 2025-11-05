@@ -1,7 +1,7 @@
-aliucord {
-    version = "1.1.1"
-    description = "More control over font sizes"
+version = "1.1.1"
+description = "More control over font sizes"
 
+aliucord {
     changelog = """
         # 1.1.1
         * Fix font scaling

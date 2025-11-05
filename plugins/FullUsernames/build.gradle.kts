@@ -1,7 +1,7 @@
-aliucord {
-    version = "1.0.2"
-    description = "Prevents username truncation"
+version = "1.0.2"
+description = "Prevents username truncation"
 
+aliucord {
     changelog = """
         # 1.0.0
         * Initial version

@@ -1,7 +1,7 @@
-aliucord {
-    version = "1.0.3"
-    description = "Port of vc-betterplusreacts"
+version = "1.0.3"
+description = "Port of vc-betterplusreacts"
 
+aliucord {
     changelog = """
         # 1.0.2
         * Support for custom emojis

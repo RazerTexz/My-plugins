@@ -1,7 +1,7 @@
-aliucord {
-    version = "1.1.4"
-    description = "Adds a new context menu for saving messages to a file"
+version = "1.1.4"
+description = "Adds a new context menu for saving messages to a file"
 
+aliucord {
     changelog = """
         # 1.1.2
         * Fix crash
