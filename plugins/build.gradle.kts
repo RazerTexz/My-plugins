@@ -4,13 +4,13 @@ import com.android.build.gradle.LibraryExtension
 import com.aliucord.gradle.AliucordExtension
 
 subprojects {
+    apply(plugin = "com.aliucord.plugin")
     apply(plugin = "com.android.library")
     apply(plugin = "org.jetbrains.kotlin.android")
-    apply(plugin = "com.aliucord.plugin")
 
     configure<KotlinAndroidExtension> {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
+            jvmTarget = JvmTarget.JVM_21
         }
     }
 
@@ -28,8 +28,8 @@ subprojects {
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
     }
 
@@ -41,8 +41,9 @@ subprojects {
     dependencies {
         val compileOnly by configurations
 
-        compileOnly("com.aliucord:Aliucord:2.4.0") // 2.5.0 is broken
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:2.2.21")
+        compileOnly("com.aliucord:Aliucord:2.6.0")
+        compileOnly("com.aliucord:Aliuhook:1.1.4")
         compileOnly("com.discord:discord:126021")
+        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:2.2.21")
     }
 }

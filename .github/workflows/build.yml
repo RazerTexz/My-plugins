@@ -8,8 +8,6 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '*.md'
   workflow_dispatch:
 
 jobs:
@@ -29,10 +27,10 @@ jobs:
           ref: builds
           path: builds
 
-      - name: Setup JDK 25
+      - name: Setup JDK 21
         uses: actions/setup-java@v5
         with:
-          java-version: 25
+          java-version: 21
           distribution: temurin
 
       - name: Setup Gradle
@@ -43,16 +41,14 @@ jobs:
       - name: Build Plugins
         run: |
           cd "$GITHUB_WORKSPACE/src"
+          chmod +x gradlew && ./gradlew make generateUpdaterJson
 
-          chmod +x gradlew
-          ./gradlew make generateUpdaterJson
-
+          rm -f "$GITHUB_WORKSPACE/builds/"*.zip
           cp plugins/*/build/outputs/*.zip build/outputs/updater.json "$GITHUB_WORKSPACE/builds"
 
       - name: Push Builds
         run: |
           cd "$GITHUB_WORKSPACE/builds"
-
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .

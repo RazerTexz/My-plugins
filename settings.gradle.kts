@@ -11,7 +11,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://maven.aliucord.com/releases")
-        maven("https://maven.aliucord.com/snapshots")
     }
 }
 
