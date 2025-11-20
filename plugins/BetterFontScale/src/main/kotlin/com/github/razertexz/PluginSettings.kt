@@ -13,7 +13,7 @@ import com.aliucord.utils.DimenUtils.defaultPadding
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.TextInput
 import com.aliucord.api.SettingsAPI
-import com.aliucord.Constants.Fonts
+import com.aliucord.Constants
 import com.aliucord.Utils
 
 import com.lytefast.flexinput.R
@@ -21,14 +21,14 @@ import com.lytefast.flexinput.R
 class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        val ctx = requireContext()
 
         setActionBarTitle("Better Font Scale Settings")
         setPadding(0)
 
+        val ctx = getContext()!!
         addView(TextView(ctx, null, 0, R.i.UiKit_Settings_Item_Header).apply {
             text = "NOTE: 0 = Use Default Value"
-            setTypeface(ResourcesCompat.getFont(ctx, Fonts.whitney_semibold))
+            typeface = ResourcesCompat.getFont(ctx, Constants.Fonts.whitney_semibold)
         })
 
         addTextInput(ctx, "Messages Font Scale", "messagesFontScale")
@@ -56,10 +56,11 @@ class PluginSettings(val settings: SettingsAPI) : SettingsPage() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             }
         ).apply {
-            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
                 setMargins(defaultPadding, 8, defaultPadding, 8)
             }
+
+            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         })
     }
 }
