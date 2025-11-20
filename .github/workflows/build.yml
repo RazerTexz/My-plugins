@@ -52,5 +52,5 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit -m "Build $GITHUB_SHA"
+          git commit -m "Build $GITHUB_SHA" || exit 0
           git push
