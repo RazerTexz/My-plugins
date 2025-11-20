@@ -36,3 +36,6 @@ Automatically marks attachments as spoilers
 
 ### [AttachmentRemover](https://github.com/RazerTexz/My-plugins/raw/builds/AttachmentRemover.zip)
 Remove individual attachments from your messages
+
+### [PluginWeb](https://github.com/RazerTexz/My-plugins/raw/builds/PluginWeb.zip)
+A quick way to search for Aliucord plugins
