@@ -23,10 +23,12 @@ class Main : Plugin() {
                 getViewId("about_me_text") -> settings.getFloat("aboutMeFontScale", 0.0f)
                 getViewId("channel_members_list_item_game") -> settings.getFloat("gameStatusFontScale", 0.0f)
                 getViewId("user_profile_header_custom_status") -> settings.getFloat("profileStatusFontScale", 0.0f)
-                else -> return@before
+                else -> 0.0f
             }
 
-            it.args[0] = newTextSize * ctx.resources.displayMetrics.scaledDensity
+            if (newTextSize != 0.0f) {
+                it.args[0] = newTextSize * ctx.resources.displayMetrics.scaledDensity
+            }
         }
     }
 
