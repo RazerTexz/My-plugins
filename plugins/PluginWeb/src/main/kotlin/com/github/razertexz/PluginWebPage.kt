@@ -15,16 +15,19 @@ import com.aliucord.Constants
 import com.aliucord.Http
 import com.aliucord.Utils
 import com.aliucord.utils.MDUtils
+import com.aliucord.utils.GsonUtils
 import com.aliucord.utils.ChangelogUtils
-import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.TextInput
+import com.aliucord.fragments.SettingsPage
 
 import com.discord.utilities.color.ColorCompat
 
 import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
 import com.lytefast.flexinput.R
 
 import java.io.File
+import java.io.InputStreamReader
 
 class PluginWebPage() : SettingsPage() {
     private class PluginData(
@@ -37,7 +40,7 @@ class PluginWebPage() : SettingsPage() {
         val changelog: String?
     )
 
-    private class Adapter(private val originalList: List<PluginData>) : ListAdapter<PluginData, Adapter.ViewHolder>(DiffCallback()), Filterable {
+    private class Adapter(private val originalData: List<PluginData>) : ListAdapter<PluginData, Adapter.ViewHolder>(DiffCallback()), Filterable {
         private class ViewHolder(val card: PluginWebCard) : RecyclerView.ViewHolder(card)
         private class DiffCallback : DiffUtil.ItemCallback<PluginData>() {
             override fun areItemsTheSame(oldItem: PluginData, newItem: PluginData): Boolean = oldItem.name == newItem.name
@@ -116,9 +119,9 @@ class PluginWebPage() : SettingsPage() {
                 override fun performFiltering(constraint: CharSequence?): FilterResults {
                     return FilterResults().apply {
                         values = if (constraint.isNullOrEmpty())
-                            originalList
+                            originalData
                         else
-                            originalList.filter { it.name.contains(constraint, true) || it.description.contains(constraint, true) }
+                            originalData.filter { it.name.contains(constraint, true) || it.description.contains(constraint, true) }
                     }
                 }
 
@@ -137,7 +140,7 @@ class PluginWebPage() : SettingsPage() {
         removeScrollView()
 
         Utils.threadPool.execute {
-            val data = Http.simpleJsonGet<List<PluginData>>("https://raw.githubusercontent.com/Aliucord/plugins-repo/builds/manifest.json", object : TypeToken<List<PluginData>>() {}.type)
+            val data = GsonUtils.gson.d<List<PluginData>>(JsonReader(InputStreamReader(Http.Request("https://raw.githubusercontent.com/Aliucord/plugins-repo/builds/manifest.json").execute().stream())), object : TypeToken<List<PluginData>>() {}.type)
 
             Utils.mainThread.post {
                 val context = view.context
