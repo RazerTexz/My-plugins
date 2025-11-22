@@ -76,9 +76,9 @@ class Main : Plugin() {
             val messageId = newMessage.o()
             val channelId = newMessage.g()
 
-            val oldContent = StoreStream.getMessages().getMessage(channelId, messageId).content
+            val oldContent = StoreStream.getMessages().getMessage(channelId, messageId)?.content ?: return@before
             val newContent = newMessage.i()
-            if (oldContent != null && oldContent != newContent)
+            if (oldContent != newContent)
                 messageRecords.computeIfAbsent(messageId) { MessageRecord() }.edits += MessageRecord.Edit(oldContent, System.currentTimeMillis())
         }
 
