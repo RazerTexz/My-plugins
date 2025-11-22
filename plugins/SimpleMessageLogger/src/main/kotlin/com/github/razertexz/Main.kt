@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.text.style.ForegroundColorSpan
+import android.util.LongSparseArray
 
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
@@ -40,13 +41,13 @@ class Main : Plugin() {
 
     private class MessageRecord(
         var deletedTimestamp: Long = 0L,
-        val edits: ArrayList<Edit> = ArrayList()
+        var edits: ArrayList<Edit>? = null
     ) {
         class Edit(val content: String, val timestamp: Long)
     }
 
     override fun start(ctx: Context) {
-        val messageRecords = HashMap<Long, MessageRecord>()
+        val messageRecords = LongSparseArray<MessageRecord>()
 
         patcher.before<StoreMessages>("handleMessageDelete", Long::class.java, List::class.java) {
             if (!settings.getBool("logDeletedMessages", true))
@@ -57,7 +58,7 @@ class Main : Plugin() {
                 if (message == null || settings.getBool("ignoreBots", false) && message.author.e() == true || settings.getBool("ignoreSelf", false) && message.author.id == StoreStream.getUsers().me.id) {
                     true
                 } else {
-                    messageRecords.computeIfAbsent(messageId) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
+                    messageRecords.getOrPut(messageId) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
                     updateMessage(messageId)
 
                     false
@@ -78,8 +79,12 @@ class Main : Plugin() {
 
             val oldContent = StoreStream.getMessages().getMessage(channelId, messageId)?.content ?: return@before
             val newContent = newMessage.i()
-            if (oldContent != newContent)
-                messageRecords.computeIfAbsent(messageId) { MessageRecord() }.edits += MessageRecord.Edit(oldContent, System.currentTimeMillis())
+            if (oldContent != newContent) {
+                val record = messageRecords.getOrPut(messageId) { MessageRecord() }
+                if (record.edits == null) record.edits = ArrayList()
+
+                record.edits!! += MessageRecord.Edit(oldContent, System.currentTimeMillis())
+            }
         }
 
         val mDraweeStringBuilder = SimpleDraweeSpanTextView::class.java.getDeclaredField("mDraweeStringBuilder").apply { isAccessible = true }
@@ -91,15 +96,15 @@ class Main : Plugin() {
             val messageEntry = it.args[1] as MessageEntry
 
             val message = messageEntry.message
-            val messageRecord = messageRecords[message.id] ?: return@after
+            val record = messageRecords[message.id] ?: return@after
 
             val textView = it.args[0] as SimpleDraweeSpanTextView
             val context = textView.context
             val builder = mDraweeStringBuilder[textView] as DraweeSpanStringBuilder
 
-            if (messageRecord.deletedTimestamp > 0L) {
+            if (record.deletedTimestamp > 0L) {
                 val start = builder.length
-                val timeStr = " (deleted: ${ TimeUtils.toReadableTimeString(context, messageRecord.deletedTimestamp, ClockFactory.get()) })"
+                val timeStr = " (deleted: ${ TimeUtils.toReadableTimeString(context, record.deletedTimestamp, ClockFactory.get()) })"
 
                 builder.setSpan(ForegroundColorSpan(0xFFF04747.toInt()), 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 builder.append(timeStr)
@@ -107,7 +112,7 @@ class Main : Plugin() {
                 builder.setSpan(ForegroundColorSpan(ColorCompat.getThemedColor(context, R.b.colorTextMuted)), start, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
 
-            if (messageRecord.edits.isNotEmpty()) {
+            if (record.edits != null) {
                 val messageRenderContext = getMessageRenderContext.invoke(
                     this,
                     context,
@@ -123,7 +128,7 @@ class Main : Plugin() {
                 ) as MessagePreprocessor
 
                 val tempBuilder = DraweeSpanStringBuilder()
-                for (edit in messageRecord.edits) {
+                for (edit in record.edits) {
                     val timeStr = " (edited: ${ TimeUtils.toReadableTimeString(context, edit.timestamp, ClockFactory.get()) })\n"
                     val parsed = DiscordParser.parseChannelMessage(
                         context,
@@ -150,6 +155,16 @@ class Main : Plugin() {
         val adapter = WidgetChatList.`access$getAdapter$p`(Utils.widgetChatList!!)
         val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == messageId }
         if (idx != -1) adapter.notifyItemChanged(idx)
+    }
+
+    private inline fun <T> LongSparseArray<T>.getOrPut(key: Long, defaultValue: () -> T): T {
+        var value = get(key)
+        if (value == null) {
+            value = defaultValue()
+            this.put(key, value)
+        }
+
+        return value
     }
 
     override fun stop(ctx: Context) = patcher.unpatchAll()
