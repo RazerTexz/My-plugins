@@ -59,7 +59,10 @@ class Main : Plugin() {
                     true
                 } else {
                     messageRecords.getOrPut(messageId) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
-                    updateMessage(messageId)
+
+                    val adapter = WidgetChatList.`access$getAdapter$p`(Utils.widgetChatList!!)
+                    val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == messageId }
+                    if (idx != -1) adapter.notifyItemChanged(idx)
 
                     false
                 }
@@ -127,7 +130,7 @@ class Main : Plugin() {
                     messageEntry.messageState
                 ) as MessagePreprocessor
 
-                val tempBuilder = DraweeSpanStringBuilder()
+                val editBuilder = DraweeSpanStringBuilder()
                 for (edit in record.edits) {
                     val timeStr = " (edited: ${ TimeUtils.toReadableTimeString(context, edit.timestamp, ClockFactory.get()) })\n"
                     val parsed = DiscordParser.parseChannelMessage(
@@ -138,23 +141,19 @@ class Main : Plugin() {
                         if (message.isWebhook()) DiscordParser.ParserOptions.ALLOW_MASKED_LINKS else DiscordParser.ParserOptions.DEFAULT,
                         false
                     )
-
                     parsed.setSpan(RelativeSizeSpan(0.75f), parsed.length - timeStr.length, parsed.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    tempBuilder.append(parsed)
+
+                    editBuilder.append(parsed)
                 }
 
-                tempBuilder.setSpan(ForegroundColorSpan(ColorCompat.getThemedColor(context, R.b.colorTextMuted)), 0, tempBuilder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                builder.insert(0, tempBuilder)
+                editBuilder.setSpan(ForegroundColorSpan(ColorCompat.getThemedColor(context, R.b.colorTextMuted)), 0, editBuilder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                editBuilder.append(builder)
+
+                textView.setDraweeSpanStringBuilder(editBuilder)
+            } else {
+                textView.setDraweeSpanStringBuilder(builder)
             }
-
-            textView.setDraweeSpanStringBuilder(builder)
         }
-    }
-
-    private fun updateMessage(messageId: Long) {
-        val adapter = WidgetChatList.`access$getAdapter$p`(Utils.widgetChatList!!)
-        val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == messageId }
-        if (idx != -1) adapter.notifyItemChanged(idx)
     }
 
     private inline fun <T> LongSparseArray<T>.getOrPut(key: Long, defaultValue: () -> T): T {
