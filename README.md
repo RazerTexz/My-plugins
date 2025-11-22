@@ -42,4 +42,5 @@ A quick way to search for Aliucord plugins
 
 ### [SimpleMessageLogger](https://github.com/RazerTexz/My-plugins/raw/builds/SimpleMessageLogger.zip)
 Logs deleted and edited messages. Simpler and lighter than MessageLogger
+
 Includes options to ignore bots and yourself
