@@ -1,4 +1,4 @@
-version = "1.0.0"
+version = "1.0.1"
 description = "Logs deleted and edited messages. Simpler and lighter than MessageLogger"
 
 aliucord {

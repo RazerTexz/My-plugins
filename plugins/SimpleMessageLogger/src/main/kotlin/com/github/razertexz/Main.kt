@@ -52,13 +52,13 @@ class Main : Plugin() {
             if (!settings.getBool("logDeletedMessages", true))
                 return@before
 
-            it.args[1] = (it.args[1] as List<Long>).filter { id ->
-                val message = StoreStream.getMessages().getMessage(it.args[0] as Long, id)
+            it.args[1] = (it.args[1] as List<Long>).filter { messageId ->
+                val message = StoreStream.getMessages().getMessage(it.args[0] as Long, messageId)
                 if (message == null || settings.getBool("ignoreBots", false) && message.author.e() == true || settings.getBool("ignoreSelf", false) && message.author.id == StoreStream.getUsers().me.id) {
                     true
                 } else {
-                    messageRecords.computeIfAbsent(id) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
-                    updateMessage(id)
+                    messageRecords.computeIfAbsent(messageId) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
+                    updateMessage(messageId)
 
                     false
                 }
@@ -69,20 +69,17 @@ class Main : Plugin() {
             if (!settings.getBool("logEditedMessages", true))
                 return@before
 
-            val message = it.args[0] as APIMessage
-            if (settings.getBool("ignoreBots", false) && message.e().e() == true || settings.getBool("ignoreSelf", false) && message.e().id == StoreStream.getUsers().me.id)
+            val newMessage = it.args[0] as APIMessage
+            if (settings.getBool("ignoreBots", false) && newMessage.e().e() == true || settings.getBool("ignoreSelf", false) && newMessage.e().id == StoreStream.getUsers().me.id)
                 return@before
 
-            val editedTimestamp = message.j()
-            if (editedTimestamp != null && editedTimestamp.g() > 0) {
-                val id = message.o()
-                val content = message.i()
+            val messageId = newMessage.o()
+            val channelId = newMessage.g()
 
-                messageRecords.computeIfAbsent(id) { MessageRecord() }.edits += MessageRecord.Edit(content, System.currentTimeMillis())
-                updateMessage(id)
-
-                it.result = null
-            }
+            val oldContent = StoreStream.getMessages().getMessage(channelId, messageId).content
+            val newContent = newMessage.i()
+            if (oldContent != null && oldContent != newContent)
+                messageRecords.computeIfAbsent(messageId) { MessageRecord() }.edits += MessageRecord.Edit(oldContent, System.currentTimeMillis())
         }
 
         val mDraweeStringBuilder = SimpleDraweeSpanTextView::class.java.getDeclaredField("mDraweeStringBuilder").apply { isAccessible = true }
@@ -149,9 +146,9 @@ class Main : Plugin() {
         }
     }
 
-    private fun updateMessage(id: Long) {
+    private fun updateMessage(messageId: Long) {
         val adapter = WidgetChatList.`access$getAdapter$p`(Utils.widgetChatList!!)
-        val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == id }
+        val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == messageId }
         if (idx != -1) adapter.notifyItemChanged(idx)
     }
 
