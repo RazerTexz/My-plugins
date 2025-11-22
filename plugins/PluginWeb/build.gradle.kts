@@ -1,8 +1,11 @@
-version = "1.0.1"
+version = "1.0.2"
 description = "A quick way to search for Aliucord plugins"
 
 aliucord {
     changelog = """
+        # 1.0.2
+        * Fixed button position shifting due to other plugins
+
         # 1.0.1
         * Faster plugin fetching
 
