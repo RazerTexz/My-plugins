@@ -20,8 +20,6 @@ import com.aliucord.utils.ChangelogUtils
 import com.aliucord.views.TextInput
 import com.aliucord.fragments.SettingsPage
 
-import com.discord.utilities.color.ColorCompat
-
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.lytefast.flexinput.R
@@ -101,7 +99,7 @@ class PluginWebPage() : SettingsPage() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
 
-            holder.card.titleView.text = "${item.name} v${item.version} by ${item.authors[0]}"
+            holder.card.titleView.text = "${item.name} v${item.version} by ${item.authors.joinToString()}"
             holder.card.descriptionView.text = MDUtils.render(item.description)
             holder.card.changelogButton.visibility = if (item.changelog != null) View.VISIBLE else View.GONE
 
@@ -118,10 +116,12 @@ class PluginWebPage() : SettingsPage() {
             return object : Filter() {
                 override fun performFiltering(constraint: CharSequence?): FilterResults {
                     return FilterResults().apply {
-                        values = if (constraint.isNullOrEmpty())
+                        val query = constraint?.trim()
+
+                        values = if (query.isNullOrEmpty())
                             originalData
                         else
-                            originalData.filter { it.name.contains(constraint, true) || it.description.contains(constraint, true) || it.authors[0].contains(constraint, true) }
+                            originalData.filter { it.name.contains(query, true) || it.description.contains(query, true) || it.authors.any { it.contains(query, true) } }
                     }
                 }
 
