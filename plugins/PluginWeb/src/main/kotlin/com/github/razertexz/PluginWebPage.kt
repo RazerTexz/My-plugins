@@ -121,7 +121,7 @@ class PluginWebPage() : SettingsPage() {
                         values = if (constraint.isNullOrEmpty())
                             originalData
                         else
-                            originalData.filter { it.name.contains(constraint, true) || it.description.contains(constraint, true) }
+                            originalData.filter { it.name.contains(constraint, true) || it.description.contains(constraint, true) || it.authors[0].contains(constraint, true) }
                     }
                 }
 
@@ -147,7 +147,7 @@ class PluginWebPage() : SettingsPage() {
                 val myAdapter = Adapter(data)
                 myAdapter.submitList(data)
 
-                addView(TextInput(context, context.getString(R.h.search)).apply {
+                addView(TextInput(context, "Search by Name, Description or Author").apply {
                     editText.setOnEditorActionListener { v, actionId, event ->
                         if (actionId == EditorInfo.IME_ACTION_DONE) {
                             myAdapter.filter.filter(editText.text)
