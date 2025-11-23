@@ -48,20 +48,26 @@ class Main : Plugin() {
 
     override fun start(ctx: Context) {
         val messageRecords = LongSparseArray<MessageRecord>()
+        val meId = StoreStream.getUsers().me.id
 
         patcher.before<StoreMessages>("handleMessageDelete", Long::class.java, List::class.java) {
             if (!settings.getBool("logDeletedMessages", true))
                 return@before
 
-            it.args[1] = (it.args[1] as List<Long>).filter { messageId ->
-                val message = StoreStream.getMessages().getMessage(it.args[0] as Long, messageId)
-                if (message == null || settings.getBool("ignoreBots", false) && message.author.e() == true || settings.getBool("ignoreSelf", false) && message.author.id == StoreStream.getUsers().me.id) {
+            val channelId = it.args[0] as Long
+            val adapter = WidgetChatList.`access$getAdapter$p`(Utils.widgetChatList!!)
+
+            val ignoreBots = settings.getBool("ignoreBots", false)
+            val ignoreSelf = settings.getBool("ignoreSelf", false)
+
+            it.args[1] = (it.args[1] as List<Long>).filter { id ->
+                val message = StoreStream.getMessages().getMessage(channelId, id)
+                if (message == null || ignoreBots && message.author.e() == true || ignoreSelf && message.author.id == meId) {
                     true
                 } else {
-                    messageRecords.getOrPut(messageId) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
+                    messageRecords.getOrPut(id) { MessageRecord() }.deletedTimestamp = System.currentTimeMillis()
 
-                    val adapter = WidgetChatList.`access$getAdapter$p`(Utils.widgetChatList!!)
-                    val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == messageId }
+                    val idx = adapter.internalData.indexOfFirst { it is MessageEntry && it.message.id == id }
                     if (idx != -1) adapter.notifyItemChanged(idx)
 
                     false
@@ -74,16 +80,17 @@ class Main : Plugin() {
                 return@before
 
             val newMessage = it.args[0] as APIMessage
-            if (settings.getBool("ignoreBots", false) && newMessage.e().e() == true || settings.getBool("ignoreSelf", false) && newMessage.e().id == StoreStream.getUsers().me.id)
+            if (settings.getBool("ignoreBots", false) && newMessage.e().e() == true || settings.getBool("ignoreSelf", false) && newMessage.e().id == meId)
                 return@before
 
-            val messageId = newMessage.o()
             val channelId = newMessage.g()
+            val id = newMessage.o()
 
-            val oldContent = StoreStream.getMessages().getMessage(channelId, messageId)?.content ?: return@before
+            val oldContent = StoreStream.getMessages().getMessage(channelId, id)?.content ?: return@before
             val newContent = newMessage.i()
+
             if (oldContent != newContent) {
-                val record = messageRecords.getOrPut(messageId) { MessageRecord() }
+                val record = messageRecords.getOrPut(id) { MessageRecord() }
                 if (record.edits == null) record.edits = ArrayList()
 
                 record.edits!! += MessageRecord.Edit(oldContent, System.currentTimeMillis())
@@ -97,20 +104,18 @@ class Main : Plugin() {
 
         patcher.after<WidgetChatListAdapterItemMessage>("processMessageText", SimpleDraweeSpanTextView::class.java, MessageEntry::class.java) {
             val messageEntry = it.args[1] as MessageEntry
-
             val message = messageEntry.message
             val record = messageRecords[message.id] ?: return@after
 
             val textView = it.args[0] as SimpleDraweeSpanTextView
-            val context = textView.context
             val builder = mDraweeStringBuilder[textView] as DraweeSpanStringBuilder
+            val context = textView.context
 
             if (record.deletedTimestamp > 0L) {
-                val start = builder.length
-                val timeStr = " (deleted: ${ TimeUtils.toReadableTimeString(context, record.deletedTimestamp, ClockFactory.get()) })"
-
                 builder.setSpan(ForegroundColorSpan(0xFFF04747.toInt()), 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                builder.append(timeStr)
+
+                val start = builder.length
+                builder.append(" (deleted: ${ TimeUtils.toReadableTimeString(context, record.deletedTimestamp, ClockFactory.get()) })")
                 builder.setSpan(RelativeSizeSpan(0.75f), start, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 builder.setSpan(ForegroundColorSpan(ColorCompat.getThemedColor(context, R.b.colorTextMuted)), start, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -160,7 +165,7 @@ class Main : Plugin() {
         var value = get(key)
         if (value == null) {
             value = defaultValue()
-            this.put(key, value)
+            put(key, value)
         }
 
         return value
