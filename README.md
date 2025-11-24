@@ -45,3 +45,6 @@ A newer and more up-to-date alternative to PluginRepo
 Logs deleted and edited messages. Simpler and lighter than MessageLogger
 
 Includes options to ignore bots and yourself
+
+### [ThemeWeb](https://github.com/RazerTexz/My-plugins/raw/builds/ThemeWeb.zip)
+A quick way to search for Aliucord themes
