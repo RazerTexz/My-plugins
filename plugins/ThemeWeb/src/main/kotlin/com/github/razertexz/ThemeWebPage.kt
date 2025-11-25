@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Filterable
 import android.widget.Filter
 
+import com.aliucord.PluginManager
 import com.aliucord.Constants
 import com.aliucord.Http
 import com.aliucord.Utils
@@ -34,16 +35,11 @@ class ThemeWebPage() : SettingsPage() {
     )
 
     private class Adapter(private val originalData: List<ThemeData>) : ListAdapter<ThemeData, Adapter.ViewHolder>(DiffCallback()), Filterable {
-        private class ViewHolder(val card: ThemeWebCard) : RecyclerView.ViewHolder(card)
-        private class DiffCallback : DiffUtil.ItemCallback<ThemeData>() {
-            override fun areItemsTheSame(oldItem: ThemeData, newItem: ThemeData): Boolean = oldItem.name == newItem.name
-            override fun areContentsTheSame(oldItem: ThemeData, newItem: ThemeData): Boolean = true
-        }
-
         private val themeDir = File(Constants.BASE_PATH, "themes")
+        private val installedThemes = ArrayList(themeDir.list().toList())
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(ThemeWebCard(parent.context)).apply {
+        private inner class ViewHolder(val card: ThemeWebCard) : RecyclerView.ViewHolder(card) {
+            init {
                 card.repoButton.setOnClickListener {
                     if (bindingAdapterPosition == RecyclerView.NO_POSITION)
                         return@setOnClickListener
@@ -57,14 +53,11 @@ class ThemeWebPage() : SettingsPage() {
                         return@setOnClickListener
 
                     Utils.threadPool.execute {
-                        if (!themeDir.exists())
-                            themeDir.mkdir()
-
                         val item = getItem(bindingAdapterPosition)
                         Http.simpleDownload(item.url, File(themeDir, item.filename))
 
                         Utils.mainThread.post {
-                            Utils.promptRestart()
+                            installedThemes += item.filename
                             notifyItemChanged(bindingAdapterPosition)
                         }
                     }
@@ -78,10 +71,19 @@ class ThemeWebPage() : SettingsPage() {
                     if (!File(themeDir, item.filename).delete())
                         return@setOnClickListener
 
-                    Utils.promptRestart()
+                    installedThemes -= item.filename
                     notifyItemChanged(bindingAdapterPosition)
                 }
             }
+        }
+
+        private class DiffCallback : DiffUtil.ItemCallback<ThemeData>() {
+            override fun areItemsTheSame(oldItem: ThemeData, newItem: ThemeData): Boolean = oldItem.name == newItem.name
+            override fun areContentsTheSame(oldItem: ThemeData, newItem: ThemeData): Boolean = true
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(ThemeWebCard(parent.context))
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -89,7 +91,7 @@ class ThemeWebPage() : SettingsPage() {
 
             holder.card.titleView.text = "${item.name} v${item.version} by ${item.author}"
             
-            if (File(themeDir, item.filename).exists()) {
+            if (item.filename in installedThemes) {
                 holder.card.installButton.visibility = View.GONE
                 holder.card.uninstallButton.visibility = View.VISIBLE
             } else {
@@ -126,6 +128,16 @@ class ThemeWebPage() : SettingsPage() {
         removeScrollView()
 
         Utils.threadPool.execute {
+            if ("Themer" !in PluginManager.plugins) {
+                val pluginFile = File(Constants.PLUGINS_PATH, "Themer.zip")
+                Http.simpleDownload("https://raw.githubusercontent.com/Vendicated/AliucordPlugins/builds/Themer.zip", pluginFile)
+
+                Utils.mainThread.post {
+                    PluginManager.loadPlugin(Utils.appContext, pluginFile)
+                    PluginManager.startPlugin("Themer")
+                }
+            }
+
             val data = GsonUtils.gson.d<List<ThemeData>>(
                 JsonReader(
                     InputStreamReader(
