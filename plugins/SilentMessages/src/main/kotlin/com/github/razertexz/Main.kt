@@ -61,7 +61,7 @@ class Main : Plugin() {
         patcher.after<WidgetChatListAdapterItemMessage>("configureThreadSpine", ModelMessage::class.java, Boolean::class.java) {
             val message = it.args[0] as ModelMessage
             if (!message.isLoading) {
-                val layout = (itemView as ViewGroup).getChildById<ConstraintLayout>(Utils.getResId("chat_list_adapter_item_text_header", "id"))!!
+                val layout = (itemView as ViewGroup).getChildById<ConstraintLayout>(Utils.getResId("chat_list_adapter_item_text_header", "id")) ?: return@after
                 val indicator = layout.getChildById<ImageView>(viewId) ?: ImageView(itemView.context).apply {
                     id = viewId
                     scaleX = 0.75f

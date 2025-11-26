@@ -1,4 +1,4 @@
-version = "1.0.2"
+version = "1.0.3"
 description = "Type '@silent' at the start of your message"
 
 aliucord {
