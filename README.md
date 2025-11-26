@@ -39,12 +39,12 @@ Remove individual attachments from your messages
 
 ### [PluginWeb](https://github.com/RazerTexz/My-plugins/raw/builds/PluginWeb.zip)
 A quick way to search for Aliucord plugins
-A newer and more up-to-date alternative to PluginRepo
 
 ### [SimpleMessageLogger](https://github.com/RazerTexz/My-plugins/raw/builds/SimpleMessageLogger.zip)
 Logs deleted and edited messages. Simpler and lighter than MessageLogger
 
-Includes options to ignore bots and yourself
-
 ### [ThemeWeb](https://github.com/RazerTexz/My-plugins/raw/builds/ThemeWeb.zip)
 A quick way to search for Aliucord themes
+
+### [SilentMessages](https://github.com/RazerTexz/My-plugins/raw/builds/SilentMessages.zip)
+Type '@silent' at the start of your message
