@@ -38,7 +38,7 @@ class Main : Plugin() {
 
     override fun start(ctx: Context) {
         val viewId = View.generateViewId()
-        val icon = ctx.getDrawable(R.e.ic_sound_quiet_24dp)!!.mutate()
+        val icon = ctx.getDrawable(R.e.ic_notifications_off_grey_24dp)!!.mutate()
         Utils.tintToTheme(icon)
 
         patcher.before<`MessageQueue$doSend$2`<*, *>>("call", SendUtils.SendPayload.ReadyToSend::class.java) {
