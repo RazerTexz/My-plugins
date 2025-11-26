@@ -39,14 +39,8 @@ class PluginWebPage() : SettingsPage() {
     )
 
     private class Adapter(private val originalData: List<PluginData>) : ListAdapter<PluginData, Adapter.ViewHolder>(DiffCallback()), Filterable {
-        private class ViewHolder(val card: PluginWebCard) : RecyclerView.ViewHolder(card)
-        private class DiffCallback : DiffUtil.ItemCallback<PluginData>() {
-            override fun areItemsTheSame(oldItem: PluginData, newItem: PluginData): Boolean = oldItem.name == newItem.name
-            override fun areContentsTheSame(oldItem: PluginData, newItem: PluginData): Boolean = true
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(PluginWebCard(parent.context)).apply {
+        private inner class ViewHolder(val card: PluginWebCard) : RecyclerView.ViewHolder(card) {
+            init {
                 card.changelogButton.setOnClickListener {
                     if (bindingAdapterPosition == RecyclerView.NO_POSITION)
                         return@setOnClickListener
@@ -96,33 +90,44 @@ class PluginWebPage() : SettingsPage() {
             }
         }
 
+        private class DiffCallback : DiffUtil.ItemCallback<PluginData>() {
+            override fun areItemsTheSame(oldItem: PluginData, newItem: PluginData): Boolean = oldItem.name == newItem.name
+            override fun areContentsTheSame(oldItem: PluginData, newItem: PluginData): Boolean = true
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(PluginWebCard(parent.context))
+        }
+
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
+            val card = holder.card
 
-            holder.card.titleView.text = "${item.name} v${item.version} by ${item.authors.joinToString()}"
-            holder.card.descriptionView.text = MDUtils.render(item.description)
-            holder.card.changelogButton.visibility = if (item.changelog != null) View.VISIBLE else View.GONE
+            card.titleView.text = "${item.name} v${item.version} by ${item.authors.joinToString()}"
+            card.descriptionView.text = MDUtils.render(item.description)
+            card.changelogButton.visibility = if (item.changelog != null) View.VISIBLE else View.GONE
 
             if (item.name in PluginManager.plugins) {
-                holder.card.installButton.visibility = View.GONE
-                holder.card.uninstallButton.visibility = View.VISIBLE
+                card.installButton.visibility = View.GONE
+                card.uninstallButton.visibility = View.VISIBLE
             } else {
-                holder.card.installButton.visibility = View.VISIBLE
-                holder.card.uninstallButton.visibility = View.GONE
+                card.installButton.visibility = View.VISIBLE
+                card.uninstallButton.visibility = View.GONE
             }
         }
 
         override fun getFilter(): Filter {
             return object : Filter() {
                 override fun performFiltering(constraint: CharSequence?): FilterResults {
-                    return FilterResults().apply {
-                        val query = constraint?.trim()
+                    val query = constraint?.trim()
+                    val results = FilterResults()
 
-                        values = if (query.isNullOrEmpty())
-                            originalData
-                        else
-                            originalData.filter { it.name.contains(query, true) || it.description.contains(query, true) || it.authors.any { it.contains(query, true) } }
-                    }
+                    results.values = if (query.isNullOrEmpty())
+                        originalData
+                    else
+                        originalData.filter { it.name.contains(query, true) || it.description.contains(query, true) || it.authors.any { it.contains(query, true) } }
+
+                    return results
                 }
 
                 override fun publishResults(constraint: CharSequence?, results: Filter.FilterResults?) {
