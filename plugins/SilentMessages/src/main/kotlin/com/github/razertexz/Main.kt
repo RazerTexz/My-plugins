@@ -41,7 +41,13 @@ class Main : Plugin() {
                         "nonce" to message.nonce,
                         "allowed_mentions" to message.allowedMentions,
                         "attachments" to message.attachments,
-                        "message_reference" to message.messageReference,
+                        "message_reference" to message.messageReference?.let {
+                            mapOf(
+                                "channel_id" to it.a(),
+                                "guild_id" to it.b(),
+                                "message_id" to it.c()
+                            )
+                        },
                         "flags" to 4096
                     )).json(GsonUtils.gsonRestApi, ApiMessage::class.java)
                 }
