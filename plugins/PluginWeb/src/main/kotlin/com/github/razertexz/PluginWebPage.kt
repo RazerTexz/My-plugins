@@ -145,7 +145,12 @@ class PluginWebPage() : SettingsPage() {
         removeScrollView()
 
         Utils.threadPool.execute {
-            val data = GsonUtils.gson.d<List<PluginData>>(JsonReader(InputStreamReader(Http.Request("https://plugins.aliucord.com/manifest.json").execute().stream())), object : TypeToken<List<PluginData>>() {}.type)
+            val reader = JsonReader(InputStreamReader(Http.Request("https://plugins.aliucord.com/manifest.json").execute().stream()))
+            val data = try {
+                GsonUtils.gson.d<List<PluginData>>(reader, object : TypeToken<List<PluginData>>() {}.type)
+            } finally {
+                reader.close()
+            }
 
             Utils.mainThread.post {
                 val context = view.context
