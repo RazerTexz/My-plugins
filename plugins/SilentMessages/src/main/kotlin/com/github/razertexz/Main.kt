@@ -54,7 +54,7 @@ class Main : Plugin() {
 
         patcher.before<StoreNotifications>("handleMessageCreate", ApiMessage::class.java) {
             val message = it.args[0] as ApiMessage
-            if (message.g() != StoreStream.getChannelsSelected().getId() && (message.l() and 4096L) != 0L)
+            if (message.g() != StoreStream.getChannelsSelected().getId() && message.l() != null && (message.l() and 4096L) != 0L)
                 it.result = null
         }
 
@@ -77,7 +77,7 @@ class Main : Plugin() {
                     })
                 }
 
-                indicator.visibility = if ((message.flags and 4096L) != 0L) View.VISIBLE else View.GONE
+                indicator.visibility = if (message.flags != null && (message.flags and 4096L) != 0L) View.VISIBLE else View.GONE
             }
         }
     }
