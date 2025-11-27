@@ -138,16 +138,12 @@ class ThemeWebPage() : SettingsPage() {
                 }
             }
 
-            val data = GsonUtils.gson.d<List<ThemeData>>(
-                JsonReader(
-                    InputStreamReader(
-                        Http.Request("https://rautobot.github.io/themes-repo/data.json")
-                            .execute()
-                            .stream()
-                    )
-                ),
-                object : TypeToken<List<ThemeData>>() {}.type
-            )
+            val reader = JsonReader(InputStreamReader(Http.Request("https://rautobot.github.io/themes-repo/data.json").execute().stream()))
+            val data = try {
+                GsonUtils.gson.d<List<ThemeData>>(reader, object : TypeToken<List<ThemeData>>() {}.type)
+            } finally {
+                reader.close()
+            }
 
             Utils.mainThread.post {
                 val context = view.context
