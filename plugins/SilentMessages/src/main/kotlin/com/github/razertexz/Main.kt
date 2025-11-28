@@ -33,21 +33,14 @@ class Main : Plugin() {
         Utils.tintToTheme(icon)
 
         patcher.before<`MessageQueue$doSend$2`<*, *>>("call", SendUtils.SendPayload.ReadyToSend::class.java) {
-            val message = `$message`
+            val message = (it.args[0] as SendUtils.SendPayload.ReadyToSend).message
             if (message.content.startsWith("@silent ")) {
                 it.result = Observable.D { // fromCallable
-                    Http.Request.newDiscordRNRequest("https://discord.com/api/v10/channels/${message.channelId}/messages", "POST").executeWithJson(mapOf(
+                    Http.Request.newDiscordRNRequest("https://discord.com/api/v10/channels/${`$message`.channelId}/messages", "POST").executeWithJson(GsonUtils.gsonRestApi, mapOf(
                         "content" to message.content.substring(7).trimStart(),
                         "nonce" to message.nonce,
                         "allowed_mentions" to message.allowedMentions,
-                        "attachments" to message.attachments,
-                        "message_reference" to message.messageReference?.let {
-                            mapOf(
-                                "channel_id" to it.a(),
-                                "guild_id" to it.b(),
-                                "message_id" to it.c()
-                            )
-                        },
+                        "message_reference" to message.messageReference,
                         "flags" to 4096
                     )).json(GsonUtils.gsonRestApi, ApiMessage::class.java)
                 }
