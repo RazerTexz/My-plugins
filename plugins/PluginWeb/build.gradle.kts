@@ -1,8 +1,11 @@
-version = "1.0.7"
+version = "1.0.8"
 description = "A quick way to search for Aliucord plugins"
 
 aliucord {
     changelog = """
+        # 1.0.8
+        * Hide installed plugins from the list
+
         # 1.0.7
         * Fixed a resource leak when fetching plugins
 

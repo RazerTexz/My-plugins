@@ -147,17 +147,16 @@ class PluginWebPage() : SettingsPage() {
         Utils.threadPool.execute {
             val reader = JsonReader(InputStreamReader(Http.Request("https://plugins.aliucord.com/manifest.json").execute().stream()))
             val data = try {
-                GsonUtils.gson.d<List<PluginData>>(reader, object : TypeToken<List<PluginData>>() {}.type)
+                GsonUtils.gson.d<List<PluginData>>(reader, object : TypeToken<List<PluginData>>() {}.type).filter { it.name !in PluginManager.plugins }
             } finally {
                 reader.close()
             }
 
             Utils.mainThread.post {
-                val context = view.context
                 val myAdapter = Adapter(data)
                 myAdapter.submitList(data)
 
-                addView(TextInput(context, "Search by Name, Description or Author").apply {
+                addView(TextInput(view.context, "Search by Name, Description or Author").apply {
                     editText.setOnEditorActionListener { v, actionId, event ->
                         if (actionId == EditorInfo.IME_ACTION_DONE) {
                             myAdapter.filter.filter(editText.text)
@@ -168,7 +167,7 @@ class PluginWebPage() : SettingsPage() {
                     }
                 })
 
-                addView(RecyclerView(context).apply {
+                addView(RecyclerView(view.context).apply {
                     layoutManager = LinearLayoutManager(context)
                     adapter = myAdapter
                     setHasFixedSize(true)
