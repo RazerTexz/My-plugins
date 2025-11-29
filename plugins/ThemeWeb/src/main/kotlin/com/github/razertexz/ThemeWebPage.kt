@@ -103,14 +103,15 @@ class ThemeWebPage() : SettingsPage() {
         override fun getFilter(): Filter {
             return object : Filter() {
                 override fun performFiltering(constraint: CharSequence?): FilterResults {
-                    return FilterResults().apply {
-                        val query = constraint?.trim()
+                    val query = constraint?.trim()
+                    val results = FilterResults()
 
-                        values = if (query.isNullOrEmpty())
-                            originalData
-                        else
-                            originalData.filter { it.name.contains(query, true) || it.author.contains(query, true) }
-                    }
+                    results.values = if (query.isNullOrEmpty())
+                        originalData
+                    else
+                        originalData.filter { it.name.contains(query, true) || it.author.contains(query, true) }
+
+                    return results
                 }
 
                 override fun publishResults(constraint: CharSequence?, results: Filter.FilterResults?) {
