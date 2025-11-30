@@ -1,4 +1,4 @@
-version = "1.0.0"
+version = "1.0.1"
 description = "Adds a copy button on multi-line codeblocks!"
 
 aliucord {
