@@ -35,7 +35,9 @@ subprojects {
 
     configure<AliucordExtension> {
         author("RazerTexz", 633565155501801472L)
-        github("https://github.com/RazerTexz/My-plugins")
+        githubUrl = "https://github.com/RazerTexz/My-plugins"
+        updateUrl = "https://raw.githubusercontent.com/RazerTexz/My-plugins/builds/updater.json"
+        buildUrl = "https://raw.githubusercontent.com/RazerTexz/My-plugins/builds/${project.name}.zip"
     }
 
     dependencies {
