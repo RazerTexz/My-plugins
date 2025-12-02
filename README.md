@@ -48,3 +48,6 @@ A quick way to search for Aliucord themes
 
 ### [SilentMessages](https://github.com/RazerTexz/My-plugins/raw/builds/SilentMessages.zip)
 Type '@silent' at the start of your message
+
+### [AliucordStyleSheets](https://github.com/RazerTexz/My-plugins/raw/builds/AliucordStyleSheets.zip)
+(A.S.S) Style Aliucord to your liking!
