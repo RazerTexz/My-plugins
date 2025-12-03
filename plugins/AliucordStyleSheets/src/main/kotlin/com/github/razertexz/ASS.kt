@@ -83,8 +83,8 @@ class ASS : Plugin() {
             view.visibility = rule.visibility!!
         }
 
-        if (rule.bgDrawable != null && view.background?.constantState != rule.bgDrawable!!.constantState) {
-            view.setBackground(rule.bgDrawable!!.constantState!!.newDrawable().mutate())
+        if (rule.bgState != null && view.background?.constantState != rule.bgState) {
+            view.setBackground(rule.bgState!!.newDrawable(view.resources).mutate())
         }
 
         if (rule.bgTint != null && view.backgroundTintList != rule.bgTint) {

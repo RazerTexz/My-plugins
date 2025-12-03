@@ -35,7 +35,7 @@ internal class Rule {
 
     @JvmField var drawableTint: ColorStateList? = null
     @JvmField var bgTint: ColorStateList? = null
-    @JvmField var bgDrawable: Drawable? = null
+    @JvmField var bgState: Drawable.ConstantState? = null
 
     @JvmField var leftMargin: Int? = null
     @JvmField var topMargin: Int? = null
@@ -91,8 +91,8 @@ internal object ASSLoader {
                     while (reader.q()) {
                         val propName = reader.C()
                         when (propName) {
+                            "bgColor" -> rule.bgState = ColorDrawable(Color.parseColor(reader.J())).constantState
                             "textColor" -> rule.textColor = Color.parseColor(reader.J())
-                            "bgColor" -> rule.bgDrawable = ColorDrawable(Color.parseColor(reader.J()))
                             "gradientOrientation" -> gradientOrientation = GradientDrawable.Orientation.valueOf(reader.J().uppercase())
                             "drawableTint", "bgTint" -> {
                                 val value = ColorStateList.valueOf(Color.parseColor(reader.J()))
@@ -121,7 +121,7 @@ internal object ASSLoader {
 
                                 val drawable = GradientDrawable(gradientOrientation, gradientColors.toIntArray())
                                 drawable.gradientType = gradientType
-                                rule.bgDrawable = drawable
+                                rule.bgState = drawable.constantState
                             }
 
                             "width", "height", "leftMargin", "topMargin", "rightMargin", "bottomMargin", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom", "textSize" -> {
