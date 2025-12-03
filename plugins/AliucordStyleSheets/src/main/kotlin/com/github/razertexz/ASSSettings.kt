@@ -77,23 +77,28 @@ internal class ASSSettings(private val settings: SettingsAPI) : SettingsPage() {
         val stylesDir = File(Constants.BASE_PATH, "styles")
         if (!stylesDir.exists()) stylesDir.mkdir()
 
-        val styleItems = ArrayList<StyleItem>()
+        val items = ArrayList<StyleItem>()
         val files = stylesDir.listFiles()
         if (files != null) {
             for (file in files) {
-                if (!file.isFile) continue
+                if (file.isFile) {
+                    val fileName = file.name
+                    if (!fileName.endsWith(".json")) continue
 
-                val fileName = file.name
-                if (!fileName.endsWith(".json")) continue
-
-                val manifest = ASSLoader.loadStyle(fileName)?.manifest ?: continue
-                styleItems += StyleItem(fileName, manifest.name, manifest.version, manifest.author)
+                    val manifest = ASSLoader.loadStyle(fileName)?.manifest ?: continue
+                    items += StyleItem(fileName, manifest.name, manifest.version, manifest.author)
+                }
             }
+        }
+
+        if (items.isEmpty()) {
+            Utils.showToast("No styles are currently installed", true)
+            return
         }
 
         addView(RecyclerView(view.context).apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = Adapter(styleItems)
+            adapter = Adapter(items)
             setHasFixedSize(true)
         })
     }

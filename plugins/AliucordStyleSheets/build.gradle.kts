@@ -1,4 +1,6 @@
-version = "1.0.0"
+import com.android.build.gradle.LibraryExtension 
+
+version = "1.0.1"
 description = "(A.S.S) Style Aliucord to your liking!"
 
 aliucord {
@@ -8,4 +10,10 @@ aliucord {
     """.trimIndent()
 
     deploy = true
+}
+
+configure<LibraryExtension> {
+    defaultConfig {
+        minSdk = 26
+    }
 }

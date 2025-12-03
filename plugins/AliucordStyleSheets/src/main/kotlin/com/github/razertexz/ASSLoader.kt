@@ -124,7 +124,7 @@ internal object ASSLoader {
                                 rule.bgDrawable = drawable
                             }
 
-                            "width", "height", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom", "leftMargin", "topMargin", "rightMargin", "bottomMargin" -> {
+                            "width", "height", "leftMargin", "topMargin", "rightMargin", "bottomMargin", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom", "textSize" -> {
                                 val raw = reader.x()
                                 val value = if (raw < 0) raw.toInt() else DimenUtils.dpToPx(raw.toFloat())
                                 when (propName) {
