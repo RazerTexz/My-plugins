@@ -4,16 +4,22 @@ import androidx.recyclerview.widget.RecyclerView
 import android.content.Context
 import android.widget.TextView
 import android.widget.ImageView
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.View
+import android.util.SparseArray
 
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
+
+import org.xmlpull.v1.XmlPullParser
 
 import de.robv.android.xposed.XC_MethodHook
 
 @AliucordPlugin(requiresRestart = false)
 class ASS : Plugin() {
+    private val stack = ArrayDeque<View>()
+
     init {
         settingsTab = SettingsTab(ASSSettings::class.java).withArgs(settings)
     }
@@ -22,43 +28,39 @@ class ASS : Plugin() {
         val currentStyle = settings.getString("currentStyle", "")
         if (currentStyle.isEmpty()) return
 
-        val stack = ArrayDeque<View>()
-        val style = ASSLoader.loadStyle(currentStyle) ?: return
-
-        patcher.patch(ViewGroup::class.java, "onViewAdded", arrayOf(View::class.java), object : XC_MethodHook(10000) {
+        val rules = ASSLoader.loadStyle(currentStyle)?.rules ?: return
+        patcher.patch(LayoutInflater::class.java, "inflate", arrayOf(XmlPullParser::class.java, ViewGroup::class.java, Boolean::class.java), object : XC_MethodHook(10000) {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {
-                if ((param.thisObject as ViewGroup) is RecyclerView) return
-
-                val child = param.args[0] as View
-                if (child.id != View.NO_ID) {
-                    val rule = style.rules[child.id]
-                    if (rule != null) applyRule(child, rule)
-                }
+                traverse(param.result as View, rules)
             }
         })
 
         patcher.patch(RecyclerView.Adapter::class.java, "onBindViewHolder", arrayOf(RecyclerView.ViewHolder::class.java, Int::class.java, List::class.java), object : XC_MethodHook(10000) {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {
-                stack.addFirst((param.args[0] as RecyclerView.ViewHolder).itemView)
-
-                while (stack.isNotEmpty()) {
-                    val current = stack.removeFirst()
-                    if (current.id != View.NO_ID) {
-                        val rule = style.rules[current.id]
-                        if (rule != null) applyRule(current, rule)
-                    }
-
-                    if (current is ViewGroup) {
-                        for (i in 0 until current.childCount) {
-                            stack.addFirst(current.getChildAt(i))
-                        }
-                    }
-                }
+                traverse((param.args[0] as RecyclerView.ViewHolder).itemView, rules)
             }
         })
     }
 
     override fun stop(ctx: Context) = patcher.unpatchAll()
+
+    private fun traverse(view: View, rules: SparseArray<Rule>) {
+        stack.addFirst(view)
+
+        while (stack.isNotEmpty()) {
+            val current = stack.removeFirst()
+            if (current.id != View.NO_ID) {
+                val rule = rules[current.id]
+                if (rule != null) applyRule(current, rule)
+            }
+
+            if (current is ViewGroup) {
+                for (i in 0 until current.childCount) {
+                    stack.addFirst(current.getChildAt(i))
+                }
+            }
+        }
+    }
 
     private fun applyRule(view: View, rule: Rule) {
         val lp = view.layoutParams
