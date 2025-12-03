@@ -19,11 +19,16 @@ class ASS : Plugin() {
     }
 
     override fun start(ctx: Context) {
-        val style = ASSLoader.loadStyle(settings.getString("currentStyle", "")) ?: return
+        val currentStyle = settings.getString("currentStyle", "")
+        if (currentStyle.isEmpty()) return
+
         val stack = ArrayDeque<View>()
+        val style = ASSLoader.loadStyle(currentStyle) ?: return
 
         patcher.patch(ViewGroup::class.java, "onViewAdded", arrayOf(View::class.java), object : XC_MethodHook(10000) {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {
+                if ((param.thisObject as ViewGroup) is RecyclerView) return
+
                 val child = param.args[0] as View
                 if (child.id != View.NO_ID) {
                     val rule = style.rules[child.id]
@@ -72,11 +77,17 @@ class ASS : Plugin() {
                 view.typeface = rule.typeface
             }
 
-            if (rule.drawableTint != null && view.compoundDrawableTintList != rule.drawableTint) {
-                view.compoundDrawableTintList = rule.drawableTint
+            if (rule.compoundDrawableTint != null && view.compoundDrawableTintList != rule.compoundDrawableTint) {
+                view.compoundDrawableTintList = rule.compoundDrawableTint
             }
-        } else if (view is ImageView && rule.drawableTint != null && view.imageTintList != rule.drawableTint) {
-            view.imageTintList = rule.drawableTint
+        } else if (view is ImageView) {
+            if (rule.drawableState != null && view.drawable?.constantState != rule.drawableState) {
+                view.setImageDrawable(rule.drawableState!!.newDrawable().mutate())
+            }
+
+            if (rule.drawableTint != null) {
+                view.setColorFilter(rule.drawableTint!!)
+            }
         }
 
         if (rule.visibility != null && view.visibility != rule.visibility) {

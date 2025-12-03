@@ -1,6 +1,6 @@
 import com.android.build.gradle.LibraryExtension 
 
-version = "1.0.4"
+version = "1.0.5"
 description = "(A.S.S) Style Aliucord to your liking!"
 
 aliucord {
