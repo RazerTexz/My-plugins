@@ -12,6 +12,7 @@ import android.util.ArrayMap
 import android.view.View
 
 import com.aliucord.Constants
+import com.aliucord.Logger
 import com.aliucord.Utils
 import com.aliucord.utils.DimenUtils
 
@@ -156,7 +157,7 @@ internal object ASSLoader {
         return try {
             ASSTypeAdapter.read(reader)
         } catch (e: Exception) {
-            Utils.showToast(e.message ?: "Something went wrong! please check debug logs.", true)
+            Logger("AliucordStyleSheets").errorToast("Something went wrong! please check debug logs.", e)
             null
         } finally {
             reader.close()
