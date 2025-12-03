@@ -51,7 +51,7 @@ internal class Rule {
     @JvmField var textColor: Int? = null
     @JvmField var typeface: Typeface? = null
 
-    @JvmField val customProperties = ArrayMap<String, String>()
+    @JvmField val customProperties = ArrayMap<Array<String>, String>()
 }
 
 internal object ASSLoader {
@@ -160,7 +160,7 @@ internal object ASSLoader {
                                 }
                             }
 
-                            else -> rule.customProperties[propName] = reader.J()
+                            else -> rule.customProperties[propName.split(".").toTypedArray()] = reader.J()
                         }
                     }
 

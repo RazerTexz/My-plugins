@@ -136,8 +136,8 @@ class ASS : Plugin() {
             )
         }
 
-        for ((name, value) in rule.customProperties.entries) {
-            ReflectUtils.setValue(view, name, value)
+        for ((paths, value) in rule.customProperties.entries) {
+            ReflectUtils.setValue(view, paths, value)
         }
     }
 }

@@ -14,10 +14,8 @@ public final class ReflectUtils {
 
     private ReflectUtils() {}
 
-    public static final void setValue(final Object instance, final String path, final String value) {
+    public static final void setValue(final Object instance, final String[] paths, final String value) {
         try {
-            final String[] paths = path.split("\\.");
-
             Object currentObj = instance;
             for (int i = 0; i < paths.length - 1; i++) {
                 currentObj = findMethod(currentObj.getClass(), paths[i], 0).invoke(currentObj);
