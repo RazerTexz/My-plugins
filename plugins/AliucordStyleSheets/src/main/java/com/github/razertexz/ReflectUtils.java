@@ -2,8 +2,6 @@ package com.github.razertexz;
 
 import android.graphics.Color;
 
-import com.aliucord.Main;
-
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;
@@ -34,15 +32,15 @@ public final class ReflectUtils {
                 getter = findMethod(clazz, "is" + baseName, 0);
             }
 
-            Object parsedValue;
+            Object parsedValue = value;
             if (value.equals("true") || value.equals("false")) {
                 parsedValue = Boolean.parseBoolean(value);
             } else if (value.startsWith("#")) {
                 parsedValue = Color.parseColor(value);
             } else if (value.endsWith("f")) {
                 parsedValue = Float.parseFloat(value.substring(0, value.length() - 1));
-            } else {
-                parsedValue = Integer.parseInt(value);
+            } else if (value.endsWith("i")) {
+                parsedValue = Integer.parseInt(value.substring(0, value.length() - 1));
             }
 
             if (getter == null || !getter.invoke(currentObj).equals(parsedValue)) {
