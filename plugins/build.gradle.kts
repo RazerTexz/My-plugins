@@ -1,5 +1,8 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.objectweb.asm.*
+
 import com.android.build.gradle.LibraryExtension
 import com.aliucord.gradle.AliucordExtension
 
@@ -11,6 +14,7 @@ subprojects {
     configure<KotlinAndroidExtension> {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_21
+            freeCompilerArgs.addAll("-Xno-param-assertions", "-Xno-call-assertions", "-Xno-receiver-assertions", "-Xno-source-debug-extension")
         }
     }
 
@@ -23,7 +27,7 @@ subprojects {
         }
 
         buildFeatures {
-            buildConfig = true
+            resValues = false
             shaders = false
         }
 
@@ -38,6 +42,25 @@ subprojects {
         githubUrl = "https://github.com/RazerTexz/My-plugins"
         updateUrl = "https://raw.githubusercontent.com/RazerTexz/My-plugins/builds/updater.json"
         buildUrl = "https://raw.githubusercontent.com/RazerTexz/My-plugins/builds/${project.name}.zip"
+    }
+
+    afterEvaluate {
+        tasks.named<KotlinCompile>("compileDebugKotlin") {
+            doLast {
+                destinationDirectory.get().asFile.walk().filter { it.extension == "class" }.forEach {
+                    val reader = ClassReader(it.readBytes())
+                    val writer = ClassWriter(reader, 0)
+
+                    reader.accept(object : ClassVisitor(Opcodes.ASM9, writer) {
+                        override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor? {
+                            return if (descriptor == "Lkotlin/Metadata;") null else super.visitAnnotation(descriptor, visible)
+                        }
+                    }, 0)
+
+                    it.writeBytes(writer.toByteArray())
+                }
+            }
+        }
     }
 
     dependencies {
