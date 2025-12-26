@@ -41,7 +41,7 @@ jobs:
       - name: Build Plugins
         run: |
           cd "$GITHUB_WORKSPACE/src"
-          chmod +x gradlew && ./gradlew make generateUpdaterJson
+          chmod +x gradlew && ./gradlew make generateUpdaterJson --no-watch-fs
 
           rm -f "$GITHUB_WORKSPACE/builds/"*.zip
           cp plugins/*/build/outputs/*.zip build/outputs/updater.json "$GITHUB_WORKSPACE/builds"
