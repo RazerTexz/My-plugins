@@ -27,16 +27,22 @@ import com.lytefast.flexinput.R
 import java.io.File
 import java.io.InputStreamReader
 
-class PluginWebPage() : SettingsPage() {
-    private class PluginData(
+internal class PluginWebPage() : SettingsPage() {
+    internal class PluginData(
         val name: String,
         val description: String,
         val version: String,
-        val authors: List<String>,
+        val authors: List<AuthorData>,
         val url: String,
         val repoUrl: String,
         val changelog: String?
-    )
+    ) {
+        internal class AuthorData(
+            val hyperlink: Boolean,
+            val id: Long,
+            val name: String
+        )
+    }
 
     private class Adapter(private val originalData: List<PluginData>) : ListAdapter<PluginData, Adapter.ViewHolder>(DiffCallback()), Filterable {
         private inner class ViewHolder(val card: PluginWebCard) : RecyclerView.ViewHolder(card) {
@@ -103,7 +109,7 @@ class PluginWebPage() : SettingsPage() {
             val item = getItem(position)
             val card = holder.card
 
-            card.titleView.text = "${item.name} v${item.version} by ${item.authors.joinToString()}"
+            card.titleView.text = "${item.name} v${item.version} by ${item.authors.joinToString() { it.name }}"
             card.descriptionView.text = MDUtils.render(item.description)
             card.changelogButton.visibility = if (item.changelog != null) View.VISIBLE else View.GONE
 
@@ -125,7 +131,7 @@ class PluginWebPage() : SettingsPage() {
                     results.values = if (query.isNullOrEmpty())
                         originalData
                     else
-                        originalData.filter { it.name.contains(query, true) || it.description.contains(query, true) || it.authors.any { it.contains(query, true) } }
+                        originalData.filter { it.name.contains(query, true) || it.description.contains(query, true) || it.authors.any { it.name.contains(query, true) } }
 
                     return results
                 }

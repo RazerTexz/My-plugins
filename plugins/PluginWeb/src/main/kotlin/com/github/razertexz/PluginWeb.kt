@@ -18,7 +18,7 @@ import com.lytefast.flexinput.R
 import de.robv.android.xposed.XC_MethodHook
 
 @AliucordPlugin(requiresRestart = false)
-class PluginWeb : Plugin() {
+internal class PluginWeb : Plugin() {
     override fun start(ctx: Context) {
         patcher.patch(WidgetSettings::class.java, "onViewBound", arrayOf(View::class.java), object : XC_MethodHook(10000) {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {

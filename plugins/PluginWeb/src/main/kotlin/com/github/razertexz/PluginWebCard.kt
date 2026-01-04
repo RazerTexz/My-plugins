@@ -18,7 +18,7 @@ import com.discord.utilities.color.ColorCompat
 
 import com.lytefast.flexinput.R
 
-class PluginWebCard(context: Context) : MaterialCardView(context) {
+internal class PluginWebCard(context: Context) : MaterialCardView(context) {
     private val p = DimenUtils.defaultPadding
 
     val titleView = TextView(context, null, 0, R.i.UiKit_TextView_Semibold).apply {

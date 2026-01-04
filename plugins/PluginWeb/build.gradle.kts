@@ -1,4 +1,4 @@
-version = "1.0.8"
+version = "1.0.9"
 description = "A quick way to search for Aliucord plugins"
 
 aliucord {
