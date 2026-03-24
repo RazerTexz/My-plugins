@@ -7,12 +7,11 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.LongSparseArray
 
+import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.Utils
 
-import com.discord.api.message.Message as ApiMessage
-import com.discord.models.message.Message as ModelMessage
+import com.discord.models.message.Message
 import com.discord.utilities.color.ColorCompat
 import com.discord.utilities.textprocessing.DiscordParser
 import com.discord.utilities.textprocessing.MessagePreprocessor
@@ -24,14 +23,13 @@ import com.discord.stores.StoreStream
 import com.discord.widgets.chat.list.WidgetChatList
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemMessage
 import com.discord.widgets.chat.list.entries.MessageEntry
-
 import com.facebook.drawee.span.DraweeSpanStringBuilder
 import com.lytefast.flexinput.R
 
+import de.robv.android.xposed.XC_MethodHook
+
 import java.lang.System
 import kotlin.jvm.functions.Function1
-
-import de.robv.android.xposed.XC_MethodHook
 
 @AliucordPlugin(requiresRestart = false)
 class SimpleMessageLogger : Plugin() {
@@ -70,20 +68,20 @@ class SimpleMessageLogger : Plugin() {
             }
         })
 
-        patcher.patch(StoreMessages::class.java, "handleMessageUpdate", arrayOf(ApiMessage::class.java), object : XC_MethodHook() {
+        patcher.patch(StoreMessages::class.java, "handleMessageUpdate", arrayOf(com.discord.api.message.Message::class.java), object : XC_MethodHook() {
             override fun beforeHookedMethod(param: XC_MethodHook.MethodHookParam) {
                 if (!settings.getBool("logEditedMessages", true)) {
                     return
                 }
 
-                val msg = param.args[0] as ApiMessage
+                val msg = param.args[0] as com.discord.api.message.Message
                 if (shouldIgnoreMessage(msg.e().id, msg.e().e())) {
                     return
                 }
 
                 val msgId = msg.o()
                 val oldContent = StoreStream.getMessages().getMessage(msg.g(), msgId)?.content ?: return
-                val newContent = msg.i()
+                val newContent = Message(msg).content
 
                 if (oldContent != newContent) {
                     editedMessages[msgId] ?: ArrayList<Pair<String, Long>>().also { editedMessages.append(msgId, it) } += Pair(oldContent, System.currentTimeMillis())
@@ -92,8 +90,8 @@ class SimpleMessageLogger : Plugin() {
         })
 
         val getMessageRenderContext = WidgetChatListAdapterItemMessage::class.java.getDeclaredMethod("getMessageRenderContext", Context::class.java, MessageEntry::class.java, Function1::class.java).apply { isAccessible = true }
-        val getMessagePreprocessor = WidgetChatListAdapterItemMessage::class.java.getDeclaredMethod("getMessagePreprocessor", Long::class.java, ModelMessage::class.java, StoreMessageState.State::class.java).apply { isAccessible = true }
-        val getSpoilerClickHandler = WidgetChatListAdapterItemMessage::class.java.getDeclaredMethod("getSpoilerClickHandler", ModelMessage::class.java).apply { isAccessible = true }
+        val getMessagePreprocessor = WidgetChatListAdapterItemMessage::class.java.getDeclaredMethod("getMessagePreprocessor", Long::class.java, Message::class.java, StoreMessageState.State::class.java).apply { isAccessible = true }
+        val getSpoilerClickHandler = WidgetChatListAdapterItemMessage::class.java.getDeclaredMethod("getSpoilerClickHandler", Message::class.java).apply { isAccessible = true }
 
         patcher.patch(WidgetChatListAdapterItemMessage::class.java, "processMessageText", arrayOf(SimpleDraweeSpanTextView::class.java, MessageEntry::class.java), object : XC_MethodHook() {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {

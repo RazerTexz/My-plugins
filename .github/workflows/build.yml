@@ -31,17 +31,15 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build Plugins
-        run: |
-          chmod +x gradlew && ./gradlew make generateUpdaterJson --no-watch-fs
-
-          mkdir builds
-          cp plugins/*/build/outputs/*.zip build/outputs/updater.json builds
+        run: chmod +x gradlew && ./gradlew make generateUpdaterJson --no-watch-fs
 
       - name: Push Builds
         run: |
+          mkdir builds
+          mv plugins/*/build/outputs/*.zip build/outputs/updater.json builds
           cd builds
-          git init
 
+          git init
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
