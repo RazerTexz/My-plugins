@@ -7,5 +7,7 @@ aliucord {
         * Initial version
     """.trimIndent()
 
+    author("RazerTexz", 633565155501801472L)
+
     deploy = true
 }

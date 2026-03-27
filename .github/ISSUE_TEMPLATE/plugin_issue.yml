@@ -1,0 +1,14 @@
+name: Plugin Issue
+description: Leave a bug report, feature request, or question
+body:
+  - type: input
+    attributes:
+      label: Discord Username / ID
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Details
+    validations:
+      required: true

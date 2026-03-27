@@ -12,20 +12,20 @@ import com.discord.views.CheckedSetting
 class PluginSettings(private val settings: SettingsAPI) : SettingsPage() {
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        val context = view.context
+        val ctx = view.context
 
         setActionBarTitle("Simple Message Logger")
         setActionBarSubtitle("Settings")
 
-        addCheckedSetting(context, "Log Deleted Messages", null, "logDeletedMessages", true)
-        addCheckedSetting(context, "Log Edited Messages", null, "logEditedMessages", true)
-        addCheckedSetting(context, "Ignore Bots", "Ignore messages sent by bots", "ignoreBots", false)
-        addCheckedSetting(context, "Ignore Self", "Ignore messages sent by you", "ignoreSelf", false)
+        addCheckedSetting(ctx, "Log Deleted Messages", null, "logDeletedMessages", true)
+        addCheckedSetting(ctx, "Log Edited Messages", null, "logEditedMessages", true)
+        addCheckedSetting(ctx, "Ignore Bots", "Ignore messages sent by bots", "ignoreBots", false)
+        addCheckedSetting(ctx, "Ignore Self", "Ignore messages sent by you", "ignoreSelf", false)
     }
 
-    private fun addCheckedSetting(context: Context, hint: CharSequence, description: String?, key: String, defValue: Boolean) {
+    private fun addCheckedSetting(context: Context, hint: CharSequence, description: String?, key: String, defaultValue: Boolean) {
         addView(Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, hint, description).apply {
-            isChecked = settings.getBool(key, defValue)
+            isChecked = settings.getBool(key, defaultValue)
             setOnCheckedListener {
                 settings.setBool(key, it)
             }

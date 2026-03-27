@@ -4,10 +4,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.android.build.gradle.LibraryExtension
 import com.aliucord.gradle.AliucordExtension
 
-val projectNamespace: String = "com.github.razertexz"
-val repositoryUrl: String = "https://github.com/RazerTexz/My-plugins"
-val authorName: String = "RazerTexz"
-val authorDiscordId: Long = 633565155501801472
+val projectNamespace = "com.github.razertexz"
+val repositoryUrl = "https://github.com/RazerTexz/My-plugins"
 
 subprojects {
     apply(plugin = "com.aliucord.plugin")
@@ -41,7 +39,6 @@ subprojects {
 
     configure<AliucordExtension> {
         github(repositoryUrl)
-        author(authorName, authorDiscordId)
     }
 
     dependencies {
