@@ -1,4 +1,4 @@
-version = "1.0.9"
+version = "1.1.0"
 description = "Logs deleted and edited messages. Simpler and lighter than MessageLogger"
 
 aliucord {
@@ -11,6 +11,4 @@ aliucord {
     """.trimIndent()
 
     author("RazerTexz", 633565155501801472L)
-
-    deploy = true
 }

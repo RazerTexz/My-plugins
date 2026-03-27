@@ -1,8 +1,8 @@
+import com.aliucord.gradle.AliucordExtension
+import com.android.build.gradle.LibraryExtension
+
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
-import com.android.build.gradle.LibraryExtension
-import com.aliucord.gradle.AliucordExtension
 
 val projectNamespace = "com.github.razertexz"
 val repositoryUrl = "https://github.com/RazerTexz/My-plugins"
@@ -12,10 +12,8 @@ subprojects {
     apply(plugin = "com.android.library")
     apply(plugin = "org.jetbrains.kotlin.android")
 
-    configure<KotlinAndroidExtension> {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
-        }
+    configure<AliucordExtension> {
+        github(repositoryUrl)
     }
 
     configure<LibraryExtension> {
@@ -31,14 +29,27 @@ subprojects {
             shaders = false
         }
 
+        sourceSets {
+            named("main") {
+                java {
+                    setSrcDirs(setOf("src"))
+                }
+                res {
+                    setSrcDirs(setOf("src/res"))
+                }
+            }
+        }
+
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
         }
     }
 
-    configure<AliucordExtension> {
-        github(repositoryUrl)
+    configure<KotlinAndroidExtension> {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_21
+        }
     }
 
     dependencies {

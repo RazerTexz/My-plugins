@@ -7,9 +7,9 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.LongSparseArray
 
+import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.Utils
 
 import com.discord.models.message.Message
 import com.discord.utilities.color.ColorCompat
@@ -102,13 +102,13 @@ class SimpleMessageLogger : Plugin() {
 
                 val textView = param.args[0] as SimpleDraweeSpanTextView
                 val ctx = textView.context
+                val mutedColor = ColorCompat.getThemedColor(ctx, R.b.colorTextMuted)
                 val builder = DraweeSpanStringBuilder()
 
                 if (edits != null) {
                     val _this = param.thisObject as WidgetChatListAdapterItemMessage
                     val renderCtx = getMessageRenderContext.invoke(_this, ctx, msgEntry, getSpoilerClickHandler.invoke(_this, msg)) as MessageRenderContext
                     val preprocessor = getMessagePreprocessor.invoke(_this, _this.adapter.data.userId, msg, msgEntry.messageState) as MessagePreprocessor
-                    val mutedColor = ColorCompat.getThemedColor(ctx, R.b.colorTextMuted)
 
                     for (edit in edits) {
                         builder.append(DiscordParser.parseChannelMessage(
@@ -120,14 +120,25 @@ class SimpleMessageLogger : Plugin() {
                             false
                         ))
 
-                        builder.appendTag(" (edited: ${DateUtils.getRelativeDateTimeString(ctx, edit.second, DateUtils.DAY_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2L, DateUtils.FORMAT_ABBREV_ALL)})\n", mutedColor)
+                        val tagStart = builder.length
+
+                        builder.append(" (edited: ${edit.second.toRelativeTimestamp(ctx)})\n")
+                        builder.setSpan(RelativeSizeSpan(0.75f), tagStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
+
+                    builder.setSpan(ForegroundColorSpan(mutedColor), 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
 
+                val contentStart = builder.length
                 builder.append(textView.text)
 
                 if (deletedAt != null) {
-                    builder.appendTag(" (deleted: ${DateUtils.getRelativeDateTimeString(ctx, deletedAt, DateUtils.DAY_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2L, DateUtils.FORMAT_ABBREV_ALL)})", ColorCompat.getThemedColor(ctx, R.b.colorTextDanger))
+                    val tagStart = builder.length
+
+                    builder.append(" (deleted: ${deletedAt.toRelativeTimestamp(ctx)})")
+                    builder.setSpan(RelativeSizeSpan(0.75f), tagStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    builder.setSpan(ForegroundColorSpan(mutedColor), tagStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    builder.setSpan(ForegroundColorSpan(ColorCompat.getThemedColor(ctx, R.b.colorTextDanger)), contentStart, tagStart, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
 
                 textView.setDraweeSpanStringBuilder(builder)
@@ -143,11 +154,7 @@ class SimpleMessageLogger : Plugin() {
         return settings.getBool("ignoreBots", false) && isBot == true || settings.getBool("ignoreSelf", false) && userId == StoreStream.getUsers().me.id
     }
 
-    fun DraweeSpanStringBuilder.appendTag(text: String, color: Int) {
-        val start = length
-
-        append(text)
-        setSpan(ForegroundColorSpan(color), start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        setSpan(RelativeSizeSpan(0.75f), start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    fun Long.toRelativeTimestamp(context: Context): CharSequence {
+        return DateUtils.getRelativeDateTimeString(context, this, DateUtils.DAY_IN_MILLIS, DateUtils.DAY_IN_MILLIS * 2L, DateUtils.FORMAT_ABBREV_ALL)
     }
 }
