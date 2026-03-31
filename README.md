@@ -51,3 +51,6 @@ Type '@silent' at the start of your message
 
 ### [AliucordStyleSheets](https://github.com/RazerTexz/My-plugins/raw/builds/AliucordStyleSheets.zip)
 (A.S.S) Style Aliucord to your liking!
+
+### [MarkdownToolbar](https://github.com/RazerTexz/My-plugins/raw/builds/MarkdownToolbar.zip)
+Adds a toolbar below the chat input for quick formatting

@@ -14,10 +14,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootDir.resolve("plugins").listFiles().forEach {
-    if (it.isDirectory && it.resolve("build.gradle.kts").exists()) {
-        include(":plugins:${it.name}")
-    }
+for (folder in rootDir.resolve("plugins").listFiles { it.isDirectory }) {
+    include(":plugins:${folder.name}")
 }
-
-rootProject.name = "Aliucord Plugins"

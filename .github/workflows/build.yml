@@ -31,7 +31,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build Plugins
-        run: chmod +x gradlew && ./gradlew make generateUpdaterJson --no-watch-fs
+        run: chmod +x gradlew && ./gradlew make generateUpdaterJson -Dorg.gradle.jvmargs="-Xmx12g -XX:+UseParallelGC" -Dorg.gradle.vfs.watch=false
 
       - name: Push Builds
         run: |

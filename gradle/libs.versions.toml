@@ -1,0 +1,16 @@
+[versions]
+aliucord = "2.7.1"
+aliucord-plugin = "2.3.0"
+discord = "126021"
+android = "8.13.2"
+kotlin = "2.3.20"
+
+[libraries]
+aliucord = { module = "com.aliucord:Aliucord", version.ref = "aliucord" }
+discord = { module = "com.discord:discord", version.ref = "discord" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+
+[plugins]
+aliucord = { id = "com.aliucord.plugin", version.ref = "aliucord-plugin" }
+android-library = { id = "com.android.library", version.ref = "android" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
