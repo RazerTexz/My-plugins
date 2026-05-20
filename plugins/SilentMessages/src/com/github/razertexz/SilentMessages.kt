@@ -26,10 +26,10 @@ import com.lytefast.flexinput.R
 import rx.Observable
 
 @AliucordPlugin(requiresRestart = false)
-class Main : Plugin() {
-    override fun start(ctx: Context) {
+class SilentMessages : Plugin() {
+    override fun start(context: Context) {
         val viewId = View.generateViewId()
-        val icon = ctx.getDrawable(R.e.ic_notifications_off_grey_24dp)!!.mutate()
+        val icon = context.getDrawable(R.e.ic_notifications_off_grey_24dp)!!.mutate()
         Utils.tintToTheme(icon)
 
         patcher.before<`MessageQueue$doSend$2`<*, *>>("call", SendUtils.SendPayload.ReadyToSend::class.java) {
@@ -91,5 +91,7 @@ class Main : Plugin() {
         return null
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 }

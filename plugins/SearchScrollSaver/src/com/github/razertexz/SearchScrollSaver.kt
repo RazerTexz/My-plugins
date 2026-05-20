@@ -12,8 +12,8 @@ import com.aliucord.patcher.*
 import com.discord.widgets.search.results.WidgetSearchResults
 
 @AliucordPlugin(requiresRestart = false)
-class Main : Plugin() {
-    override fun start(ctx: Context) {
+class SearchScrollSaver : Plugin() {
+    override fun start(context: Context) {
         var lastPos = -1
 
         patcher.after<WidgetSearchResults>("configureUI", WidgetSearchResults.Model::class.java) {
@@ -28,5 +28,7 @@ class Main : Plugin() {
         }
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 }

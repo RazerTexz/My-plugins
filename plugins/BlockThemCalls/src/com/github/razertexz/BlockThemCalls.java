@@ -21,7 +21,7 @@ import com.discord.models.domain.ModelCall;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
 
 @AliucordPlugin(requiresRestart = false)
-public class Main extends Plugin {
+public class BlockThemCalls extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("BlockThemCalls");
 
     public Main() {

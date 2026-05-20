@@ -23,7 +23,7 @@ private const val DEFAULT_SCROLLING_SLOP_DP = 8.0f
 private const val NEW_SCROLLING_SLOP_DP = DEFAULT_SCROLLING_SLOP_DP * 5.0f
 
 @AliucordPlugin(requiresRestart = true)
-class Main : Plugin() {
+class SwipeToReply : Plugin() {
     override fun start(context: Context) {
         val endRecoverAnimation = ItemTouchHelper::class.java.getDeclaredMethod("endRecoverAnimation", RecyclerView.ViewHolder::class.java, Boolean::class.java).apply { isAccessible = true }
         val getBinding = WidgetChatList::class.java.getDeclaredMethod("getBinding").apply { isAccessible = true }

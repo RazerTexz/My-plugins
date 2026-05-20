@@ -14,7 +14,7 @@ import com.discord.databinding.WidgetChannelMembersListItemUserBinding
 import com.discord.views.UsernameView
 
 @AliucordPlugin(requiresRestart = false)
-class Main : Plugin() {
+class FullUsernames : Plugin() {
     private val f_itemName by lazyField<WidgetChatListAdapterItemMessage>("itemName")
 
     override fun start(context: Context) {

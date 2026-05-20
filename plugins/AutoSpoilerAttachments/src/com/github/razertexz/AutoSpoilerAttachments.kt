@@ -10,12 +10,14 @@ import com.aliucord.patcher.*
 import com.lytefast.flexinput.model.Attachment
 
 @AliucordPlugin(requiresRestart = false)
-class Main : Plugin() {
-    override fun start(ctx: Context) {
+class AutoSpoilerAttachments : Plugin() {
+    override fun start(context: Context) {
         patcher.before<Attachment<*>>(Long::class.java, Uri::class.java, String::class.java, Object::class.java, Boolean::class.java) {
             it.args[4] = true
         }
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 }

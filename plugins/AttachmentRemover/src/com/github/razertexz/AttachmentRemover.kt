@@ -22,7 +22,7 @@ import com.lytefast.flexinput.R
 import java.util.Collections
 
 @AliucordPlugin(requiresRestart = false)
-class Main : Plugin() {
+class AttachmentRemover : Plugin() {
     override fun start(ctx: Context) {
         var selectedAttachment: MessageAttachment? = null
         val storeUser = StoreStream.getUsers()

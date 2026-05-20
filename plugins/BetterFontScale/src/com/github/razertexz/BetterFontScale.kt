@@ -9,12 +9,12 @@ import com.aliucord.patcher.*
 import com.aliucord.Utils
 
 @AliucordPlugin(requiresRestart = true)
-class Main : Plugin() {
+class BetterFontScale : Plugin() {
     init {
         settingsTab = SettingsTab(PluginSettings::class.java).withArgs(settings)
     }
 
-    override fun start(ctx: Context) {
+    override fun start(context: Context) {
         patcher.before<TextView>("setRawTextSize", Float::class.java, Boolean::class.java) {
             val newTextSize = when (id) {
                 getViewId("chat_list_adapter_item_text") -> settings.getFloat("messagesFontScale", 0.0f)
@@ -27,12 +27,14 @@ class Main : Plugin() {
             }
 
             if (newTextSize != 0.0f) {
-                it.args[0] = newTextSize * ctx.resources.displayMetrics.scaledDensity
+                it.args[0] = newTextSize * context.resources.displayMetrics.scaledDensity
             }
         }
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 
     private inline fun getViewId(name: String): Int = Utils.getResId(name, "id")
 }

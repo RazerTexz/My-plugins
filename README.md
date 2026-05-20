@@ -10,9 +10,6 @@ More control over font sizes (see plugin settings)
 ### [SearchScrollSaver](https://github.com/RazerTexz/My-plugins/raw/builds/SearchScrollSaver.zip)
 Saves your scroll position when searching
 
-### [SaveMessageToFile](https://github.com/RazerTexz/My-plugins/raw/builds/SaveMessageToFile.zip)
-Adds a new context menu for saving messages to a file
-
 ### [BetterPlusReacts](https://github.com/RazerTexz/My-plugins/raw/builds/BetterPlusReacts.zip)
 Port of [vc-betterplusreacts](https://github.com/Masterjoona/vc-betterplusreacts).
 
@@ -54,3 +51,6 @@ Type '@silent' at the start of your message
 
 ### [MarkdownToolbar](https://github.com/RazerTexz/My-plugins/raw/builds/MarkdownToolbar.zip)
 Adds a toolbar below the chat input for quick formatting
+
+### [Yoink](https://github.com/RazerTexz/My-plugins/raw/builds/Yoink.zip)
+Exports loaded channel messages (up to 200) to a text file via the top-right (⋮) menu

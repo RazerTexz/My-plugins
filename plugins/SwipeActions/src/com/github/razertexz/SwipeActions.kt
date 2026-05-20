@@ -13,8 +13,8 @@ import com.discord.databinding.WidgetChatListBinding
 import com.discord.panels.OverlappingPanelsLayout
 
 @AliucordPlugin(requiresRestart = true)
-class Main : Plugin() {
-    override fun start(ctx: Context) {
+class SwipeActions : Plugin() {
+    override fun start(context: Context) {
         val scrollingSlopPx = OverlappingPanelsLayout::class.java.getDeclaredField("scrollingSlopPx").apply { isAccessible = true }
         val newScrollingSlopPx = DimenUtils.dpToPx(8.0f * 3.5f).toFloat()
         patcher.after<OverlappingPanelsLayout>("initialize", AttributeSet::class.java) {
@@ -27,5 +27,7 @@ class Main : Plugin() {
         }
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 }

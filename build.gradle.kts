@@ -6,21 +6,17 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 plugins {
-    alias(libs.plugins.aliucord)
-    alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
+    id("com.aliucord.plugin") version "2.3.1"
+    id("com.android.library") version "8.13.2" apply false
+    id("org.jetbrains.kotlin.android") version "2.3.21" apply false
 }
 
 subprojects {
-    if (name == "plugins") {
-        return@subprojects
-    }
+    if (name == "plugins") return@subprojects
 
-    val libs = rootProject.libs
-
-    pluginManager.apply(libs.plugins.aliucord.get().pluginId)
-    pluginManager.apply(libs.plugins.android.library.get().pluginId)
-    pluginManager.apply(libs.plugins.kotlin.android.get().pluginId)
+    pluginManager.apply("com.aliucord.plugin")
+    pluginManager.apply("com.android.library")
+    pluginManager.apply("org.jetbrains.kotlin.android")
 
     configure<AliucordExtension> {
         github("https://github.com/RazerTexz/My-plugins")
@@ -66,8 +62,8 @@ subprojects {
     dependencies {
         val compileOnly by configurations
 
-        compileOnly(libs.aliucord)
-        compileOnly(libs.discord)
-        compileOnly(libs.kotlin.stdlib)
+        compileOnly("com.aliucord:Aliucord:2.9.4")
+        compileOnly("com.discord:discord:126021")
+        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
     }
 }

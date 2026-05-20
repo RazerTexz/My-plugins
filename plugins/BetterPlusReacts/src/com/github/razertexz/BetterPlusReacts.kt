@@ -22,7 +22,7 @@ import com.discord.widgets.chat.input.ChatInputViewModel
 import com.discord.utilities.rest.RestAPI
 
 @AliucordPlugin(requiresRestart = false)
-class Main : Plugin() {
+class BetterPlusReacts : Plugin() {
     override fun start(context: Context) {
         val pattern = Pattern.compile("^\\s*(\\++)(<a?:\\w+:(\\d{19})>|.)$")
 

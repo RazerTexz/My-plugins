@@ -20,12 +20,12 @@ import com.discord.utilities.spans.BlockBackgroundSpan
 import com.lytefast.flexinput.R
 
 @AliucordPlugin(requiresRestart = true)
-class Main : Plugin() {
-    override fun start(ctx: Context) {
+class CopyCodeBlocks : Plugin() {
+    override fun start(context: Context) {
         val copyBtnSize = DimenUtils.defaultPadding
         val copyBtnMargin = DimenUtils.defaultPadding / 4
 
-        val copyIcon = ctx.getDrawable(R.e.ic_copy_24dp)!!.mutate()
+        val copyIcon = context.getDrawable(R.e.ic_copy_24dp)!!.mutate()
         Utils.tintToTheme(copyIcon)
 
         patcher.after<WidgetChatListAdapterItemMessage>("processMessageText", SimpleDraweeSpanTextView::class.java, MessageEntry::class.java) {
@@ -69,5 +69,7 @@ class Main : Plugin() {
         }
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 }

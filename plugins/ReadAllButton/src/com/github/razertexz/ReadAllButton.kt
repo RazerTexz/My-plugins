@@ -24,8 +24,8 @@ private class ReadStateAck(val channel_id: Long, val message_id: Long)
 private class Payload(val read_states: List<ReadStateAck>)
 
 @AliucordPlugin(requiresRestart = true)
-class Main : Plugin() {
-    override fun start(ctx: Context) {
+class ReadAllButton : Plugin() {
+    override fun start(context: Context) {
         val storeReadStates = StoreStream.getReadStates()
         val storeMessagesMostRecent = StoreStream.getMessagesMostRecent()
 
@@ -83,5 +83,7 @@ class Main : Plugin() {
         }
     }
 
-    override fun stop(ctx: Context) = patcher.unpatchAll()
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
 }
