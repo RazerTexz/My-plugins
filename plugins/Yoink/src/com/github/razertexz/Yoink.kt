@@ -3,10 +3,10 @@ package com.github.razertexz
 import android.content.Context
 import android.view.Menu
 
-import com.aliucord.Constants
-import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
+import com.aliucord.Constants
+import com.aliucord.Utils
 
 import com.discord.api.channel.ChannelUtils
 import com.discord.databinding.WidgetHomeBinding
@@ -22,11 +22,15 @@ import de.robv.android.xposed.XC_MethodHook
 import java.io.File
 import java.text.SimpleDateFormat
 
-@AliucordPlugin(requiresRestart = false)
+@AliucordPlugin
 class Yoink : Plugin() {
+    init {
+        settingsTab = SettingsTab(YoinkSettings::class.java).withArgs(settings)
+    }
+
     override fun start(context: Context) {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm z '-' ")
-        val storeMessagesHolder = with(StoreMessages::class.java.getDeclaredField("holder")) {
+        val sdf = SimpleDateFormat("'['yyyy-MM-dd HH:mm z']' ")
+        val holder = StoreMessages::class.java.getDeclaredField("holder").run {
             isAccessible = true
             get(StoreStream.getMessages()) as StoreMessagesHolder
         }
@@ -35,21 +39,36 @@ class Yoink : Plugin() {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {
                 (param.args[0] as WidgetHome).toolbar.menu.add(Menu.NONE, Menu.NONE, Menu.NONE, "Yoink Messages").setOnMenuItemClickListener {
                     val channel = (param.args[1] as WidgetHomeModel).channel
-                    val messages = storeMessagesHolder.getMessagesForChannel(channel.k())!!
-                    val filePath = "${Constants.BASE_PATH}/${StoreStream.getGuilds().getGuild(channel.i())?.name ?: "Direct Messages"} - ${ChannelUtils.c(channel)} - ${System.currentTimeMillis()}.txt"
+                    val msgs = holder.getMessagesForChannel(channel.k())!!
 
+                    val filePath = "${Constants.BASE_PATH}/${StoreStream.getGuilds().getGuild(channel.i())?.name ?: "Direct Messages"} - ${ChannelUtils.c(channel)} - ${System.currentTimeMillis()}.txt"
                     File(filePath).writeText(buildString {
-                        for (message in messages.values) {
-                            append(sdf.format(message.timestamp.g()))
-                            append(message.author.username)
+                        for (msg in msgs.values) {
+                            if (settings.getBool("includeTimestamps", true)) {
+                                append(sdf.format(msg.timestamp.g()))
+                            }
+
+                            if (settings.getBool("includeMessageIds", false)) {
+                                append('[')
+                                append(msg.id)
+                                append("] ")
+                            }
+
+                            if (settings.getBool("includeReplyIds", false) && msg.messageReference != null) {
+                                append("[↩️ ")
+                                append(msg.messageReference.c())
+                                append("] ")
+                            }
+
+                            append(msg.author.username)
                             append('\n')
 
-                            if (message.content.isNotEmpty()) {
-                                append(message.content)
+                            if (msg.content.isNotEmpty()) {
+                                append(msg.content)
                                 append('\n')
                             }
 
-                            for (attachment in message.attachments) {
+                            for (attachment in msg.attachments) {
                                 append("📎 ")
                                 append(attachment.f())
                                 append('\n')
@@ -59,7 +78,7 @@ class Yoink : Plugin() {
                         }
                     })
 
-                    Utils.showToast("${messages.size} messages yoinked to $filePath")
+                    Utils.showToast("${msgs.size} messages yoinked to $filePath")
                     true
                 }
             }
