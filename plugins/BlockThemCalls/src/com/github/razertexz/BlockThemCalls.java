@@ -24,7 +24,7 @@ import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
 public class BlockThemCalls extends Plugin {
     private final SettingsAPI settings = new SettingsAPI("BlockThemCalls");
 
-    public Main() {
+    public BlockThemCalls() {
         settingsTab = new SettingsTab(PluginSettings.class).withArgs(settings);
     }
 

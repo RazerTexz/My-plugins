@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 plugins {
     id("com.aliucord.plugin") version "2.3.1"
     id("com.android.library") version "8.13.2" apply false
-    id("org.jetbrains.kotlin.android") version "2.3.21" apply false
+    id("org.jetbrains.kotlin.android") version "2.4.0" apply false
 }
 
 subprojects {
@@ -60,10 +60,8 @@ subprojects {
     }
 
     dependencies {
-        val compileOnly by configurations
-
-        compileOnly("com.aliucord:Aliucord:2.9.4")
-        compileOnly("com.discord:discord:126021")
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
+        "compileOnly"("com.aliucord:Aliucord:2.9.5")
+        "compileOnly"("com.discord:discord:126021")
+        "compileOnly"("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
     }
 }

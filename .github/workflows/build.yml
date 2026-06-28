@@ -15,7 +15,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -28,14 +28,14 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Build plugins
+      - name: Build
         run: |
           chmod +x gradlew
-          ./gradlew make generateUpdaterJson -Dorg.gradle.jvmargs="-Xmx12g -XX:+UseParallelGC" -Dorg.gradle.vfs.watch=false
+          ./gradlew make generateUpdaterJson -Dorg.gradle.vfs.watch=false
 
           install -D -t builds plugins/*/build/outputs/*.zip build/outputs/updater.json
 
-      - name: Publish plugins
+      - name: Publish
         working-directory: builds
         run: |
           git init

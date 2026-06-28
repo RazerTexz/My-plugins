@@ -1,10 +1,12 @@
-version = "1.0.0"
+version = "1.0.1"
 description = "Exports loaded channel messages (up to 200) to a text file via the top-right (⋮) menu"
 
 aliucord {
     changelog = """
-        # 1.0.0
-        * Initial version
+        # 1.0.1
+        * Switched from ASV to formatted TXT
+        * Filenames now use guild/channel names
+        * Show export path in the toast
     """.trimIndent()
 
     author("RazerTexz", 633565155501801472L)
