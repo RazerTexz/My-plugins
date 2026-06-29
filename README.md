@@ -11,7 +11,7 @@ More control over font sizes (see plugin settings)
 Saves your scroll position when searching
 
 ### [BetterPlusReacts](https://github.com/RazerTexz/My-plugins/raw/builds/BetterPlusReacts.zip)
-Port of [vc-betterplusreacts](https://github.com/Masterjoona/vc-betterplusreacts).
+Port of [vc-betterplusreacts](https://github.com/Masterjoona/vc-betterplusreacts)
 
 ### [FullUsernames](https://github.com/RazerTexz/My-plugins/raw/builds/FullUsernames.zip)
 Prevents username truncation

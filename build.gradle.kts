@@ -60,7 +60,7 @@ subprojects {
     }
 
     dependencies {
-        "compileOnly"("com.aliucord:Aliucord:2.9.6")
+        "compileOnly"("com.aliucord:Aliucord:2.9.7")
         "compileOnly"("com.discord:discord:126021")
         "compileOnly"("org.jetbrains.kotlin:kotlin-stdlib:1.5.31")
     }

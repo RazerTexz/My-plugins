@@ -1,7 +1,6 @@
 package com.github.razertexz
 
 import android.content.Context
-import android.view.Menu
 
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
@@ -9,12 +8,10 @@ import com.aliucord.Constants
 import com.aliucord.Utils
 
 import com.discord.api.channel.ChannelUtils
-import com.discord.databinding.WidgetHomeBinding
 import com.discord.stores.StoreMessages
 import com.discord.stores.StoreMessagesHolder
 import com.discord.stores.StoreStream
 import com.discord.widgets.home.WidgetHome
-import com.discord.widgets.home.WidgetHomeHeaderManager
 import com.discord.widgets.home.WidgetHomeModel
 
 import de.robv.android.xposed.XC_MethodHook
@@ -35,14 +32,14 @@ class Yoink : Plugin() {
             get(StoreStream.getMessages()) as StoreMessagesHolder
         }
 
-        patcher.patch(WidgetHomeHeaderManager::class.java.getDeclaredMethod("configure", WidgetHome::class.java, WidgetHomeModel::class.java, WidgetHomeBinding::class.java), object : XC_MethodHook() {
+        patcher.patch(WidgetHome::class.java.getDeclaredMethod("configureUI", WidgetHomeModel::class.java), object : XC_MethodHook() {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {
-                (param.args[0] as WidgetHome).toolbar.menu.add(Menu.NONE, Menu.NONE, Menu.NONE, "Yoink Messages").setOnMenuItemClickListener {
-                    val channel = (param.args[1] as WidgetHomeModel).channel
+                (param.thisObject as WidgetHome).actionBarTitleLayout.setOnLongClickListener {
+                    val channel = (param.args[0] as WidgetHomeModel).channel
                     val msgs = holder.getMessagesForChannel(channel.k())!!
 
-                    val filePath = "${Constants.BASE_PATH}/${StoreStream.getGuilds().getGuild(channel.i())?.name ?: "Direct Messages"} - ${ChannelUtils.c(channel)} - ${System.currentTimeMillis()}.txt"
-                    File(filePath).writeText(buildString {
+                    val path = "${Constants.BASE_PATH}/${StoreStream.getGuilds().getGuild(channel.i())?.name ?: "Direct Messages"} - ${ChannelUtils.c(channel)} - ${System.currentTimeMillis()}.txt"
+                    File(path).writeText(buildString {
                         for (msg in msgs.values) {
                             if (settings.getBool("includeTimestamps", true)) {
                                 append(sdf.format(msg.timestamp.g()))
@@ -78,7 +75,7 @@ class Yoink : Plugin() {
                         }
                     })
 
-                    Utils.showToast("${msgs.size} messages yoinked to $filePath")
+                    Utils.showToast("${msgs.size} messages yoinked to $path")
                     true
                 }
             }

@@ -1,11 +1,12 @@
-version = "1.0.2"
-description = "Exports loaded channel messages (up to 200) to a text file via the top-right (⋮) menu"
+version = "1.0.3"
+description = "Exports loaded channel messages (up to 200) to .txt by long-pressing the channel name at the top"
 
 aliucord {
     changelog = """
+        # 1.0.3
+        * Replaced the top-right (⋮) menu with a long press on the channel name at the top to prevent clutter
         # 1.0.2
         * Added options to include timestamps, message IDs, and reply IDs
-
         # 1.0.1
         * Switched from ASV to formatted TXT
         * Filenames now use guild/channel names
