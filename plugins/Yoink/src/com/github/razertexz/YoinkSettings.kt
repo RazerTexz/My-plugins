@@ -29,5 +29,10 @@ class YoinkSettings(private val settings: SettingsAPI) : SettingsPage() {
             isChecked = settings.getBool("includeReplyIds", false)
             setOnCheckedListener { settings.setBool("includeReplyIds", it) }
         })
+
+        addView(Utils.createCheckedSetting(view.context, CheckedSetting.ViewType.SWITCH, "Include Attachment URLs", null).apply {
+            isChecked = settings.getBool("includeAttachmentUrls", true)
+            setOnCheckedListener { settings.setBool("includeAttachmentUrls", it) }
+        })
     }
 }

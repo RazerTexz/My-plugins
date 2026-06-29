@@ -53,4 +53,4 @@ Type '@silent' at the start of your message
 Adds a toolbar below the chat input for quick formatting
 
 ### [Yoink](https://github.com/RazerTexz/My-plugins/raw/builds/Yoink.zip)
-Exports loaded channel messages (up to 200) to a text file via the top-right (⋮) menu
+Exports loaded channel messages (up to 200) to .txt by long-pressing the channel name at the top

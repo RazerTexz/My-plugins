@@ -7,7 +7,6 @@ import com.aliucord.entities.Plugin
 import com.aliucord.Constants
 import com.aliucord.Utils
 
-import com.discord.api.channel.ChannelUtils
 import com.discord.stores.StoreMessages
 import com.discord.stores.StoreMessagesHolder
 import com.discord.stores.StoreStream
@@ -34,11 +33,13 @@ class Yoink : Plugin() {
 
         patcher.patch(WidgetHome::class.java.getDeclaredMethod("configureUI", WidgetHomeModel::class.java), object : XC_MethodHook() {
             override fun afterHookedMethod(param: XC_MethodHook.MethodHookParam) {
-                (param.thisObject as WidgetHome).actionBarTitleLayout.setOnLongClickListener {
-                    val channel = (param.args[0] as WidgetHomeModel).channel
-                    val msgs = holder.getMessagesForChannel(channel.k())!!
+                val model = param.args[0] as WidgetHomeModel
+                val layout = (param.thisObject as WidgetHome).actionBarTitleLayout
 
-                    val path = "${Constants.BASE_PATH}/${StoreStream.getGuilds().getGuild(channel.i())?.name ?: "Direct Messages"} - ${ChannelUtils.c(channel)} - ${System.currentTimeMillis()}.txt"
+                layout.setOnLongClickListener {
+                    val msgs = holder.getMessagesForChannel(model.channelId) ?: return@setOnLongClickListener true
+                    val path = "${Constants.BASE_PATH}/${StoreStream.getGuilds().getGuild(model.channel.i())?.name ?: "Direct Messages"} - ${layout.k.d.text} - ${System.currentTimeMillis()}.txt"
+
                     File(path).writeText(buildString {
                         for (msg in msgs.values) {
                             if (settings.getBool("includeTimestamps", true)) {
@@ -46,29 +47,33 @@ class Yoink : Plugin() {
                             }
 
                             if (settings.getBool("includeMessageIds", false)) {
-                                append('[')
-                                append(msg.id)
-                                append("] ")
+                                append('[').append(msg.id).append("] ")
                             }
 
                             if (settings.getBool("includeReplyIds", false) && msg.messageReference != null) {
-                                append("[↩️ ")
-                                append(msg.messageReference.c())
-                                append("] ")
+                                append("[↩ ").append(msg.messageReference.c()).append("] ")
                             }
 
-                            append(msg.author.username)
-                            append('\n')
+                            append(msg.author.username).append('\n')
 
                             if (msg.content.isNotEmpty()) {
-                                append(msg.content)
-                                append('\n')
+                                append(msg.content).append('\n')
                             }
 
-                            for (attachment in msg.attachments) {
-                                append("📎 ")
-                                append(attachment.f())
-                                append('\n')
+                            for (embed in msg.embeds) {
+                                append("📄 ").append(embed.j()?.replace("\r\n", "⏎")?.replace('\n', '⏎') ?: "No Title").append("\n   ").append(embed.c()?.replace("\r\n", "⏎")?.replace('\n', '⏎') ?: "No Description").append('\n')
+
+                                if (embed.d() != null) {
+                                    for (field in embed.d()) {
+                                        append("   • ").append(field.a().replace("\r\n", "⏎")?.replace('\n', '⏎')).append(": ").append(field.b().replace("\r\n", "⏎")?.replace('\n', '⏎')).append('\n')
+                                    }
+                                }
+                            }
+
+                            if (settings.getBool("includeAttachmentUrls", true)) {
+                                for (attachment in msg.attachments) {
+                                    append("📎 ").append(attachment.f()).append('\n')
+                                }
                             }
 
                             append('\n')
